@@ -1,0 +1,7 @@
+C:\Users\TonyTsai\Desktop\CSNamedPipe\CSNamedPipe\bin\Debug\CSNamedPipe.exe
+C:\Users\TonyTsai\Desktop\CSNamedPipe\CSNamedPipe\bin\Debug\CSNamedPipe.pdb
+C:\Users\TonyTsai\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.csprojResolveAssemblyReference.cache
+C:\Users\TonyTsai\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.exe
+C:\Users\TonyTsai\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.pdb
+C:\Users\HAHI\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.exe
+C:\Users\HAHI\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.pdb
