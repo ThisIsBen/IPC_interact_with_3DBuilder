@@ -73,55 +73,52 @@ public partial class IPC: System.Web.UI.Page
         
     }
 
-    public String switchVisible_Invisible(GridViewRow selectedRow, string HFID,HiddenField HFItself)
+    public String switchVisible_Invisible(GridViewRow selectedRow, string HFID, GridView gvScore)
     {
-        bool BooLInOrVisible;
+        bool BooLInOrVisible=false;
        
-        if (selectedRow!=null)
+        if (selectedRow!=null)//hide or show the selected organ.
         {
             var HFInOrVisible =selectedRow.FindControl(HFID) as HiddenField;
             BooLInOrVisible = Convert.ToBoolean(HFInOrVisible.Value);
         }
-        else
-        {
-          
-            BooLInOrVisible = Convert.ToBoolean(HFItself.Value);
-        }
+       
 
         String HideOrShow = "";
-        if (BooLInOrVisible)
+        if (BooLInOrVisible )//if current state is visible
         {
             //means its visible before being clicked
             if (selectedRow != null)
+            {
                 (selectedRow.FindControl(HFID) as HiddenField).Value = "false";//switch to invisible
-            else
-                if (HFItself != null)
-                {
-                    HFItself.Value = "false";//switch to invisible
-                    //ShowOrHideAll.ImageUrl = "~/Image/invisible.png";
-                   
-                }
-            HideOrShow = "hide";
+                HideOrShow = "hide";
+            }
+           
         }
-        else
+        else//if current state is invisible
         {
             if (selectedRow != null)
+            {
                 (selectedRow.FindControl(HFID) as HiddenField).Value = "true";//switch to visible
+                HideOrShow = "show";
+            }
+            
             else
-                if (HFItself != null)
-                {
-                    HFItself.Value = "true";//switch to visible
-                  
-                }
-            //ShowOrHideAll.ImageUrl = "~/Image/visible.png";
-            HideOrShow = "show";
+            {
+                foreach (GridViewRow row in gvScore.Rows)
+                    {
+                        (row.FindControl(HFID) as HiddenField).Value = "true";//switch to visible
+                    }
+                HideOrShow = "showAll";
+             }            
+           
         }
         return HideOrShow;
     }
     public void ShowOrHideAllBtn_Click(object sender, EventArgs e)
     {
         //switch visibility icon All rows .
-        String HideOrShow = switchVisible_Invisible(null, null,AllInOrVisible);
+        String HideOrShow = switchVisible_Invisible(null, "InOrVisible", gvScore);
 
         /*
         //iterate through all the organs       
@@ -156,7 +153,7 @@ public partial class IPC: System.Web.UI.Page
         //send hide 3D organ msg to 3DBuilder
         //string contact = "7 " + HideOrShow;//send "7 Hide realOrganName" to 3DBuilder
         //string contact = "6 " + HideOrShow ;
-        string contact = "6 " + HideOrShow + " " + "Left Popliteal Vein"; //send "6 Hide realOrganName" to 3DBuilder        
+        string contact = "7 " + HideOrShow ; //send "6 Hide realOrganName" to 3DBuilder        
         StreamWriter wr = (StreamWriter)Session["Writer"];
 
         /*
@@ -168,7 +165,7 @@ public partial class IPC: System.Web.UI.Page
          "<script>alert('" + contact + "');</script>",
          false);
         /////
-         * */
+       */
         wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
     }
     //submit current edition to 3DBuilder

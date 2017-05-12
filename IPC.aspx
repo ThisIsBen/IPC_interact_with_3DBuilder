@@ -35,6 +35,7 @@
     </style>
 
     <script type="text/javascript">
+        
         //Bind webpage default close cross button with "Finish" button to shot down CsNamedPipe.exe when user close IPC webpage.
         window.onbeforeunload = function () {
             document.getElementById('<%= FinishBtn.ClientID %>').click();
@@ -63,10 +64,11 @@
             if (hfHide_ShowAll.value == "true") {
                 iconHide_ShowAll.src= "Image/visible.png";
             }
+            /*
             else {
                 iconHide_ShowAll.src = "Image/invisible.png";
             }
-         
+            */
 
             //resume mark icon in gridView
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
