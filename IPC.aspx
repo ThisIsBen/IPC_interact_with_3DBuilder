@@ -200,7 +200,7 @@
                             <label>顯示/隱藏全部</label>
                         </div>
                         <div>
-                            <asp:ImageButton ID="ShowOrHideAll" OnClick="ShowOrHideAllBtn_Click" ImageUrl="~/Image/visible.png" runat="server" />
+                            <input type="image" id="ShowOrHideAll" src="~/Image/visible.png" runat="server" onclick="javascript: __doPostBack('ShowOrHideAll', ''); return false;"  />
                             <asp:HiddenField ID="AllInOrVisible" runat="server" Value="true" />
                         </div>
 

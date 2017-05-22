@@ -17,6 +17,7 @@ public partial class IPC: System.Web.UI.Page
    // public static System.Diagnostics.Process rd = new System.Diagnostics.Process();
    // private StreamWriter myStreamWriter = null; 
   
+    
     protected void Page_Load(object sender, EventArgs e)
     {
         Page.MaintainScrollPositionOnPostBack = true;
@@ -41,6 +42,28 @@ public partial class IPC: System.Web.UI.Page
             gvScore.HeaderRow.TableSection = TableRowSection.TableHeader;
         }
     }
+
+
+
+    public void sendMsg23DBuilder(string contact)
+    {
+        
+
+        //send cmd1
+        try
+        {
+            StreamWriter wr = (StreamWriter)Session["Writer"];
+            //send cmd2
+            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+            wr.Flush();
+        }
+        catch(Exception e)
+        {
+
+        }
+      
+    }
+
     protected void StartIPC_Click(object sender, EventArgs e)
     {
         
@@ -115,46 +138,23 @@ public partial class IPC: System.Web.UI.Page
         }
         return HideOrShow;
     }
-    public void ShowOrHideAllBtn_Click(object sender, EventArgs e)
+    public void ShowOrHideAll_Click(object sender, EventArgs e)
     {
         //switch visibility icon All rows .
         String HideOrShow = switchVisible_Invisible(null, "InOrVisible", gvScore);
 
-        /*
-        //iterate through all the organs       
-        String answerString = "";
-        int GVtotalRow=gvScore.Rows.Count;
-        
-        for (int index = 0; index < GVtotalRow; index++)
-        {
-
-
-
-            answerString += (gvScore.Rows[index].FindControl("TextBox_Answer") as HiddenField).Value.ToString(); //The name of selected 3D object 
-            if (index != GVtotalRow-1)
-                answerString += "$";
-            
-
-
-        }
-         */
-        /*
-        //use JS alert in C#
-
-        ScriptManager.RegisterStartupScript(
-        this,
-        typeof(Page),
-        "Alert",
-        "<script>alert('" + answerString + "');</script>",
-        false);
-        */
+       
        
 
         //send hide 3D organ msg to 3DBuilder
         //string contact = "7 " + HideOrShow;//send "7 Hide realOrganName" to 3DBuilder
         //string contact = "6 " + HideOrShow ;
-        string contact = "7 " + HideOrShow ; //send "6 Hide realOrganName" to 3DBuilder        
-        StreamWriter wr = (StreamWriter)Session["Writer"];
+
+        //string contact = "6 hide Left Popliteal Vein";
+        string contact = "7 " + HideOrShow; //send "6 Hide realOrganName" to 3DBuilder  
+
+        sendMsg23DBuilder(contact);
+       
 
         /*
         //use JS alert() in C#
@@ -166,7 +166,7 @@ public partial class IPC: System.Web.UI.Page
          false);
         /////
        */
-        wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+       
     }
     //submit current edition to 3DBuilder
     protected void gvScore_RowCommand(Object sender, GridViewCommandEventArgs e)
@@ -189,13 +189,8 @@ public partial class IPC: System.Web.UI.Page
             var answer = selectedRow.FindControl("TextBox_Answer") as HiddenField;
             string input = tbx.Text.Replace(" ","");
             string contact = "5 " + input + " " + num.Text + " " + answer.Value.ToString();
-            StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
-                // + num.Text + answer.Value.ToString()//;
-
-            // Display the selected author.
-           // Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('" + contact + "');</script>");
-
+            sendMsg23DBuilder(contact);
+               
         }
 
 
@@ -234,8 +229,7 @@ public partial class IPC: System.Web.UI.Page
             
             string contact = "6 " + HideOrShow + " " + answer.Value.ToString(); //send "6 Hide realOrganName" to 3DBuilder
             
-            StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+           sendMsg23DBuilder(contact);
            
             
         }
