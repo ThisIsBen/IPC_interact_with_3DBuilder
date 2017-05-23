@@ -36,12 +36,17 @@
 
     <script type="text/javascript">
         
-        //Bind webpage default close cross button with "Finish" button to shot down CsNamedPipe.exe when user close IPC webpage.
-        window.onbeforeunload = function () {
+        //Close CSNamePipe.exe before close the webpage.
+        $(window).unload(function () {
             document.getElementById('<%= FinishBtn.ClientID %>').click();
-        };
-
-
+        });
+        /////////////////////////////////
+        //Bind webpage default close cross button with "Finish" button to shot down CsNamedPipe.exe when user close IPC webpage.
+        //window.onbeforeunload = function () {
+        //    document.getElementById('<%= FinishBtn.ClientID %>').click();
+        //};
+        ///////////////////////////////////////////
+        
         //resume scroll position after asp.net postback
 
         var hdnScroll = document.getElementById("<%= hdnScrollPos.ClientID %>");
@@ -58,20 +63,33 @@
             //recover visbility icon of hide_showAll
            
             var hfHide_ShowAll = document.getElementById("<%= AllInOrVisible.ClientID %>");
+
+
+            //suspects of can't read
+            ///////////////////////////////////////////////////////////
             var iconHide_ShowAll = document.getElementById("<%= ShowOrHideAll.ClientID %>");
            
            
             if (hfHide_ShowAll.value == "true") {
                 iconHide_ShowAll.src= "Image/visible.png";
             }
+
+
+            ///////////////////////////////////////////////////
+            
             /*
             else {
                 iconHide_ShowAll.src = "Image/invisible.png";
             }
             */
 
+
+
+            //suspects of can't read
+            ///////////////////////////////////////////////////
             //resume mark icon in gridView
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+            
             for (i = 1; i < gvDrv.rows.length; i++) {
 
                 
@@ -105,7 +123,8 @@
 
 
             }
-
+            
+//////////////////////////////////////////////////////////////
         }
 
 
@@ -177,7 +196,7 @@
     </script>
 
 
-
+   
     <div align="center">
         <asp:HiddenField ID="hdnScrollPos" runat="server" />
         <div class="jumbotron">
@@ -196,20 +215,23 @@
                 <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
             </div>
         </div>
-         <div>
-                            <label>顯示/隱藏全部</label>
-                        </div>
-                        <div>
-                            <input type="image" id="ShowOrHideAll" src="~/Image/visible.png" runat="server" onclick="javascript: __doPostBack('ShowOrHideAll', ''); return false;"  />
-                            <asp:HiddenField ID="AllInOrVisible" runat="server" Value="true" />
-                        </div>
+        
 
 
         <div class="row">
-
+            
             <asp:Panel ID="scorePanel" runat="server" Width="60%" HorizontalAlign="Center">
-                <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
+                <div>
+                <label>顯示/隱藏全部</label>
+            </div>
+            <div>
 
+
+                <input type="image" id="ShowOrHideAll" src="~/Image/visible.png" runat="server" onserverclick="ShowOrHideAll_Click" />
+                <asp:HiddenField ID="AllInOrVisible" runat="server" Value="true" />
+            </div>
+                <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
+                   
                     <Columns>
 
                         <asp:TemplateField HeaderText="號碼">
@@ -232,7 +254,7 @@
                         <asp:ButtonField ButtonType="Image" CommandName="Submit" ImageUrl="~/Image/checkmark2.png" ControlStyle-Height="40px" HeaderText="確認">
                             <ControlStyle CssClass=" menu_img" />
                         </asp:ButtonField>
-                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="~/Image/checkmark2.png" ControlStyle-Height="40px" HeaderText="顯示/隱藏">
+                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" HeaderText="顯示/隱藏">
                             <ControlStyle CssClass=" menu_img" />
                         </asp:ButtonField>
 

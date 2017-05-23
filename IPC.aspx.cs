@@ -9,6 +9,7 @@ using System.IO;
 using System.Security;
 using System.Xml;
 using System.Data;
+using System.Threading;
 
 
 public partial class IPC: System.Web.UI.Page
@@ -40,28 +41,60 @@ public partial class IPC: System.Web.UI.Page
             //gvScore.DataMember = 
             gvScore.DataBind();
             gvScore.HeaderRow.TableSection = TableRowSection.TableHeader;
+
+
+
+
+
+
+            //add an invisible row which contains a btn to activate ShowAll 
+            
         }
     }
-
+   
 
 
     public void sendMsg23DBuilder(string contact)
     {
-        
+        /*
 
         //send cmd1
         try
         {
-            StreamWriter wr = (StreamWriter)Session["Writer"];
-            //send cmd2
-            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
-            wr.Flush();
+            using (StreamWriter wr = (StreamWriter)Session["Writer"])
+            {
+                //send cmd2
+                wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+            }// the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+           
+            //wr.Flush();
         }
         catch(Exception e)
         {
 
         }
-      
+      */
+
+        
+        //send cmd1
+        try
+        {
+           
+            StreamWriter wr = (StreamWriter)Session["Writer"];
+            //StreamWriter wr = new StreamWriter((StreamWriter)Session["Writer"]);
+            //StreamWriter wr = new StreamWriter((Stream )Session["Writer"], Encoding.UTF8, 4096, true);
+            //send cmd2
+            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+            
+            // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+           
+            //wr.Flush();
+        }
+        catch (Exception e)
+        {
+
+        }
+         
     }
 
     protected void StartIPC_Click(object sender, EventArgs e)
@@ -138,34 +171,45 @@ public partial class IPC: System.Web.UI.Page
         }
         return HideOrShow;
     }
-    public void ShowOrHideAll_Click(object sender, EventArgs e)
+
+
+    protected void ShowOrHideAll_Click(object sender, EventArgs e)
     {
+        
+
+        
         //switch visibility icon All rows .
         String HideOrShow = switchVisible_Invisible(null, "InOrVisible", gvScore);
+        string contact = "7 " + HideOrShow; //send "6 Hide realOrganName" to 3DBuilder  
+        
 
-       
-       
+        /*
+         string a = "abcdd";
+        
+         //use JS alert() in C#
+         ScriptManager.RegisterStartupScript(
+          this,
+          typeof(Page),
+          "Alert",
+          "<script>alert('" + a + "');</script>",
+          false);
+         /////
+        */
 
         //send hide 3D organ msg to 3DBuilder
         //string contact = "7 " + HideOrShow;//send "7 Hide realOrganName" to 3DBuilder
         //string contact = "6 " + HideOrShow ;
 
+
+        
         //string contact = "6 hide Left Popliteal Vein";
-        string contact = "7 " + HideOrShow; //send "6 Hide realOrganName" to 3DBuilder  
-
+        
         sendMsg23DBuilder(contact);
-       
 
-        /*
-        //use JS alert() in C#
-        ScriptManager.RegisterStartupScript(
-         this,
-         typeof(Page),
-         "Alert",
-         "<script>alert('" + contact + "');</script>",
-         false);
-        /////
-       */
+       // Thread.Sleep(1000); //Delay 1秒
+        
+       
+       
        
     }
     //submit current edition to 3DBuilder
