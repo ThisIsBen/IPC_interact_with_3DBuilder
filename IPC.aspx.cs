@@ -17,10 +17,18 @@ public partial class IPC: System.Web.UI.Page
     //private static System.Diagnostics.Process os = new System.Diagnostics.Process();
    // public static System.Diagnostics.Process rd = new System.Diagnostics.Process();
    // private StreamWriter myStreamWriter = null; 
-  
+
+    
+    //In the near future ,we will get the Path from URL para or other para transmission method.
+    string XMLFolder = "IPC_Questions/";
+    string questionXMLPath = "SceneFile_Q1.xml";
+
+   
     
     protected void Page_Load(object sender, EventArgs e)
     {
+        questionXMLPath = XMLFolder + questionXMLPath;
+
         Page.MaintainScrollPositionOnPostBack = true;
         if (!IsPostBack)
         {
@@ -31,7 +39,9 @@ public partial class IPC: System.Web.UI.Page
             gvScore.PageIndex = 0;
 
             DataSet ds = new DataSet();
-            ds.ReadXml(Server.MapPath("SceneFile13.xml")); //must synchronized with the XML file in Items.aspx.cs:  wr.WriteLine("3 D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\SceneFile13.xml");//send protocol,Data to 3DBuilder.
+            //ds.ReadXml(Server.MapPath("SceneFile13.xml")); //must synchronized with the XML file in Items.aspx.cs:  wr.WriteLine("3 D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\SceneFile13.xml");//send protocol,Data to 3DBuilder.
+            ds.ReadXml(Server.MapPath(questionXMLPath)); //must synchronized with the XML file in Items.aspx.cs:  wr.WriteLine("3 D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\SceneFile13.xml");//send protocol,Data to 3DBuilder.
+            
             //in Items.aspx.cs
 
             //DataRow dtRow = dtScore.NewRow();
@@ -277,7 +287,18 @@ public partial class IPC: System.Web.UI.Page
            
             
         }
-       
+        if (e.CommandName == "relay")
+        {
+            //switch visibility icon All rows .
+            String HideOrShow = switchVisible_Invisible(null, "InOrVisible", gvScore);
+            string contact = "7 " + HideOrShow; //send "6 Hide realOrganName" to 3DBuilder  
+
+
+           
+            sendMsg23DBuilder(contact);
+
+        }
+
     }
 
 

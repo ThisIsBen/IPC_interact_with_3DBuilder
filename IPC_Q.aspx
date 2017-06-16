@@ -1,9 +1,13 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeFile="IPC.aspx.cs" Inherits="IPC" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="./Site.Master" CodeFile="IPC_Q.aspx.cs" Inherits="IPC" %>
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <!--Include Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -13,6 +17,8 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="./bootstrap-checkbox/dist/js/bootstrap-checkbox.min.js" defer></script>
+
     <style type="text/css">
         th {
             
@@ -27,22 +33,15 @@
             background-color: #b6ff00;
         }
 
-        .submit_img {
-            width: 100%;
-            visibility: hidden;
-        }
         .menu_img {
             width: 100%;
-           
         }
-        .hideIfNotQuestion {
-           visibility: hidden;
-        }
+
         
     </style>
 
     <script type="text/javascript">
-        
+       
         //Close CSNamePipe.exe before close the webpage.
         //$(window).unload(function () {
          //   document.getElementById('<%= FinishBtn.ClientID %>').click();
@@ -77,18 +76,10 @@
             
             //recover visbility icon of hide_showAll
            
-            var hfHide_ShowAll = document.getElementById("<%= AllInOrVisible.ClientID %>");
-
-
-            //suspects of can't read
-            ///////////////////////////////////////////////////////////
-            var iconHide_ShowAll = document.getElementById("<%= ShowOrHideAll.ClientID %>");
            
            
-            if (hfHide_ShowAll.value == "true") {
-                iconHide_ShowAll.src= "Image/visible.png";
-            }
-
+           
+            
 
             ///////////////////////////////////////////////////
             
@@ -103,10 +94,12 @@
             //suspects of can't read
             ///////////////////////////////////////////////////
             //resume mark icon in gridView
-            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
             
+            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+
+            /*
             for (i = 1; i < gvDrv.rows.length; i++) {
-           
+
                 
                 
                 //recover visbility icon of each row
@@ -117,35 +110,28 @@
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = "Image/invisible.png";
                 }
                 
-               
-
-
-            }
-            
-
-            for (i = 1; i < gvDrv.rows.length; i++)
-            {
                 //recover mark icon of each row
-                if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[3] != null) {
-                    switch (parseInt(gvDrv.rows[i].cells[1].getElementsByTagName("input")[3].value)) {
+                switch (parseInt(gvDrv.rows[i].cells[1].getElementsByTagName("input")[3].value)) {
 
-                        case 0:
-                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = "image/notSure.png";
-                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = "image/giveUp.png";
-                                break;
-                        case 1:
-                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = "image/notSureClick.png";
-                            break;
-                        case 2:
-                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = "image/giveUpClick.png";
-                            break;
-
+                    case 0:
+                        gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = "image/notSure.png";
+                        gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = "image/giveUp.png";
+                        break;
+                    case 1:
+                        gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = "image/notSureClick.png";
+                        break;
+                    case 2:
+                        gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = "image/giveUpClick.png";
+                        break;
 
 
 
-                   }
+
                 }
+
+
             }
+            */
 //////////////////////////////////////////////////////////////
         }
 
@@ -216,22 +202,53 @@
         }
 
 
+        function checkPickedOrgans(questionArray) {
 
-        function showTBOfQuestionOrgans() {
-            console.log(questionArray);
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
             for (i = 0; i < questionArray.length; i++) {
-                //show the textbox of the organs that have been chosen as part of question.
-                gvDrv.rows[questionArray[i]].cells[1].getElementsByTagName("input")[0].style.visibility = 'visible';
-                //show the submit button of the organs that have been chosen as part of question.
-                gvDrv.rows[questionArray[i]].cells[2].getElementsByTagName("input")[0].style.visibility = 'visible';
 
-                //show the markicona of the organs that have been chosen as part of question.
-                gvDrv.rows[questionArray[i]].cells[4].getElementsByTagName("input")[0].style.visibility = 'visible';
-                gvDrv.rows[questionArray[i]].cells[4].getElementsByTagName("input")[1].style.visibility = 'visible';
+
+                //check the organ that has been chosen as part of question.
+                $("#" + gvDrv.rows[questionArray[i]].cells[2].getElementsByTagName("input")[0].id ).prop('checked', true);
+
             }
         }
+        function readInExistingQuestion() {
+            $.ajax({
+                type: "GET",
+                url: "IPC_Questions/SceneFile_Q1.xml",
+                dataType: "xml",
+                success: function (xml) {
+
+                    var questionArray = []
+
+                    $(xml).find('Organ').each(function () {
+
+                        $title = $(this).find("Question");
+
+                        var val = $title.text();
+
+                        if (val == "Yes") {
+                            $no = $(this).find("Number");
+
+                            //push to questionArray
+                            questionArray.push($no.text());
+                            //alert($no.text());
+
+                        }
+
+
+
+
+                    });
+                    console.log(questionArray);
+                    checkPickedOrgans(questionArray);
+                }
+
+            });
+        }
+
     </script>
 
 
@@ -261,14 +278,14 @@
             
             <asp:Panel ID="scorePanel" runat="server" Width="60%" HorizontalAlign="Center">
                 <div>
-                <label>顯示/隱藏全部</label>
+                    
+            
             </div>
             <div>
 
-                <input type="image" id="ShowOrHideAll" src="~/Image/visible.png" runat="server" onserverclick="ShowOrHideAll_Click"/>
                
                 
-                <asp:HiddenField ID="AllInOrVisible" runat="server" Value="true" />
+              
             </div>
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
                   
@@ -281,77 +298,63 @@
                         </asp:TemplateField>
                         <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="名稱">
                             <ItemTemplate>
-                                <asp:TextBox ID="TextBox_Text" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
-                                <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />
-                                <asp:HiddenField ID="InOrVisible" runat="server" Value="true" />
-                                <asp:HiddenField ID="markRecord" runat="server" Value="0" />
+                              
+                                <asp:Label ID="LBTextBox_OrganName" runat="server" Text='<%# Eval("Name") %>' />
+                                
+
                             </ItemTemplate>
 
                         </asp:TemplateField>
-
-
-
-                        <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="~/Image/checkmark2.png" ControlStyle-Height="40px" HeaderText="確認">
-                            <ControlStyle CssClass=" submit_img" />
-                        </asp:ButtonField>
-                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px" HeaderText="顯示/隱藏">
-                            <ControlStyle CssClass=" menu_img" />
-                        </asp:ButtonField>
-
-                        <asp:TemplateField HeaderText="記號<br/>不確定/不會">
+                         <asp:TemplateField HeaderText="是否要排入考題">
                             <ItemTemplate>
-                                <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="image/notSure.png" OnClientClick="return toNotSureIcon(this) " ControlStyle-Height="40px" />
-                                <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="image/giveUp.png" OnClientClick="return toGiveUpIcon(this)" ControlStyle-Height="40px" />
+                                 <asp:CheckBox runat="server" ID="checkbox_pickedOrgan" />
 
+                             
                             </ItemTemplate>
-
-
                         </asp:TemplateField>
+
+
+
+                        
+                        
+
+                        
 
                     </Columns>
                 </asp:GridView>
             </asp:Panel>
         </div>
     </div>
+    <script type="text/javascript">
 
-    <script>
-        var questionArray = []
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
-       questionXMLPath = "IPC_Questions/SceneFile_Q1.xml";
-       //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
+        questionXMLPath = "IPC_Questions/SceneFile_Q1.xml";
+        //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
+
+        //to extract para in URL
+        $.urlParam = function (name) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            return results[1] || 0;
+        }
+
         $(document).ready(function () {
-            $.ajax({
-                type: "GET",
-                url: questionXMLPath,
-                dataType: "xml",
-                success: function (xml) {
+            $(':checkbox').checkboxpicker();
 
-                    
+            
 
-                    $(xml).find('Organ').each(function () {
-
-                        $title = $(this).find("Question");
-
-                        var val = $title.text();
-
-                        if (val == "Yes") {
-                            $no = $(this).find("Number");
-
-                            //push to questionArray
-                            questionArray.push($no.text());
-                            //alert($no.text());
-
-                        }
+            //load XML to check the organs that are picked to be part of question.
+            if ($.urlParam('viewContent') == "Yes") // Yes
+            {
+                //load XML to check the organs that are picked to be part of question.
+                
+                readInExistingQuestion();
+            }
 
 
+          
 
-
-                    });
-                    
-                    showTBOfQuestionOrgans();
-                }
-
-            });
         });
-    </script>
+       
+     </script>
+
 </asp:Content>
