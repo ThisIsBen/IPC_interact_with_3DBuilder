@@ -316,13 +316,16 @@
 
     <script>
         var questionArray = []
+
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
-       questionXMLPath = "IPC_Questions/SceneFile_Q1.xml";
+        XMLFolder = "IPC_Questions/";
+        questionXMLPath = "SceneFile_Q1.xml";
+        
        //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
         $(document).ready(function () {
             $.ajax({
                 type: "GET",
-                url: questionXMLPath,
+                url: XMLFolder + questionXMLPath,
                 dataType: "xml",
                 success: function (xml) {
 
