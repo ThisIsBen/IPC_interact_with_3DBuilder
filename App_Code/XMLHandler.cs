@@ -109,13 +109,13 @@ public class XMLHandler
 
         xDoc.Save(xmlStorePath);
 
-        
+        /*
         //sync the organ XML file which is just saved to xmlStorePath with the corresponding organ XML file in D:\Mirac3DBuilder\HintsAccounts\Student\Mirac\1161-1450 for 3DBuilder to read.
         System.Diagnostics.Process proc = new System.Diagnostics.Process();
         proc.StartInfo.FileName = "D:\\IPC\\syncOrganXML.bat";
         proc.StartInfo.WorkingDirectory = "D:\\IPC";
         proc.Start();
-         
+         */
     
     
     
