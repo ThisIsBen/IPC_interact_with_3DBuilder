@@ -233,6 +233,9 @@ public partial class IPC: System.Web.UI.Page
         if (e.CommandName == "Submit")
         {
 
+            //generated random question number with Peter's function
+            int[] randQuestionNoList = { 5, 3, 1 };
+
             // Convert the row index stored in the CommandArgument
             // property to an Integer.
             int index = Convert.ToInt32(e.CommandArgument);
@@ -246,7 +249,7 @@ public partial class IPC: System.Web.UI.Page
             //text exam mode
             
             if(Request["examMode"]=="Yes")
-                num.Text = (selectedRow.RowIndex + 1).ToString();
+                num.Text = (Array.IndexOf(randQuestionNoList,Int32.Parse(num.Text))+1).ToString();
             
              /////////////////////////////
             
