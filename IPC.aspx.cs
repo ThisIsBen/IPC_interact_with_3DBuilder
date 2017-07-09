@@ -241,8 +241,17 @@ public partial class IPC: System.Web.UI.Page
             // cell in the GridView control.
             GridViewRow selectedRow = gvScore.Rows[index];
             var tbx = selectedRow.FindControl("TextBox_Text") as TextBox;
-            var num = selectedRow.FindControl("TextBox_Number") as Label;
+            var num =selectedRow.FindControl("TextBox_Number") as Label;
+            /////////////////////////////////////////////
+            //text exam mode
+            
+            if(Request["examMode"]=="Yes")
+                num.Text = (selectedRow.RowIndex + 1).ToString();
+            
+             /////////////////////////////
+            
             var answer = selectedRow.FindControl("TextBox_Answer") as HiddenField;
+            
             string input = tbx.Text.Replace(" ","");
             //Bent 2017 test
             string contact = "5 " + input + " " + num.Text + " " + answer.Value.ToString();
