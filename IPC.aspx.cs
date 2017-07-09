@@ -58,7 +58,9 @@ public partial class IPC: System.Web.UI.Page
 
 
             //add an invisible row which contains a btn to activate ShowAll 
-            
+            //use JS alert() in C#
+           
+           
         }
     }
    
@@ -242,7 +244,9 @@ public partial class IPC: System.Web.UI.Page
             var num = selectedRow.FindControl("TextBox_Number") as Label;
             var answer = selectedRow.FindControl("TextBox_Answer") as HiddenField;
             string input = tbx.Text.Replace(" ","");
+            //Bent 2017 test
             string contact = "5 " + input + " " + num.Text + " " + answer.Value.ToString();
+            //string contact = "5 " + input + " "  + answer.Value.ToString();
             sendMsg23DBuilder(contact);
                
         }

@@ -217,19 +217,45 @@
 
 
 
-        function showTBOfQuestionOrgans() {
-            console.log(questionArray);
+        function showTBOfQuestionOrgans(inExamMode) {
+            //console.log(inExamMode);
+            //console.log(questionArray);
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
+           
+
             for (i = 0; i < questionArray.length; i++) {
+
+                showTBItems = questionArray[i];
+                if (inExamMode)//if it's in exam mode,do showTBItems = i
+                    showTBItems = i+1;
+                
+                    
+
                 //show the textbox of the organs that have been chosen as part of question.
-                gvDrv.rows[questionArray[i]].cells[1].getElementsByTagName("input")[0].style.visibility = 'visible';
+                gvDrv.rows[showTBItems].cells[1].getElementsByTagName("input")[0].style.visibility = 'visible';
                 //show the submit button of the organs that have been chosen as part of question.
-                gvDrv.rows[questionArray[i]].cells[2].getElementsByTagName("input")[0].style.visibility = 'visible';
+                gvDrv.rows[showTBItems].cells[2].getElementsByTagName("input")[0].style.visibility = 'visible';
 
                 //show the markicona of the organs that have been chosen as part of question.
-                gvDrv.rows[questionArray[i]].cells[4].getElementsByTagName("input")[0].style.visibility = 'visible';
-                gvDrv.rows[questionArray[i]].cells[4].getElementsByTagName("input")[1].style.visibility = 'visible';
+                gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[0].style.visibility = 'visible';
+                gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[1].style.visibility = 'visible';
+            }
+        }
+
+        function rearrangeQNo() {
+            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+
+           
+
+            for (i = 1; i < gvDrv.rows.length; i++) {
+
+             
+               
+                //show the textbox of the organs that have been chosen as part of question.
+               
+               
+                gvDrv.rows[i].cells[0].getElementsByTagName("span")[0].innerHTML = i;
             }
         }
     </script>
@@ -321,7 +347,30 @@
         XMLFolder = "IPC_Questions/";
         questionXMLPath = "SceneFile_Q1.xml";
         
-       //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
+
+        //to extract para in URL
+        $.urlParam = function (name) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+            if (!results)
+                return 0;
+                
+            else
+                return results[1];
+        }
+        //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
+
+
+
+
+
+        //swap the elements of index x and y in an array.
+        function swapElement(questionList, x, y) {
+            var b = questionList[y];
+            questionList[y] = questionList[x];
+            questionList[x] = b;
+        }
+
+
         $(document).ready(function () {
             $.ajax({
                 type: "GET",
@@ -350,11 +399,96 @@
 
 
                     });
-                    
-                    showTBOfQuestionOrgans();
+
+                    //activate exam mode
+
+                    if ($.urlParam('examMode') == "Yes") {
+
+                        //對調IPC table rows ,改tableID ,rowID與pickedRandQNo 與questionList :1~n即可符合使用
+
+                        //give tr unique id
+                        tableID = "MainContent_gvScore"
+                        rowID = "tableRowID"
+                        var tableTr = $("#" + tableID + " tr");
+                        //var countTr = tableTr.size();
+                        var countTr = document.getElementById(tableID).rows.length;
+                        //alert(countTr);
+                        for (i = 0; i < countTr; i++) {
+
+                            tableTr.eq(i).attr('id', 'tableRowID' + i);
+
+                        }
+
+
+
+
+                        //generate the exam question number according to pickedRandQNo,and swap the corresponding row in the table at the same time.
+
+                        var pickedRandQNo = [5, 3, 1];
+
+                        var questionList = [];
+                        for (i = 0; i < countTr; i++) {
+                            questionList[i] = i + 1;
+                        }
+
+                        var $elem1;
+                        var $elem2;
+                        var $placeholder = $("<tr><td></td></tr>");
+                        var swapTarget;
+                        for (i = 0; i < pickedRandQNo.length; i++) {
+                            swapTarget = questionList.indexOf(pickedRandQNo[i]);
+
+
+                            //test
+                            console.log(questionList[swapTarget]);
+                            console.log(questionList[i]);
+                            console.log("\n");
+
+
+                            $elem1 = $("#" + rowID + questionList[swapTarget]);
+                            $elem2 = $("#" + rowID + questionList[i]);
+
+                            $elem2.after($placeholder);
+                            $elem1.after($elem2);
+                            $placeholder.replaceWith($elem1);
+
+                            swapElement(questionList, swapTarget, i);
+
+                        }
+                        
+
+
+                        //rearrange Question numbers in ascending order to keep Question numbers being arranged as ususal order.
+                        rearrangeQNo();
+
+
+                        //show the TextBox of the question Organs.
+                        examMode = true;
+                        showTBOfQuestionOrgans(examMode);
+
+
+
+                    }
+
+
+
+
+                    if ($.urlParam('examMode') == 0)
+                    {
+
+                        //show the TextBox of the question Organs.
+                        examMode = false;
+                        showTBOfQuestionOrgans(examMode);
+                    }
                 }
 
             });
+
+
+
+            
+           
+
         });
     </script>
 </asp:Content>
