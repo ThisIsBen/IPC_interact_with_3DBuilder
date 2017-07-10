@@ -247,17 +247,30 @@ public partial class IPC: System.Web.UI.Page
             var num =selectedRow.FindControl("TextBox_Number") as Label;
             /////////////////////////////////////////////
             //text exam mode
+            //store the Question number
+            string QuestionNo;
+
+            //if it's in the exam mode
+            if (Request["examMode"] == "Yes")
+            {
+
+                QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(num.Text)) + 1).ToString();
+
+
+            }
             
-            if(Request["examMode"]=="Yes")
-                num.Text = (Array.IndexOf(randQuestionNoList,Int32.Parse(num.Text))+1).ToString();
-            
+            //if it's not in the exam mode
+            else
+            {
+                QuestionNo = num.Text;
+            }
              /////////////////////////////
             
             var answer = selectedRow.FindControl("TextBox_Answer") as HiddenField;
             
             string input = tbx.Text.Replace(" ","");
             //Bent 2017 test
-            string contact = "5 " + input + " " + num.Text + " " + answer.Value.ToString();
+            string contact = "5 " + input + " " + QuestionNo + " " + answer.Value.ToString();
             //string contact = "5 " + input + " "  + answer.Value.ToString();
             sendMsg23DBuilder(contact);
                
