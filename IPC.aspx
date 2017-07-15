@@ -413,9 +413,14 @@
                         //get the randomized  Question Numbers picked by instructor to IPC.aspx sent through Session
                        var pickedRandQNo = [];
                        <% 
-                            var arrayData = (int[])Session["randomQuestionNo"];
-                            for(int i=0;i<arrayData.Length;i++)
-                            {
+        
+                            
+                            var arrayData = RandomQuestionNoSession;
+
+                            //if RandomQuestionNoSession is not null
+                            if(arrayData[0]!=-1)
+                                for(int i=0;i<arrayData.Length;i++)
+                                {
                                 
                          
                         %>
@@ -423,7 +428,7 @@
                         pickedRandQNo.push('<%= arrayData[i] %>');
 
                         <% 
-                            }
+                                }
                         %>
                         //alert(pickedRandQNo);
                        

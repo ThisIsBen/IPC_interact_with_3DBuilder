@@ -12,7 +12,7 @@ using System.Data;
 using System.Threading;
 
 
-public partial class IPC: System.Web.UI.Page
+public partial class IPC : CsSessionManager 
 {
     //private static System.Diagnostics.Process os = new System.Diagnostics.Process();
    // public static System.Diagnostics.Process rd = new System.Diagnostics.Process();
