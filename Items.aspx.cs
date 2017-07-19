@@ -41,12 +41,14 @@ public partial class Items : Page
     protected void btnKnee_Click(object sender, EventArgs e)
     {
 
-        //These variables will set by URL parameter or data retrieve from DB in the near future.
-        bool ExamMode = false;//ExamMode的中控
+        //These 3 variables will set by URL parameter or data retrieve from DB in the near future.
+        ///////////////////////////////////////////////////////////////////////////////
+        bool ExamMode = true;//ExamMode的中控
+        
         //Randomize the organ number picked by instructor 
         int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor will be retrieved from DB in the near future. 
         string ID_Num="234";//The last 3 digits of student's ID will be retrieved from DB in the near future.  
-
+        ///////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -57,7 +59,7 @@ public partial class Items : Page
         //if it's in exam mode.
         if (ExamMode)
         {
-           
+            //randomize the  Question Numbers picked by instructor using student's ID as seed.
             int[] randomQuestionNo = RandomQuestionNo.rand(ID_Num, pickedQuestions);
 
 

@@ -135,9 +135,9 @@ public partial class IPC : CsSessionManager
     {
         
         Process os = (Process)Session["Process"];
-        //string filename = os.ProcessName ;
+        
         os.Kill();
-        //File.Delete(Server.MapPath("~/") + @filename+".exe");
+      
         
     }
 
@@ -234,7 +234,7 @@ public partial class IPC : CsSessionManager
         {
 
             //generated random question number with Peter's function
-            int[] randQuestionNoList = { 5, 3, 1 };
+            int[] randQuestionNoList = RandomQuestionNoSession;
 
             // Convert the row index stored in the CommandArgument
             // property to an Integer.
@@ -252,18 +252,18 @@ public partial class IPC : CsSessionManager
 
             //if it's in the exam mode
             if (Request["examMode"] == "Yes")
-            {
+             {
 
                 QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(num.Text)) + 1).ToString();
-
+                // QuestionNo = index.ToString();
 
             }
             
             //if it's not in the exam mode
             else
-            {
-                QuestionNo = num.Text;
-            }
+           {
+               QuestionNo = num.Text;
+           }
              /////////////////////////////
             
             var answer = selectedRow.FindControl("TextBox_Answer") as HiddenField;

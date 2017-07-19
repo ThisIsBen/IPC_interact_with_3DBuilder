@@ -287,7 +287,7 @@
             
             <asp:Panel ID="scorePanel" runat="server" Width="60%" HorizontalAlign="Center">
                 <div>
-                <label>顯示/隱藏全部</label>
+                <label>顯示全部</label>
             </div>
             <div>
 
@@ -372,6 +372,7 @@
 
 
         $(document).ready(function () {
+
             $.ajax({
                 type: "GET",
                 url: XMLFolder + questionXMLPath,
@@ -521,8 +522,13 @@
             });
 
 
-
-            
+            //Prevent users from submitting a TextBox content by hitting Enter
+            $(window).keydown(function (event) {
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    return false;//do not postBack
+                }
+            });
            
 
         });
