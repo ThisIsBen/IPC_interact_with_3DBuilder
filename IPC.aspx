@@ -267,7 +267,7 @@
         <div class="jumbotron">
             <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
-            <div class="container">
+            <div  class="container">
                 <div class="row">
                     <div class="col-sm-6">
                         <asp:Button ID="FinishBtn" OnClick="FinishBtn_Click" Text="Finish" runat="server" />
@@ -287,7 +287,7 @@
             
             <asp:Panel ID="scorePanel" runat="server" Width="60%" HorizontalAlign="Center">
                 <div>
-                <label>顯示全部</label>
+                <label>Show all hidden organs</label>
             </div>
             <div>
 
@@ -300,15 +300,15 @@
                   
                     <Columns>
 
-                        <asp:TemplateField HeaderText="號碼">
+                        <asp:TemplateField HeaderText="Question Number">
                             <ItemTemplate>
                                 <asp:Label ID="TextBox_Number" CliendIDMode="static" name="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="名稱">
+                        <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="Organ Name">
                             <ItemTemplate>
                                 <asp:TextBox ID="TextBox_Text" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
-                                <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />
+                                <%--<asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />--%>
                                 <asp:HiddenField ID="InOrVisible" runat="server" Value="true" />
                                 <asp:HiddenField ID="markRecord" runat="server" Value="0" />
                             </ItemTemplate>
@@ -317,14 +317,14 @@
 
 
 
-                        <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="~/Image/checkmark2.png" ControlStyle-Height="40px" HeaderText="確認">
+                        <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="~/Image/checkmark2.png" ControlStyle-Height="40px" HeaderText="Submit">
                             <ControlStyle CssClass=" submit_img" />
                         </asp:ButtonField>
-                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px" HeaderText="顯示/隱藏">
+                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Show/Hide">
                             <ControlStyle CssClass=" menu_img" />
                         </asp:ButtonField>
 
-                        <asp:TemplateField HeaderText="記號<br/>不確定/不會">
+                        <asp:TemplateField HeaderText="Mark<br/>Not sure  /&nbsp;&nbsp;&nbsp;&nbsp;  Give up">
                             <ItemTemplate>
                                 <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="image/notSure.png" OnClientClick="return toNotSureIcon(this) " ControlStyle-Height="40px" />
                                 <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="image/giveUp.png" OnClientClick="return toGiveUpIcon(this)" ControlStyle-Height="40px" />

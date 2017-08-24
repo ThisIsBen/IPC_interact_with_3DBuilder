@@ -30,4 +30,22 @@ public class CsSessionManager : System.Web.UI.Page
             Session["randomQuestionNo"] = value;
         }
     }
+
+    protected List<string> CorrectOrganNameSession//project is 徵件或報告
+    {
+        get
+        {
+            if (Session["CorrectOrganNameSession"] == null)
+            {
+                List<string> empty = new List<string>();
+                Session["CorrectOrganNameSession"] = empty;
+            }
+            return (List<string>)Session["CorrectOrganNameSession"]; 
+
+        }
+        set
+        {
+            Session["CorrectOrganNameSession"] = value;
+        }
+    }
 }

@@ -22,7 +22,7 @@ public partial class IPC : CsSessionManager
     //In the near future ,we will get the Path from URL para or other para transmission method.
     string XMLFolder = "IPC_Questions/";
     string questionXMLPath = "SceneFile_Q1.xml";
-
+    List<string> CorrectOrganNameList = new List<string>();//to contain the content read from organ XML file.
    
     
     protected void Page_Load(object sender, EventArgs e)
@@ -54,6 +54,20 @@ public partial class IPC : CsSessionManager
 
 
 
+            // For each correct organ name in the table, add it to a list called CorrectOrganNameList .
+            
+                foreach (DataRow row in ds.Tables["Organ"].Rows)
+                {
+
+                    CorrectOrganNameList.Add(row["Name"].ToString());
+                    
+                }
+            //store correct organ list to session
+                CorrectOrganNameSession = CorrectOrganNameList;
+
+
+            
+            
 
 
 
@@ -256,7 +270,7 @@ public partial class IPC : CsSessionManager
 
                 QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(num.Text)) + 1).ToString();
                 // QuestionNo = index.ToString();
-
+                
             }
             
             //if it's not in the exam mode
@@ -265,12 +279,15 @@ public partial class IPC : CsSessionManager
                QuestionNo = num.Text;
            }
              /////////////////////////////
-            
-            var answer = selectedRow.FindControl("TextBox_Answer") as HiddenField;
+         
+           
+            //get the corresponding correct organ name 
+            var answer = CorrectOrganNameSession[Convert.ToInt32(num.Text)-1];
+                
             
             string input = tbx.Text.Replace(" ","");
             //Bent 2017 test
-            string contact = "5 " + input + " " + QuestionNo + " " + answer.Value.ToString();
+            string contact = "5 " + input + " " + QuestionNo + " " + answer.ToString();
             //string contact = "5 " + input + " "  + answer.Value.ToString();
             sendMsg23DBuilder(contact);
                
@@ -294,7 +311,9 @@ public partial class IPC : CsSessionManager
             GridViewRow selectedRow = gvScore.Rows[index];
            
             var num = selectedRow.FindControl("TextBox_Number") as Label; //Index of the selected 3D object
-            var answer = selectedRow.FindControl("TextBox_Answer") as HiddenField; //The name of selected 3D object 
+            
+            //get the corresponding correct organ name 
+            var answer = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 
             
             //switch visibility icon of the selected row .
             String HideOrShow = switchVisible_Invisible(selectedRow, "InOrVisible",null);
@@ -310,7 +329,7 @@ public partial class IPC : CsSessionManager
             //send hide 3D organ msg to 3DBuilder
             */
             
-            string contact = "6 " + HideOrShow + " " + answer.Value.ToString(); //send "6 Hide realOrganName" to 3DBuilder
+            string contact = "6 " + HideOrShow + " " + answer.ToString(); //send "6 Hide realOrganName" to 3DBuilder
             
            sendMsg23DBuilder(contact);
            
