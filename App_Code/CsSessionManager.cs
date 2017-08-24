@@ -31,6 +31,7 @@ public class CsSessionManager : System.Web.UI.Page
         }
     }
 
+
     protected List<string> CorrectOrganNameSession//project is 徵件或報告
     {
         get

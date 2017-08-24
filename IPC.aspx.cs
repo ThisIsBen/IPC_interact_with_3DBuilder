@@ -334,6 +334,7 @@ public partial class IPC : CsSessionManager
            sendMsg23DBuilder(contact);
            
             
+
         }
         if (e.CommandName == "relay")
         {
