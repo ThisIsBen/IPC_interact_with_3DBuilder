@@ -22,7 +22,6 @@ public partial class IPC : CsSessionManager
     //In the near future ,we will get the Path from URL para or other para transmission method.
     string XMLFolder = "IPC_Questions/";
     string questionXMLPath = "SceneFile_Q1.xml";
-    List<string> CorrectOrganNameList = new List<string>();//to contain the content read from organ XML file.
    
     
     protected void Page_Load(object sender, EventArgs e)
@@ -53,7 +52,8 @@ public partial class IPC : CsSessionManager
             gvScore.HeaderRow.TableSection = TableRowSection.TableHeader;
 
 
-
+            List<string> CorrectOrganNameList = new List<string>();//to contain the content read from organ XML file.
+   
             // For each correct organ name in the table, add it to a list called CorrectOrganNameList .
             
                 foreach (DataRow row in ds.Tables["Organ"].Rows)

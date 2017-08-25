@@ -309,7 +309,7 @@
                         <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="Organ Name">
                             <ItemTemplate>
                                 <asp:TextBox ID="TextBox_Text" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
-                                <%--<asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />--%>
+                                <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />
                                 <asp:HiddenField ID="InOrVisible" runat="server" Value="true" />
                                 <asp:HiddenField ID="markRecord" runat="server" Value="0" />
                             </ItemTemplate>
