@@ -7,7 +7,7 @@ using System.Web.UI.WebControls;
 using System.IO;
 
 
-public partial class Items : Page
+public partial class Items : CsSessionManager
 {
 
    
@@ -64,7 +64,7 @@ public partial class Items : Page
 
 
             //send randomized  Question Numbers picked by instructor to IPC.aspx through Session
-            Session["randomQuestionNo"] = randomQuestionNo;
+            RandomQuestionNoSession = randomQuestionNo;
 
 
 
