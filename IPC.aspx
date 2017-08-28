@@ -43,7 +43,21 @@
     </style>
 
     <script type="text/javascript">
+        //img source gallery 
+        visibleImg = "Image/visible.png";
+        invisibleImg = "Image/invisible.png";
+        notSureImg = "image/notSure.png";
+        giveUpImg = "image/giveUp.png";
+        notSureClickImg = "image/notSureClick.png";
+        giveUpClickImg = "image/giveUpClick.png";
+        checkMarkImg = "Image/checkmark2.png";
         
+
+
+
+
+
+
         //Close CSNamePipe.exe before close the webpage.
         //$(window).unload(function () {
          //   document.getElementById('<%= FinishBtn.ClientID %>').click();
@@ -69,6 +83,8 @@
 
 
         window.onload = function () {
+
+           
             //resume scroll position after asp.net postback
             //divAnswerSheet.scrollTop = hdnScroll.value;
 
@@ -87,7 +103,7 @@
            
            
             if (hfHide_ShowAll.value == "true") {
-                iconHide_ShowAll.src= "Image/visible.png";
+                iconHide_ShowAll.src= visibleImg;
             }
 
 
@@ -95,7 +111,7 @@
             
             /*
             else {
-                iconHide_ShowAll.src = "Image/invisible.png";
+                iconHide_ShowAll.src =invisibleImg ;
             }
             */
 
@@ -103,6 +119,10 @@
 
             //suspects of can't read
             ///////////////////////////////////////////////////
+
+            //keep submit btn visible at all times
+            $('#ShowOrHideAll').attr('src', visibleImg);
+
             //resume mark icon in gridView
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
             
@@ -111,11 +131,23 @@
                 
                 
                 //recover visbility icon of each row
+
+                //keep submit btn visible at all times
+                gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = checkMarkImg;
+
+                //keep Mark icons visible at all times
+                gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureImg;
+                gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpImg;
+
+
+                //if the currently traversed organ was visible,then keep it visible
                 if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[2].value == "true") {
-                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = "Image/visible.png";
+                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = visibleImg;
                 }
+
+                //if the currently traversed organ was invisible,then keep it invisible
                 else {
-                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = "Image/invisible.png";
+                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src =invisibleImg ;
                 }
                 
                
@@ -131,14 +163,14 @@
                     switch (parseInt(gvDrv.rows[i].cells[1].getElementsByTagName("input")[3].value)) {
 
                         case 0:
-                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = "image/notSure.png";
-                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = "image/giveUp.png";
+                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureImg;
+                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpImg;
                                 break;
                         case 1:
-                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = "image/notSureClick.png";
+                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureClickImg;
                             break;
                         case 2:
-                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = "image/giveUpClick.png";
+                            gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpClickImg;
                             break;
 
 
@@ -162,19 +194,19 @@
             //change " " to "not sure"icon or change"not sure"icon and "give up"Icon to " "
             var img = row.cells[4].getElementsByTagName("input")[0].src;
             var imgBesideIt = row.cells[4].getElementsByTagName("input")[1].src;
-            if (img.indexOf('notSureClick.png') != -1 ) {
-                row.cells[4].getElementsByTagName("input")[0].src = "image/notSure.png";
+            if (img.indexOf(notSureClickImg) != -1) {
+                row.cells[4].getElementsByTagName("input")[0].src = notSureImg;
                 //record the current mark icon in the hidden field,0 means empty
                 row.cells[1].getElementsByTagName("input")[3].value = 0;
             }
 
             
             else {
-                if (imgBesideIt.indexOf('giveUpClick.png') != -1)
+                if (imgBesideIt.indexOf(giveUpClickImg) != -1)
                 {
-                    row.cells[4].getElementsByTagName("input")[1].src = "image/giveUp.png";
+                    row.cells[4].getElementsByTagName("input")[1].src = giveUpImg;
                 }
-                row.cells[4].getElementsByTagName("input")[0].src = "image/notSureClick.png";
+                row.cells[4].getElementsByTagName("input")[0].src = notSureClickImg;
                 
                 //record the current mark icon in the hidden field,1 means notSure.png
                 row.cells[1].getElementsByTagName("input")[3].value = 1;
@@ -194,19 +226,19 @@
             //change to "give up" icon
             var img = row.cells[4].getElementsByTagName("input")[1].src;
             var imgBesideIt = row.cells[4].getElementsByTagName("input")[0].src;
-            if (img.indexOf('giveUpClick.png') != -1) {
+            if (img.indexOf(giveUpClickImg) != -1) {
 
-                row.cells[4].getElementsByTagName("input")[1].src = "image/giveUp.png";
+                row.cells[4].getElementsByTagName("input")[1].src = giveUpImg;
                 //record the current mark icon in the hidden field,0 means empty
                 row.cells[1].getElementsByTagName("input")[3].value = 0;
             }
           
             else {
-                if (imgBesideIt.indexOf('notSureClick.png') != -1)
+                if (imgBesideIt.indexOf(notSureClickImg) != -1)
                 {
-                    row.cells[4].getElementsByTagName("input")[0].src = "image/notSure.png";
+                    row.cells[4].getElementsByTagName("input")[0].src = notSureImg;
                 }
-                row.cells[4].getElementsByTagName("input")[1].src = "image/giveUpClick.png";
+                row.cells[4].getElementsByTagName("input")[1].src = giveUpClickImg;
 
                 //record the current mark icon in the hidden field,1 means notSure.png
                 row.cells[1].getElementsByTagName("input")[3].value = 2;
@@ -292,7 +324,7 @@
             </div>
             <div>
 
-                <input type="image" id="ShowOrHideAll" src="~/Image/visible.png" runat="server" onserverclick="ShowOrHideAll_Click"/>
+                <input type="image" id="ShowOrHideAll" src="" runat="server" onserverclick="ShowOrHideAll_Click"/>
                
                 
                 <asp:HiddenField ID="AllInOrVisible" runat="server" Value="true" />
@@ -309,7 +341,11 @@
                         <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="Organ Name">
                             <ItemTemplate>
                                 <asp:TextBox ID="TextBox_Text" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
+                                
+                                <%--show the corresponding correct organ name for debugging purpose--%>
                                 <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />
+                                <%--show the corresponding correct organ name for debugging purpose--%>
+
                                 <asp:HiddenField ID="InOrVisible" runat="server" Value="true" />
                                 <asp:HiddenField ID="markRecord" runat="server" Value="0" />
                             </ItemTemplate>
@@ -318,7 +354,7 @@
 
 
 
-                        <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="~/Image/checkmark2.png" ControlStyle-Height="40px" HeaderText="Submit">
+                        <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Submit">
                             <ControlStyle CssClass=" submit_img" />
                         </asp:ButtonField>
                         <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Show/Hide">
@@ -327,8 +363,8 @@
 
                         <asp:TemplateField HeaderText="Mark<br/>Not sure  /&nbsp;&nbsp;&nbsp;&nbsp;  Give up">
                             <ItemTemplate>
-                                <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="image/notSure.png" OnClientClick="return toNotSureIcon(this) " ControlStyle-Height="40px" />
-                                <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="image/giveUp.png" OnClientClick="return toGiveUpIcon(this)" ControlStyle-Height="40px" />
+                                <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="return toNotSureIcon(this) " ControlStyle-Height="40px" />
+                                <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="return toGiveUpIcon(this)" ControlStyle-Height="40px" />
 
                             </ItemTemplate>
 
@@ -373,6 +409,11 @@
 
 
         $(document).ready(function () {
+            
+            
+            
+
+
 
             $.ajax({
                 type: "GET",

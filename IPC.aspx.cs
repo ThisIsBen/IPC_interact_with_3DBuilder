@@ -51,19 +51,20 @@ public partial class IPC : CsSessionManager
             gvScore.DataBind();
             gvScore.HeaderRow.TableSection = TableRowSection.TableHeader;
 
-
-            List<string> CorrectOrganNameList = new List<string>();//to contain the content read from organ XML file.
+            //to contain the content read from organ XML file.
+            List<string> CorrectOrganNameList = new List<string>();
    
-            // For each correct organ name in the table, add it to a list called CorrectOrganNameList .
-            
-                foreach (DataRow row in ds.Tables["Organ"].Rows)
-                {
+            // For each correct organ name in the table, 
+            //add it to a list called CorrectOrganNameList .
 
-                    CorrectOrganNameList.Add(row["Name"].ToString());
-                    
-                }
+            foreach (DataRow row in ds.Tables["Organ"].Rows)
+            {
+
+                CorrectOrganNameList.Add(row["Name"].ToString());
+
+            }
             //store correct organ list to session
-                CorrectOrganNameSession = CorrectOrganNameList;
+            CorrectOrganNameSession = CorrectOrganNameList;
 
 
             
