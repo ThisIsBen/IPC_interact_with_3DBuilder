@@ -13,7 +13,7 @@ using System.IO;
 /// </summary>
 public class CsSessionManager : System.Web.UI.Page
 {
-    protected int[] RandomQuestionNoSession//project is 徵件或報告
+    protected int[] RandomQuestionNoSession//Store the Question Number picked by Instructor
     {
         get
         {
@@ -32,7 +32,7 @@ public class CsSessionManager : System.Web.UI.Page
     }
 
 
-    protected List<string> CorrectOrganNameSession//project is 徵件或報告
+    protected List<string> CorrectOrganNameSession//Store correct answer of Organ name
     {
         get
         {
