@@ -13,7 +13,7 @@ using System.IO;
 /// </summary>
 public class CsSessionManager : System.Web.UI.Page
 {
-    protected int[] RandomQuestionNoSession//Store the Question Number picked by Instructor
+    protected int[] RandomQuestionNoSession//Store the randomized Question Numbers ,which were picked by Instructor
     {
         get
         {
