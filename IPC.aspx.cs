@@ -282,7 +282,7 @@ public partial class IPC : CsSessionManager
          
            
             //get the corresponding correct organ name 
-            var answer = CorrectOrganNameSession[Convert.ToInt32(num.Text)-1];
+            var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo) - 1];
                 
             
             string input = tbx.Text.Replace(" ","");
