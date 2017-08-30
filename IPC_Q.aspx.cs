@@ -87,7 +87,7 @@ public partial class IPC: System.Web.UI.Page
         //string readIn_xml_str = GetXml("./IPC_Question_Origin/SceneFile_ex.xml");
 
 
-
+        //read in the XML files that contains all organs of a certain body part. e.g., Knee 
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_Question_OriginXMLPath));
        
 

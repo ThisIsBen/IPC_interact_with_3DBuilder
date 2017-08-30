@@ -22,13 +22,54 @@ public class XMLHandler
 
 
     }
-   
+
+    //get  values from specific Tag name with specific value
+    public List<string> getValueOfSpecificTagName(string targetTagName,string SpecificTagName, string SpecificValue)
+    {
+        //to contain the value retrieved.
+        List<string> retrievedValueList = new List<string>();
+       
+        //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Question").Value == "Yes").Single();
+        var targets = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element(SpecificTagName).Value == SpecificValue);
+
+        foreach (var node in targets)
+        {
+            retrievedValueList.Add(node.Element(targetTagName).Value);
+        }
+        return retrievedValueList;
+    }
+
+
+    //get the number of the organ whose Question tag is "Yes"
+    public int[] getPickedQuestionNumber()
+    {
+        //get  values from tag "Number" whose tag "Question" is marked "Yes"
+        List<string> strPickedQuesionNumber = getValueOfSpecificTagName("Number", "Question", "Yes");
+        
+        
+        //Convert the string list to int array.
+        int elementNumInList=strPickedQuesionNumber.Count;
+        int[] pickedQuestions = new int[elementNumInList];
+        for (int i = 0; i < elementNumInList; i++)
+        {
+            pickedQuestions[i] = Int32.Parse(strPickedQuesionNumber[i]);
+
+        }
+        return pickedQuestions;
+ 
+    }
+    
+    
+
+
      //set the checked organs as Questions by setting its Question tag to "Yes"
     public void setAsQuestion( Label OrganName)
     {
        
 
         var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value == OrganName.Text).Single();
+
+
 
         target.Element("Question").Value = "Yes";
 

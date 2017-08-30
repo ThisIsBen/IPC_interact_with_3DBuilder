@@ -9,8 +9,9 @@ using System.IO;
 
 public partial class Items : CsSessionManager
 {
-
-   
+    //In the near future ,we will get the IPC_Question_OriginXMLPath from URL para or other para transmission method.
+    //this XML file contains all organs of a certain body part.
+    string IPC_QuestionXMLFolder = "IPC_Questions/";
     //In the near future ,we will get the Path from URL para or other para transmission method.
     string XMLFolder = "D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\";
     string questionXMLPath = "SceneFile_Q1.xml";
@@ -37,19 +38,42 @@ public partial class Items : CsSessionManager
 
     }
 
+    //get the picked Question number from Question XML file
+    public int[] getPickedQuestionNumber()
+    {
+        ////Get The Question Number of organs  picked by instructor////////// 
+        //read in the XML files that contains all organs of a certain body part. e.g., Knee 
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_QuestionXMLFolder + questionXMLPath));
+
+        //convert  XmlDocument object to XElement object to use "where" phrase to locate a specific tag;
+        xmlHandler.convertXmlDoc2XElement();
+
+        //get the number of the Organs whose Question tag are marked "Yes".
+        return xmlHandler.getPickedQuestionNumber();
+       
+    }
+
+
 
     protected void btnKnee_Click(object sender, EventArgs e)
     {
 
-        //These 3 variables will set by URL parameter or data retrieve from DB in the near future.
+        //These 2 variables will set by URL parameter or data retrieve from DB in the near future.
         ///////////////////////////////////////////////////////////////////////////////
         bool ExamMode = true;//ExamMode的中控
+        string ID_Num = "234";//The last 3 digits of student's ID will be retrieved from DB in the near future. 
+        //int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor will be retrieved from DB in the near future. 
         
-        //Randomize the organ number picked by instructor 
-        int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor will be retrieved from DB in the near future. 
-        string ID_Num="234";//The last 3 digits of student's ID will be retrieved from DB in the near future.  
-        ///////////////////////////////////////////////////////////////////////////////
+       
+        //////////////////////////////////////////////////////////////////////////
 
+        //Get The Question Number of organs  picked by instructor ( from Question XML file)
+        int[] pickedQuestions = getPickedQuestionNumber();
+     
+       
+       
+
+       
 
 
 
