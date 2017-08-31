@@ -148,12 +148,66 @@ public partial class IPC : CsSessionManager
     }
     public void FinishBtn_Click(object sender, EventArgs e)
     {
-        
-        Process os = (Process)Session["Process"];
-        
+        //commented it for Peter work on storing student's answer to DB
+        //Break 3DBuilder connection     
+        Process os = (Process)Session["Process"];       
         os.Kill();
-      
         
+        
+          
+        //Begin: The followings are  for temporary use ,and should be removed before push to github
+        //int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor
+        //RandomQuestionNoSession = pickedQuestions;
+        //End: The followings are  for temporary use ,and should be removed before push to github
+        /*
+        String[] values = new String[10];
+        values[0] = this.gvScore.Rows[0].Cells[0].Text.ToString();
+        values[1] = this.gvScore.Rows[0].Cells[1].Text.ToString();
+        values[2] = this.gvScore.Rows[0].Cells[2].Text.ToString();
+        values[3] = this.gvScore.Rows[0].Cells[3].Text.ToString();
+        values[4] = this.gvScore.Rows[0].Cells[4].Text.ToString();
+        values[5] = this.gvScore.Rows[1].Cells[0].Text.ToString();
+        values[6] = this.gvScore.Rows[1].Cells[1].Text.ToString();
+        values[7] = this.gvScore.Rows[1].Cells[2].Text.ToString();
+        values[8] = this.gvScore.Rows[1].Cells[3].Text.ToString();
+        values[9] = this.gvScore.Rows[1].Cells[4].Text.ToString();
+      
+        Session["values"] = values;
+        */
+        int RandomQuestionNum;//將題號一個一個取出來
+        string strTB1;
+        List<string> StudentAnswerList = new List<string>();//to store student's answer.
+
+        for (int i = 0; i < RandomQuestionNoSession.Length; i++)
+        {
+            RandomQuestionNum = RandomQuestionNoSession[i];
+            TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
+            strTB1 = tb.Text;
+            StudentAnswerList.Add(strTB1);
+        }
+
+
+        /* foreach (GridViewRow row in gvScore.Rows)
+         {
+            // TextBox tb = (TextBox)row.FindControl("TextBox_Text");
+
+         }
+        */
+        ///your code ......
+        ///
+        //Peter needs to get content of the first RandomQuestionNoSession.Length TH TextBoxes in the GridView called gvScore. 
+        //and store them to a List called StudentAnswerList
+        //List<string> StudentAnswerList = new List<string>();//to store student's answer.
+        //StudentAnswerList.Add(strTB1);
+
+        //RandomQuestionNoSession.Length ==3
+        //C# GridView gvScore
+        //gvScore.Rows
+
+
+
+
+
     }
 
     public String switchVisible_Invisible(GridViewRow selectedRow, string HFID, GridView gvScore)
