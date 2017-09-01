@@ -174,19 +174,24 @@ public partial class IPC : CsSessionManager
       
         Session["values"] = values;
         */
-        int RandomQuestionNum;//將題號一個一個取出來
-        string strTB1;
-        List<string> StudentAnswerList = new List<string>();//to store student's answer.
-
-        for (int i = 0; i < RandomQuestionNoSession.Length; i++)
+        //store student's answer to DB
+        if (Request["examMode"] == "Yes")
         {
-            RandomQuestionNum = RandomQuestionNoSession[i];
-            TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
-            strTB1 = tb.Text;
-            StudentAnswerList.Add(strTB1);
+
+         
+            int RandomQuestionNum;//將題號一個一個取出來
+            string strTB1;
+            List<string> StudentAnswerList = new List<string>();//to store student's answer.
+
+            for (int i = 0; i < RandomQuestionNoSession.Length; i++)
+            {
+                RandomQuestionNum = RandomQuestionNoSession[i];
+                TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
+                strTB1 = tb.Text;
+                StudentAnswerList.Add(strTB1);
+            }
+
         }
-
-
         /* foreach (GridViewRow row in gvScore.Rows)
          {
             // TextBox tb = (TextBox)row.FindControl("TextBox_Text");
