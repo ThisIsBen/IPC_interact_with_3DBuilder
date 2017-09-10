@@ -39,42 +39,80 @@ using System.Threading.Tasks;
         }
 
 
+
+
+
+
+
+    #endregion
+
+    #region Access StudentIPC_Score_related DB Data
+    /// <summary>
+    /// Get user's information by token.
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+
+
+
+    //Store student's answer and QuestionNumberOrder to DB
+    //get 
+    public static DataTable GetStuIPCAns()
+    {
+        string sql = string.Format("Select * From ScoreDetail ");
+        return GetDataTable(sql);
+    }
+    //set
+    public static int InsertStuIPCAns(string _StuCouHWDe_ID, string cPaperID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session)
+    {
+        if (Num_Of_Question_Submision_Session==1)
+        {
+            string sql = string.Format("Insert into ScoreDetail(StuCouHWDe_ID ,cPaperID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cPaperID, _StudentAnswer, _QuesOrdering);
+            return InsertData(sql);
+        }
+
+        else {
+            
+            string sql = string.Format("UPDATE[SCOREDB].[dbo].[ScoreDetail]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cPaperID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cPaperID);
+            return UpdateData(sql);
+        }
+    }
     
-       
-       
 
-       
-        #endregion
 
-        #region GetDB_Data
-        /// <summary>
-        /// Get user's information by token.
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        public static DataTable GetAllTBData() {
+
+
+
+
+
+
+
+
+
+
+    //Access and store Score into DB
+    public static DataTable GetAllTBData()
+        {
             string sql = string.Format("Select * From ScoreDetail ");
             return GetDataTable(sql);
         }
-        
-
         public static int InsertScore(string ID,string grade)
         {
             string  sql = string.Format("Insert into ScoreDetail VALUES( '{0}', '{1}' )", ID,grade);
             return InsertData(sql);
         }
 
-    public static int UpdateScore(string ID, string NewGrade)
-    {
-        string sql = string.Format("Update ScoreDetail set Grade = ' {1:d} ' where StuCouHWDe_ID = '{0}'  ", ID, NewGrade);
-        return UpdateData(sql);
-    }
+        public static int UpdateScore(string ID, string NewGrade)
+        {
+            string sql = string.Format("Update ScoreDetail set Grade = ' {1:d} ' where StuCouHWDe_ID = '{0}'  ", ID, NewGrade);
+            return UpdateData(sql);
+        }
 
-    public static int DeleteScore(string ID)
-    {
-        string sql = string.Format("Delete from ScoreDetail where StuCouHWDe_ID = '{0}' ", ID);
-        return UpdateData(sql);
-    }
+        public static int DeleteScore(string ID)
+        {
+            string sql = string.Format("Delete from ScoreDetail where StuCouHWDe_ID = '{0}' ", ID);
+            return UpdateData(sql);
+        }
 
 
 

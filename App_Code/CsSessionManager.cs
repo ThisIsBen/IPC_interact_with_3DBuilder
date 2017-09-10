@@ -49,4 +49,22 @@ public class CsSessionManager : System.Web.UI.Page
             Session["CorrectOrganNameSession"] = value;
         }
     }
+    //存完成的大題次數
+    protected  int Num_Of_Question_Submision_Session//Store correct answer of Organ name
+    {
+        get
+        {
+            if (Session["Num_Of_Question_Submision_Session"] == null)
+            {
+                //出始值為0
+                Session["Num_Of_Question_Submision_Session"] = 0;
+            }
+            return (int)Session["Num_Of_Question_Submision_Session"];
+
+        }
+        set
+        {
+            Session["Num_Of_Question_Submision_Session"] = value;
+        }
+    }
 }

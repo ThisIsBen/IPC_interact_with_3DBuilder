@@ -22,8 +22,10 @@ public partial class IPC : CsSessionManager
     //In the near future ,we will get the Path from URL para or other para transmission method.
     string XMLFolder = "IPC_Questions/";
     string questionXMLPath = "SceneFile_Q1.xml";
-   
-    
+    string QuestionFileName = "SceneFile_Q1.xml";
+    string _StuCouHWDe_ID = "12345";
+    string cPaperID = "002";
+
     protected void Page_Load(object sender, EventArgs e)
     {
         questionXMLPath = XMLFolder + questionXMLPath;
@@ -146,18 +148,28 @@ public partial class IPC : CsSessionManager
         //wr.WriteLine("3 0");
 
     }
+   public void InsertStuIPCAns2DB(string _StuCouHWDe_ID, string cPaperID,string _QuesOrdering, string _StudentAnswer, int Num_Of_Question_Submision_Session)
+    {
+        CsDBOp.InsertStuIPCAns(_StuCouHWDe_ID, cPaperID, _QuesOrdering, _StudentAnswer, Num_Of_Question_Submision_Session);
+    }
+
+
     public void FinishBtn_Click(object sender, EventArgs e)
     {
         //commented it for Peter work on storing student's answer to DB
-        //Break 3DBuilder connection     
+        //Break 3DBuilder connection 
+        /*    
         Process os = (Process)Session["Process"];       
         os.Kill();
-        
+        */
         
           
         //Begin: The followings are  for temporary use ,and should be removed before push to github
-        //int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor
-        //RandomQuestionNoSession = pickedQuestions;
+        int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor
+        RandomQuestionNoSession = pickedQuestions;        
+       
+        string _QuesOrdering = "";
+        
         //End: The followings are  for temporary use ,and should be removed before push to github
         /*
         String[] values = new String[10];
@@ -178,19 +190,53 @@ public partial class IPC : CsSessionManager
         if (Request["examMode"] == "Yes")
         {
 
-         
-            int RandomQuestionNum;//將題號一個一個取出來
-            string strTB1;
-            List<string> StudentAnswerList = new List<string>();//to store student's answer.
 
+            StuAnsM StudentAnswer = new StuAnsM();
+            int RandomQuestionNum;//將題號一個一個取出來
+            string strTB1;//暫儲存學生每格答案
+                          /*
+                          List<string> StudentAnswerList = new List<string>();//to store student's answer.
+                          */
+            StudentAnswer._QuesOrdering += QuestionFileName + ",";
+            StudentAnswer._StudentAnswer += QuestionFileName + ",";
+            
             for (int i = 0; i < RandomQuestionNoSession.Length; i++)
             {
+               
                 RandomQuestionNum = RandomQuestionNoSession[i];
                 TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
                 strTB1 = tb.Text;
-                StudentAnswerList.Add(strTB1);
+                _QuesOrdering = RandomQuestionNum+",";               
+                StudentAnswer._StudentAnswer+=strTB1+",";
+                StudentAnswer._QuesOrdering+=_QuesOrdering;
             }
+            StudentAnswer._QuesOrdering += ":";
+            StudentAnswer._StudentAnswer += ":";
+            Num_Of_Question_Submision_Session++; 
+            //foreach (StuAnsM c in StudentAnswerList) //顯示list裡的資料
+            //{
 
+            //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
+            //}
+            InsertStuIPCAns2DB(_StuCouHWDe_ID, cPaperID,StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+                                                                                                          ///////////////////////////////////////
+            //DataTable dt = CsDBOp.GetStuIPCAns();
+            //StuAnsM Stu_correct_papers = new StuAnsM();
+            ////get the retrieved data from each row of the retrieved data table.
+            //foreach (DataRow dr in dt.Rows)
+            //{
+            //    //get the value of field StuCouHWDe_ID from ScoreDetailTB table
+            //    Response.Write("<script>console.log(" + dr.Field<string>("StuCouHWDe_ID") + ");</script> ");
+
+            //    //get the value of field Grade from ScoreDetailTB table
+
+            //    IList<string> names = dr.Field<string>("Grade").Split(',').ToList<string>();
+            //    //Response.Write("<script>console.log(" + names + ");</script> ");
+
+            //    Response.Write("<script>console.log(" + names[0] + ");</script> ");
+
+            //    //
+            //}
         }
         /* foreach (GridViewRow row in gvScore.Rows)
          {
