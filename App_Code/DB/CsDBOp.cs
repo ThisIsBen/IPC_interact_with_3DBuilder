@@ -59,7 +59,7 @@ using System.Threading.Tasks;
     //get 
     public static DataTable GetStuIPCAns()
     {
-        string sql = string.Format("Select * From ScoreDetail ");
+        string sql = string.Format("Select * From StuCouHWDe_IPC ");
         return GetDataTable(sql);
     }
     //set
@@ -67,13 +67,13 @@ using System.Threading.Tasks;
     {
         if (Num_Of_Question_Submision_Session==1)
         {
-            string sql = string.Format("Insert into ScoreDetail(StuCouHWDe_ID ,cPaperID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cPaperID, _StudentAnswer, _QuesOrdering);
+            string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cPaperID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cPaperID, _StudentAnswer, _QuesOrdering);
             return InsertData(sql);
         }
 
         else {
             
-            string sql = string.Format("UPDATE[SCOREDB].[dbo].[ScoreDetail]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cPaperID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cPaperID);
+            string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cPaperID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cPaperID);
             return UpdateData(sql);
         }
     }
@@ -88,32 +88,32 @@ using System.Threading.Tasks;
 
 
 
-
-
+//The following is the example of how to Access and store data into DB
+/*
     //Access and store Score into DB
     public static DataTable GetAllTBData()
         {
-            string sql = string.Format("Select * From ScoreDetail ");
+            string sql = string.Format("Select * From StuCouHWDe_IPC ");
             return GetDataTable(sql);
         }
         public static int InsertScore(string ID,string grade)
         {
-            string  sql = string.Format("Insert into ScoreDetail VALUES( '{0}', '{1}' )", ID,grade);
+            string  sql = string.Format("Insert into StuCouHWDe_IPC VALUES( '{0}', '{1}' )", ID,grade);
             return InsertData(sql);
         }
 
         public static int UpdateScore(string ID, string NewGrade)
         {
-            string sql = string.Format("Update ScoreDetail set Grade = ' {1:d} ' where StuCouHWDe_ID = '{0}'  ", ID, NewGrade);
+            string sql = string.Format("Update StuCouHWDe_IPC set Grade = ' {1:d} ' where StuCouHWDe_ID = '{0}'  ", ID, NewGrade);
             return UpdateData(sql);
         }
 
         public static int DeleteScore(string ID)
         {
-            string sql = string.Format("Delete from ScoreDetail where StuCouHWDe_ID = '{0}' ", ID);
+            string sql = string.Format("Delete from StuCouHWDe_IPC where StuCouHWDe_ID = '{0}' ", ID);
             return UpdateData(sql);
         }
-
+*/
 
 
     #endregion

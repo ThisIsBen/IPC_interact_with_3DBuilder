@@ -22,9 +22,9 @@ public partial class IPC : CsSessionManager
     //In the near future ,we will get the Path from URL para or other para transmission method.
     string XMLFolder = "IPC_Questions/";
     string questionXMLPath = "SceneFile_Q1.xml";
-    string QuestionFileName = "SceneFile_Q1.xml";
-    string _StuCouHWDe_ID = "12345";
-    string cPaperID = "002";
+    string QuestionFileName = "SceneFile_Q1.xml";//只有檔名，沒有資料夾名稱
+    string _StuCouHWDe_ID = "1223";
+    string cPaperID = "003";
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -206,13 +206,30 @@ public partial class IPC : CsSessionManager
                 RandomQuestionNum = RandomQuestionNoSession[i];
                 TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
                 strTB1 = tb.Text;
-                _QuesOrdering = RandomQuestionNum+",";               
-                StudentAnswer._StudentAnswer+=strTB1+",";
-                StudentAnswer._QuesOrdering+=_QuesOrdering;
+                if (i == (RandomQuestionNoSession.Length - 1))
+                {
+                    _QuesOrdering = RandomQuestionNum.ToString();
+                    StudentAnswer._StudentAnswer += strTB1;                  
+                }
+                else
+                {
+                    _QuesOrdering = RandomQuestionNum + ",";
+                    StudentAnswer._StudentAnswer += strTB1 + ",";                  
+                }
+                StudentAnswer._QuesOrdering += _QuesOrdering;
             }
             StudentAnswer._QuesOrdering += ":";
             StudentAnswer._StudentAnswer += ":";
-            Num_Of_Question_Submision_Session++; 
+            //測試將session回歸0
+           // if (Num_Of_Question_Submision_Session > 2)
+           //{
+           //     Num_Of_Question_Submision_Session = 0;
+           // }
+           // else
+           // {
+                Num_Of_Question_Submision_Session++;
+           // }
+   
             //foreach (StuAnsM c in StudentAnswerList) //顯示list裡的資料
             //{
 
