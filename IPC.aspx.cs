@@ -12,6 +12,8 @@ using System.Data;
 using System.Threading;
 
 
+
+
 public partial class IPC : CsSessionManager 
 {
     //private static System.Diagnostics.Process os = new System.Diagnostics.Process();
@@ -23,7 +25,7 @@ public partial class IPC : CsSessionManager
     string XMLFolder = "IPC_Questions/";
     string questionXMLPath = "SceneFile_Q1.xml";
     string QuestionFileName = "SceneFile_Q1.xml";//只有檔名，沒有資料夾名稱
-    string _StuCouHWDe_ID = "1223";
+    string _StuCouHWDe_ID = "1225";
     string cPaperID = "003";
 
     protected void Page_Load(object sender, EventArgs e)
@@ -197,6 +199,9 @@ public partial class IPC : CsSessionManager
                           /*
                           List<string> StudentAnswerList = new List<string>();//to store student's answer.
                           */
+
+            //trim space of QuestionFileName e.g., "   SceneFile_Q12.xml   "=>"SceneFile_Q12.xml"
+            QuestionFileName = QuestionFileName.Trim();
             StudentAnswer._QuesOrdering += QuestionFileName + ",";
             StudentAnswer._StudentAnswer += QuestionFileName + ",";
             
@@ -205,7 +210,7 @@ public partial class IPC : CsSessionManager
                
                 RandomQuestionNum = RandomQuestionNoSession[i];
                 TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
-                strTB1 = tb.Text;
+                strTB1 = tb.Text.Trim();
                 if (i == (RandomQuestionNoSession.Length - 1))
                 {
                     _QuesOrdering = RandomQuestionNum.ToString();
