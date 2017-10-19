@@ -25,8 +25,8 @@ public partial class IPC : CsSessionManager
     string XMLFolder = "IPC_Questions/";
     string questionXMLPath = "SceneFile_Q1.xml";
     string QuestionFileName = "SceneFile_Q1.xml";//只有檔名，沒有資料夾名稱
-    string _StuCouHWDe_ID = "1225";
-    string cPaperID = "003";
+    string _StuCouHWDe_ID = "1226";
+    string cActivityID = "004";
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -150,9 +150,9 @@ public partial class IPC : CsSessionManager
         //wr.WriteLine("3 0");
 
     }
-   public void InsertStuIPCAns2DB(string _StuCouHWDe_ID, string cPaperID,string _QuesOrdering, string _StudentAnswer, int Num_Of_Question_Submision_Session)
+   public void InsertStuIPCAns2DB(string _StuCouHWDe_ID, string cActivityID,string _QuesOrdering, string _StudentAnswer, int Num_Of_Question_Submision_Session)
     {
-        CsDBOp.InsertStuIPCAns(_StuCouHWDe_ID, cPaperID, _QuesOrdering, _StudentAnswer, Num_Of_Question_Submision_Session);
+        CsDBOp.InsertStuIPCAns(_StuCouHWDe_ID, cActivityID, _QuesOrdering, _StudentAnswer, Num_Of_Question_Submision_Session);
     }
 
 
@@ -240,7 +240,7 @@ public partial class IPC : CsSessionManager
 
             //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
             //}
-            InsertStuIPCAns2DB(_StuCouHWDe_ID, cPaperID,StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+            InsertStuIPCAns2DB(_StuCouHWDe_ID, cActivityID,StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
                                                                                                           ///////////////////////////////////////
             //DataTable dt = CsDBOp.GetStuIPCAns();
             //StuAnsM Stu_correct_papers = new StuAnsM();

@@ -63,17 +63,17 @@ using System.Threading.Tasks;
         return GetDataTable(sql);
     }
     //set
-    public static int InsertStuIPCAns(string _StuCouHWDe_ID, string cPaperID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session)
+    public static int InsertStuIPCAns(string _StuCouHWDe_ID, string cActivityID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session)
     {
         if (Num_Of_Question_Submision_Session==1)
         {
-            string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cPaperID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cPaperID, _StudentAnswer, _QuesOrdering);
+            string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cActivityID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cActivityID, _StudentAnswer, _QuesOrdering);
             return InsertData(sql);
         }
 
         else {
             
-            string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cPaperID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cPaperID);
+            string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cActivityID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cActivityID);
             return UpdateData(sql);
         }
     }
