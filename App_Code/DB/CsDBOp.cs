@@ -77,13 +77,20 @@ using System.Threading.Tasks;
             return UpdateData(sql);
         }
     }
-    
 
 
 
 
 
+        //11/9 store filename ,order, and correct answer to DB '[SCOREDB].[dbo].[IPCExamHWCorrectAnswer]'
+        //use cActivityID to find if the record has already existed.
+        /*
+         if (GetDataTable(string.Format("Select * from AdditionScore where RID = {0:d}", rId))?.Rows.Count > 0)
+            sql = string.Format("Update AdditionScore Set Score = '{1}', Opinion = '{2}' Where RID = {0:d} ", rId, model.AdditionScore, model.AdditionOpinion);
+        else
+            sql = string.Format("Insert Into AdditionScore Values({0:d}, '{1}', '{2}')", rId, model.AdditionScore, model.AdditionOpinion);
 
+        */
 
 
 

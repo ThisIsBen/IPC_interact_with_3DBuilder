@@ -27,6 +27,10 @@ public partial class IPC: System.Web.UI.Page
     string XMLFolder = "IPC_Questions/";
     string questionXMLPath = "SceneFile_Q1.xml";
 
+    //11/9 set string cActivityID = "006" temporarily
+    
+    //11/9 string QuestionBodyPart="Knee";
+
     
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -131,6 +135,13 @@ public partial class IPC: System.Web.UI.Page
         
        //store as XML
         xmlHandler.saveXML(Server.MapPath(questionXMLPath));
+
+        //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
+
+        //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering
+
+        //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
+
         
 
 

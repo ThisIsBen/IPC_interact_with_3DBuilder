@@ -13,6 +13,10 @@ public class XMLHandler
     XmlDocument xmlDoc;
     XElement xDoc;
 
+    //11/9 add correct answer list member  variable
+
+    //11/9 add order of correct answer list member  variable
+
     public XMLHandler(string XMLSrcPath)
     {
         xmlDoc = new XmlDocument();
@@ -73,6 +77,11 @@ public class XMLHandler
 
         target.Element("Question").Value = "Yes";
 
+        //11/9 Add a function in XMLHandler.cs  to accumulate all the selected organName.Text in a list.
+        
+        //add 'OrganName.Text' to   correct answer list 
+        
+        //add 'target.Element("Number").Value' to order of correct answer list
 
         
 
