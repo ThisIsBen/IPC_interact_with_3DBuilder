@@ -11,7 +11,7 @@ using System.Xml;
 using System.Data;
 using System.Threading;
 using System.Xml.Linq;
-
+using System.Text;
 
 
 public partial class IPC: System.Web.UI.Page
@@ -29,9 +29,9 @@ public partial class IPC: System.Web.UI.Page
     string questionXMLPath = "SceneFile_Q1.xml";
 
     //11/9 set string cActivityID = "006" temporarily
-    
+    string cActivityID = "006";
     //11/9 string QuestionBodyPart="Knee";
-
+    string QuestionBodyPart = "Knee";
     
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -132,21 +132,24 @@ public partial class IPC: System.Web.UI.Page
             }
         }
 
+        // determine whether add data to DB, question reload、no bodypart
 
-        
-       //store as XML
-        xmlHandler.saveXML(Server.MapPath(questionXMLPath));
-
-        //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
-
-        //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering
 
         //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
+        //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
+        //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering
+        string xmlpath = XMLFolder + questionXMLPath;
+        string CA=xmlpath+xmlHandler.correctAnswer+":";
+        string CAO = xmlpath + xmlHandler.correctAnswerOrder+":";
+        string QBP = xmlHandler.correctAnswer.ToString().Remove(0, 1);
 
+
+        CsDBOp.InsertIPCExamHWCorrectAns(cActivityID, CA, QBP, CAO);
+       
+       //store as XML
+        xmlHandler.saveXML(Server.MapPath(questionXMLPath));
         
-
-
-
+        
     }
 
   

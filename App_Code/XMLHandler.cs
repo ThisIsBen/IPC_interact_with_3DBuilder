@@ -14,8 +14,9 @@ public class XMLHandler
     XElement xDoc;
 
     //11/9 add correct answer list member  variable
-
+    public StringBuilder correctAnswer = new StringBuilder();
     //11/9 add order of correct answer list member  variable
+    public StringBuilder correctAnswerOrder = new StringBuilder();
 
     public XMLHandler(string XMLSrcPath)
     {
@@ -72,17 +73,20 @@ public class XMLHandler
        
 
         var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value == OrganName.Text).Single();
-
+        var test = target.Element("Question").Value;
 
 
         target.Element("Question").Value = "Yes";
+        
+        correctAnswer.Append(","+OrganName.Text);
+        correctAnswerOrder.Append(","+target.Element("Number").Value);
+        
 
         //11/9 Add a function in XMLHandler.cs  to accumulate all the selected organName.Text in a list.
-        
         //add 'OrganName.Text' to   correct answer list 
         
         //add 'target.Element("Number").Value' to order of correct answer list
-
+       
         
 
     }

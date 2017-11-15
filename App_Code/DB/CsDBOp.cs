@@ -125,9 +125,34 @@ using System.Threading.Tasks;
 
     #endregion
 
+    #region Access IPCExamHWCorrectAnswer DB Data
+    public static DataTable GetIPCExamHWCorrectAns()
+    {
+        string sql = string.Format("Select * From IPCExamHWCorrectAnswer ");
+        return GetDataTable(sql);
+    }
+    //set
+    public static int InsertIPCExamHWCorrectAns(string cActivityID, string _correctAnswer, string _QuestionBodyPart, string _QuesOrdering)
+    {
+        //first add
+        //if (Num_Of_Question_Submision_Session == 1)
+
+        string sql = string.Format("Insert into IPCExamHWCorrectAnswer(cActivityID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
+            return InsertData(sql);
+        
+        //update
+        //else
+        //{
+
+        //    string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cActivityID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cActivityID);
+        //    return UpdateData(sql);
+        //}
+    }
+
+    #endregion
 
 
-    /*
+        /*
         public static DataTable GetMOEManagerInfo(int uId)
         {
             string sql = string.Format("Select * From MOEManager Where UID = '{0}'", uId);
