@@ -132,21 +132,23 @@ using System.Threading.Tasks;
         return GetDataTable(sql);
     }
     //set
-    public static int InsertIPCExamHWCorrectAns(string cActivityID, string _correctAnswer, string _QuestionBodyPart, string _QuesOrdering)
+    public static int InsertIPCExamHWCorrectAns(string _cActivityID, string _correctAnswer, string _QuestionBodyPart, string _QuesOrdering)
     {
         //first add
         //if (Num_Of_Question_Submision_Session == 1)
-
-        string sql = string.Format("Insert into IPCExamHWCorrectAnswer(cActivityID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
+        if (GetDataTable(string.Format("Select * from IPCExamHWCorrectAnswer where cActivityID = {0:d}", _cActivityID)).Rows.Count == 0)
+        {
+            string sql = string.Format("Insert into IPCExamHWCorrectAnswer(cActivityID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
             return InsertData(sql);
-        
-        //update
-        //else
-        //{
 
-        //    string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cActivityID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cActivityID);
-        //    return UpdateData(sql);
-        //}
+        }
+        //update
+        else
+        {
+            string sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer]  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cActivityID =  '{3}'"
+                , _correctAnswer, _QuestionBodyPart,_QuesOrdering, _cActivityID);
+            return UpdateData(sql);
+        }
     }
 
     #endregion

@@ -133,7 +133,8 @@ public partial class IPC: System.Web.UI.Page
         }
 
         // determine whether add data to DB, question reload、no bodypart
-
+        if (xmlHandler.correctAnswer.Length == 0)
+            return;
 
         //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
         //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
@@ -141,7 +142,7 @@ public partial class IPC: System.Web.UI.Page
         string xmlpath = XMLFolder + questionXMLPath;
         string CA=xmlpath+xmlHandler.correctAnswer+":";
         string CAO = xmlpath + xmlHandler.correctAnswerOrder+":";
-        string QBP = xmlHandler.correctAnswer.ToString().Remove(0, 1);
+        string QBP = QuestionBodyPart;
 
 
         CsDBOp.InsertIPCExamHWCorrectAns(cActivityID, CA, QBP, CAO);
