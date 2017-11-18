@@ -20,7 +20,7 @@
       <Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>Yes</Question>
+      <Question>No</Question>
     </Organ>
     <Organ>
       <Name>Extensor digitorum longus</Name>
@@ -29,7 +29,7 @@
       <Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>Yes</Question>
+      <Question>No</Question>
     </Organ>
     <Organ>
       <Name>Fibularis longus</Name>
@@ -47,7 +47,7 @@
       <Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>No</Question>
+      <Question>Yes</Question>
     </Organ>
     <Organ>
       <Name>Gracilis</Name>
@@ -56,7 +56,7 @@
       <Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>No</Question>
+      <Question>Yes</Question>
     </Organ>
     <Organ>
       <Name>Iliotibial tract</Name>

@@ -136,7 +136,9 @@ using System.Threading.Tasks;
     {
         //first add
         //if (Num_Of_Question_Submision_Session == 1)
-        if (GetDataTable(string.Format("Select * from IPCExamHWCorrectAnswer where cActivityID = {0:d}", _cActivityID)).Rows.Count == 0)
+        DataRowCollection DRC = GetDataTable(string.Format("Select * from IPCExamHWCorrectAnswer where cActivityID = {0:d}", _cActivityID)).Rows;
+        
+        if (DRC.Count == 0)
         {
             string sql = string.Format("Insert into IPCExamHWCorrectAnswer(cActivityID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
             return InsertData(sql);
@@ -145,9 +147,34 @@ using System.Threading.Tasks;
         //update
         else
         {
-            string sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer]  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cActivityID =  '{3}'"
+            string sql;
+            if (DRC[0][2].ToString().Contains(_QuestionBodyPart))
+            {
+                int index=0;
+                foreach(string tempStr in DRC[0][2].ToString().Split(',')){
+                    if (tempStr == _QuestionBodyPart)
+                        break;
+                    index++;
+                }
+                //subtrim end ":" from string 
+                _correctAnswer =_correctAnswer.Remove(_correctAnswer.Length - 1);
+                _QuesOrdering = _QuesOrdering.Remove(_QuesOrdering.Length - 1);
+
+                sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer] SET correctAnswer = REPLACE(correctAnswer,'{0}','{1}')  where cActivityID =  '{2}' ",
+                    DRC[0][1].ToString().Split(':')[index], _correctAnswer, _cActivityID);
+                UpdateData(sql);
+                sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer] SET correctAnswerOrdering = REPLACE(correctAnswerOrdering,'{0}','{1}') where cActivityID =  '{2}' ",
+                    DRC[0][3].ToString().Split(':')[index], _QuesOrdering, _cActivityID);
+                return UpdateData(sql); 
+
+            }
+                
+            else{
+                sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer]  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cActivityID =  '{3}'"
                 , _correctAnswer, _QuestionBodyPart,_QuesOrdering, _cActivityID);
-            return UpdateData(sql);
+                return UpdateData(sql);
+            }
+            
         }
     }
 

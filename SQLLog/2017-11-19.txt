@@ -1,0 +1,13 @@
+
+2017-11-19 01:16:32 ： 查詢函式 「SELECT REPLACE(correctAnswerOrder,'IPC_Questions/IPC_Questions/SceneFile_Q1.xml,2,3:','IPC_Questions/IPC_Questions/SceneFile_Q1.xml,1,4') FROM IPCExamHWCorrectAnswer where cActivityID =  '006' 」
+			錯誤內容「System.Data.SqlClient.SqlException (0x80131904): 無效的資料行名稱 'correctAnswerOrder'。
+   於 System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   於 System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   於 System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   於 System.Data.SqlClient.SqlCommand.RunExecuteNonQueryTds(String methodName, Boolean async, Int32 timeout, Boolean asyncWrite)
+   於 System.Data.SqlClient.SqlCommand.InternalExecuteNonQuery(TaskCompletionSource`1 completion, String methodName, Boolean sendToPipe, Int32 timeout, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   於 System.Data.SqlClient.SqlCommand.ExecuteNonQuery()
+   於 CsDBConnection.ExecuteNonQuery(String sql) 於 e:\repository\IPC_interact_with_3DBuilder\App_Code\DB\CsDBConnection.cs: 行 22
+ClientConnectionId:b8cd4622-50b5-4c6f-a3be-54b684fb5eeb
+Error Number:207,State:1,Class:16」
+
