@@ -26,7 +26,7 @@ public partial class IPC : CsSessionManager
     string questionXMLPath = "SceneFile_Q1.xml";
     string QuestionFileName = "SceneFile_Q1.xml";//只有檔名，沒有資料夾名稱
     string _StuCouHWDe_ID = "1226";
-    string cActivityID = "004";
+    string cActivityID = "009";
 
     protected void Page_Load(object sender, EventArgs e)
     {

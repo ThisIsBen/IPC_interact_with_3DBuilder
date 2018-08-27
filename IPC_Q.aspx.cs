@@ -32,7 +32,7 @@ public partial class IPC: System.Web.UI.Page
     string cActivityID = "006";
     //11/9 string QuestionBodyPart="Knee";
     string QuestionBodyPart = "Knee";
-    
+    //string QuestionBodyPart = "Stomach";
     protected void Page_Load(object sender, EventArgs e)
     {
         questionXMLPath = XMLFolder + questionXMLPath;

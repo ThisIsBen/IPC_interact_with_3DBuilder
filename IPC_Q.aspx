@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="./Site.Master" CodeFile="IPC_Q.aspx.cs" Inherits="IPC" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="./Site.Master" CodeFile="IPC_Q.aspx.cs" Inherits="IPC"  MaintainScrollPositionOnPostback="true"%>
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -63,7 +63,7 @@
         
         //resume scroll position after asp.net postback
 
-        var hdnScroll = document.getElementById("<%= hdnScrollPos.ClientID %>");
+        
 
 
         window.onload = function () {
@@ -254,7 +254,7 @@
 
    
     <div align="center">
-        <asp:HiddenField ID="hdnScrollPos" runat="server" />
+       
         <div class="jumbotron">
             <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>

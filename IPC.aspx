@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeFile="IPC.aspx.cs" Inherits="IPC" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeFile="IPC.aspx.cs" Inherits="IPC" MaintainScrollPositionOnPostback="true"%>
 
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -79,7 +79,7 @@
         
         //resume scroll position after asp.net postback
 
-        var hdnScroll = document.getElementById("<%= hdnScrollPos.ClientID %>");
+       
 
 
         window.onload = function () {
@@ -90,14 +90,17 @@
 
 
            
-            //comment it to test why "Can't read"
-            
+           
+            //20180827 If there is no need to hide all the 3D organs,we can delete the following part and set the image src of the "#ShowOrHideAll" button 
+            //20180827 the so-called following part start from here
             //recover visbility icon of hide_showAll
            
+           
             var hfHide_ShowAll = document.getElementById("<%= AllInOrVisible.ClientID %>");
+            
+            
 
-
-            //suspects of can't read
+            
             ///////////////////////////////////////////////////////////
             var iconHide_ShowAll = document.getElementById("<%= ShowOrHideAll.ClientID %>");
            
@@ -122,6 +125,9 @@
 
             //keep submit btn visible at all times
             $('#ShowOrHideAll').attr('src', visibleImg);
+            //20180827 end
+
+
 
             //resume mark icon in gridView
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
@@ -141,7 +147,7 @@
 
 
                 //if the currently traversed organ was visible,then keep it visible
-                if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[2].value == "true") {
+                if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value == "true") {
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = visibleImg;
                 }
 
@@ -158,9 +164,10 @@
 
             for (i = 1; i < gvDrv.rows.length; i++)
             {
+               
                 //recover mark icon of each row
-                if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[3] != null) {
-                    switch (parseInt(gvDrv.rows[i].cells[1].getElementsByTagName("input")[3].value)) {
+                if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[2] != null) {
+                    switch (parseInt(gvDrv.rows[i].cells[1].getElementsByTagName("input")[2].value)) {
 
                         case 0:
                             gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureImg;
@@ -189,31 +196,46 @@
             //get the clicked row of TemplageField
             var row = lnk.parentNode.parentNode;
             var rowIndex = row.rowIndex;
-
+           
 
             //change " " to "not sure"icon or change"not sure"icon and "give up"Icon to " "
             var img = row.cells[4].getElementsByTagName("input")[0].src;
             var imgBesideIt = row.cells[4].getElementsByTagName("input")[1].src;
+            
+           
+
             if (img.indexOf(notSureClickImg) != -1) {
                 row.cells[4].getElementsByTagName("input")[0].src = notSureImg;
                 //record the current mark icon in the hidden field,0 means empty
-                row.cells[1].getElementsByTagName("input")[3].value = 0;
-            }
+                row.cells[1].getElementsByTagName("input")[2].value = 0;
 
-            
+               
+            }
+          
+
+           
             else {
+                
                 if (imgBesideIt.indexOf(giveUpClickImg) != -1)
                 {
                     row.cells[4].getElementsByTagName("input")[1].src = giveUpImg;
                 }
+                
                 row.cells[4].getElementsByTagName("input")[0].src = notSureClickImg;
                 
                 //record the current mark icon in the hidden field,1 means notSure.png
-                row.cells[1].getElementsByTagName("input")[3].value = 1;
-            }
+                row.cells[1].getElementsByTagName("input")[2].value = 1;//bug
+                
+               
 
+              
+            }
+            
+           
+          
+           
             //to prevent refreshing of page when button inside form clicked
-            return false;
+            //return false;
         }
 
         //change mark icon to "give up " icon with double click.
@@ -230,7 +252,7 @@
 
                 row.cells[4].getElementsByTagName("input")[1].src = giveUpImg;
                 //record the current mark icon in the hidden field,0 means empty
-                row.cells[1].getElementsByTagName("input")[3].value = 0;
+                row.cells[1].getElementsByTagName("input")[2].value = 0;
             }
           
             else {
@@ -241,7 +263,7 @@
                 row.cells[4].getElementsByTagName("input")[1].src = giveUpClickImg;
 
                 //record the current mark icon in the hidden field,1 means notSure.png
-                row.cells[1].getElementsByTagName("input")[3].value = 2;
+                row.cells[1].getElementsByTagName("input")[2].value = 2;
             }
 
             //to prevent refreshing of page when button inside form clicked
@@ -296,7 +318,7 @@
 
    
     <div align="center">
-        <asp:HiddenField ID="hdnScrollPos" runat="server" />
+        
         <div class="jumbotron">
             <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
@@ -327,7 +349,8 @@
                 <input type="image" id="ShowOrHideAll" src="" runat="server" onserverclick="ShowOrHideAll_Click"/>
                
                 
-                <asp:HiddenField ID="AllInOrVisible" runat="server" Value="true" />
+              
+                <input type="hidden" id="AllInOrVisible" runat="server" value="true">
             </div>
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
                   
@@ -343,11 +366,13 @@
                                 <asp:TextBox ID="TextBox_Text" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
                                 
                                 <%--show the corresponding correct organ name for debugging purpose--%>
-                                <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />
+                              <%-- <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />--%>
                                 <%--show the corresponding correct organ name for debugging purpose--%>
 
-                                <asp:HiddenField ID="InOrVisible" runat="server" Value="true" />
-                                <asp:HiddenField ID="markRecord" runat="server" Value="0" />
+                               <asp:HiddenField ID="InOrVisible" runat="server" Value="true" />
+                               <%-- <asp:HiddenField ID="markRecord" runat="server" Value="0" />--%>
+                               <%-- <input type="hidden" id="InOrVisible" runat="server" value="true">--%>
+                                <input type="hidden" id="markRecord" runat="server" value="0">
                             </ItemTemplate>
 
                         </asp:TemplateField>
@@ -363,8 +388,8 @@
 
                         <asp:TemplateField HeaderText="Mark<br/>Not sure  /&nbsp;&nbsp;&nbsp;&nbsp;  Give up">
                             <ItemTemplate>
-                                <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="return toNotSureIcon(this) " ControlStyle-Height="40px" />
-                                <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="return toGiveUpIcon(this)" ControlStyle-Height="40px" />
+                                <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="if (!toNotSureIcon(this)) return false;  " ControlStyle-Height="40px" />
+                                <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick=" if (!toGiveUpIcon(this)) return false; " ControlStyle-Height="40px" />
 
                             </ItemTemplate>
 
