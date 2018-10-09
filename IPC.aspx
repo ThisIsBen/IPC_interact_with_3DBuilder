@@ -11,8 +11,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+   
     <style type="text/css">
         th {
             
@@ -39,10 +40,19 @@
         .hideIfNotQuestion {
            visibility: hidden;
         }
-        
+
+        .nonQuestionTR {
+            background-color:gray;
+        }
+
+
+
     </style>
 
     <script type="text/javascript">
+
+        //if (a == 0) {; }
+        
         //img source gallery 
         visibleImg = "Image/visible.png";
         invisibleImg = "Image/invisible.png";
@@ -82,36 +92,41 @@
        
 
 
-        window.onload = function () {
+        window.onload = onloadFun;
 
-           
+        function onloadFun() {
+
+
+            //load();
+
+
             //resume scroll position after asp.net postback
             //divAnswerSheet.scrollTop = hdnScroll.value;
 
 
-           
-           
+
+
             //20180827 If there is no need to hide all the 3D organs,we can delete the following part and set the image src of the "#ShowOrHideAll" button 
             //20180827 the so-called following part start from here
             //recover visbility icon of hide_showAll
-           
-           
-            var hfHide_ShowAll = document.getElementById("<%= AllInOrVisible.ClientID %>");
-            
-            
 
-            
+
+            var hfHide_ShowAll = document.getElementById("<%= AllInOrVisible.ClientID %>");
+
+
+
+
             ///////////////////////////////////////////////////////////
             var iconHide_ShowAll = document.getElementById("<%= ShowOrHideAll.ClientID %>");
-           
-           
+
+
             if (hfHide_ShowAll.value == "true") {
-                iconHide_ShowAll.src= visibleImg;
+                iconHide_ShowAll.src = visibleImg;
             }
 
 
             ///////////////////////////////////////////////////
-            
+
             /*
             else {
                 iconHide_ShowAll.src =invisibleImg ;
@@ -127,15 +142,16 @@
             $('#ShowOrHideAll').attr('src', visibleImg);
             //20180827 end
 
-
+            //assign the image of the hide non question <tr> btn
+            $('#HideNonQuestionTR').innerHTML = '<img src="' + visibleImg + '" />';
 
             //resume mark icon in gridView
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
-            
+
             for (i = 1; i < gvDrv.rows.length; i++) {
-           
-                
-                
+
+
+
                 //recover visbility icon of each row
 
                 //keep submit btn visible at all times
@@ -151,20 +167,19 @@
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = visibleImg;
                 }
 
-                //if the currently traversed organ was invisible,then keep it invisible
+                    //if the currently traversed organ was invisible,then keep it invisible
                 else {
-                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src =invisibleImg ;
+                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisibleImg;
                 }
-                
-               
+
+
 
 
             }
-            
 
-            for (i = 1; i < gvDrv.rows.length; i++)
-            {
-               
+
+            for (i = 1; i < gvDrv.rows.length; i++) {
+
                 //recover mark icon of each row
                 if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[2] != null) {
                     switch (parseInt(gvDrv.rows[i].cells[1].getElementsByTagName("input")[2].value)) {
@@ -172,7 +187,7 @@
                         case 0:
                             gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureImg;
                             gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpImg;
-                                break;
+                            break;
                         case 1:
                             gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureClickImg;
                             break;
@@ -183,13 +198,11 @@
 
 
 
-                   }
+                    }
                 }
             }
-//////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////
         }
-
-
 
         //change mark icon to "not sure " icon and remove the mark when the mark has existed with single click.
         function toNotSureIcon(lnk) {
@@ -275,6 +288,9 @@
         function showTBOfQuestionOrgans(inExamMode) {
             //console.log(inExamMode);
             //console.log(questionArray);
+
+            
+
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
            
@@ -285,7 +301,8 @@
                 if (inExamMode)//if it's in exam mode,do showTBItems = i
                     showTBItems = i+1;
                 
-                    
+                //change the background color of the organs that have been chosen as part of question.
+                gvDrv.rows[showTBItems].style.backgroundColor = questionTRBgColor;
 
                 //show the textbox of the organs that have been chosen as part of question.
                 gvDrv.rows[showTBItems].cells[1].getElementsByTagName("input")[0].style.visibility = 'visible';
@@ -295,6 +312,25 @@
                 //show the markicona of the organs that have been chosen as part of question.
                 gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[0].style.visibility = 'visible';
                 gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[1].style.visibility = 'visible';
+            }
+
+            //assign a class to the non question TRs
+            assignClass2NonQuestionTR();
+            
+
+        }
+
+        function assignClass2NonQuestionTR() {
+
+            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+
+            //assign a common class to all the non question TRs for the further control.
+            for (i = 1; i < gvDrv.rows.length; i++) {
+                if (gvDrv.rows[i].style.backgroundColor != questionTRBgColor) {
+                    var nonQuestionRow = gvDrv.rows[i];
+                    nonQuestionRow.classList.add('nonQuestionTR');
+                }
+
             }
         }
 
@@ -348,10 +384,19 @@
 
                 <input type="image" id="ShowOrHideAll" src="" runat="server" onserverclick="ShowOrHideAll_Click"/>
                
+                <br />
+                  <br />
+                  <br />
+                <button type="button" id="HideNonQuestionTR"  onclick="hideNonQuestionTR()"></button>
                 
               
                 <input type="hidden" id="AllInOrVisible" runat="server" value="true">
             </div>
+                
+                
+
+                <asp:UpdatePanel ID="UpdatePanel1"   UpdateMode="Conditional"  runat="server">
+                    <ContentTemplate>
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
                   
                     <Columns>
@@ -398,12 +443,18 @@
 
                     </Columns>
                 </asp:GridView>
+                </ContentTemplate>
+            </asp:UpdatePanel>
             </asp:Panel>
         </div>
     </div>
-
+     
     <script>
+        //to keep all the organ numbers that are assigned as questions 
         var questionArray = []
+
+        //to decide the background color of the question TR.
+        questionTRBgColor = "red";
 
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
         XMLFolder = "IPC_Questions/";
@@ -421,32 +472,48 @@
         }
         //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
 
+        $(document).ready(function () {
 
+            documentReadyFun();
+            loadAfterUpdatePanel();
+        });
 
+        
 
+        //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
+        function loadAfterUpdatePanel() {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+        }
 
-        //swap the elements of index x and y in an array.
-        function swapElement(questionList, x, y) {
-            var b = questionList[y];
-            questionList[y] = questionList[x];
-            questionList[x] = b;
+        function EndRequestHandler() {
+            //reset the question number array before doing the init ready function again
+            resetParameters();
+           
+            //do the init ready function again after coming back from UpdatePanel AJAX 
+            documentReadyFun();
+
+            //do the window.onload function again because AJAX doesn't trigger window.onload event.
+            onloadFun();
+            
+           
+        
+    
+
         }
 
 
-        $(document).ready(function () {
-            
-            
-            
-
-
-
+        function resetParameters()
+        {
+            questionArray = [];
+        }
+        function documentReadyFun() {
             $.ajax({
                 type: "GET",
                 url: XMLFolder + questionXMLPath,
                 dataType: "xml",
                 success: function (xml) {
 
-                    
+
 
 
 
@@ -477,10 +544,10 @@
 
                         //generate the exam question number according to pickedRandQNo,and swap the corresponding row in the table at the same time.
 
-                        
+
                         //get the randomized  Question Numbers picked by instructor to IPC.aspx sent through Session
-                       var pickedRandQNo = [];
-                       <% 
+                        var pickedRandQNo = [];
+                        <% 
         
                             
                             var arrayData = RandomQuestionNoSession;
@@ -499,9 +566,9 @@
                                 }
                         %>
                         //alert(pickedRandQNo);
-                       
 
-                        
+
+
                         //對調IPC table rows ,改tableID ,rowID與pickedRandQNo 與questionList :1~n即可符合使用
                         //對調IPC table rows according to the pickedRandQNo array sent through Session
                         //give tr unique id
@@ -520,9 +587,9 @@
 
 
 
-                        
-                       
-                       
+
+
+
                         var questionList = [];
                         for (i = 0; i < countTr; i++) {
                             questionList[i] = i + 1;
@@ -546,7 +613,7 @@
                             console.log(questionList[i]);
                             console.log("\n");
 
-                            
+
                             $elem1 = $("#" + rowID + questionList[swapTarget]);
                             $elem2 = $("#" + rowID + questionList[i]);
                             $elem2.after($placeholder);
@@ -559,7 +626,7 @@
                             swapElement(questionList, swapTarget, i);
 
                         }
-                        
+
 
 
                         //rearrange Question numbers in ascending order to keep Question numbers being arranged as ususal order.
@@ -577,8 +644,7 @@
 
 
 
-                    if ($.urlParam('examMode') == 0)
-                    {
+                    if ($.urlParam('examMode') == 0) {
 
                         //show the TextBox of the question Organs.
                         examMode = false;
@@ -596,8 +662,37 @@
                     return false;//do not postBack
                 }
             });
-           
 
-        });
+
+        }
+
+
+        //swap the elements of index x and y in an array.
+        function swapElement(questionList, x, y) {
+            var b = questionList[y];
+            questionList[y] = questionList[x];
+            questionList[x] = b;
+        }
+
+
+        function hideNonQuestionTR() {
+            var x = document.getElementsByClassName("nonQuestionTR");
+            
+            for (i = 0; i < x.length; i++) {
+                x[i].classList.toggle("hidden");
+            }
+
+            
+            
+            //assign the image of the hide non question <tr> btn
+            //$('#HideNonQuestionTR').innerHTML = '<img src="' + visibleImg + '" />';
+            //$('#HideNonQuestionTR').innerHTML = 'abcde';
+        }
+
+
+        if (a == 0) {; }
     </script>
+
+
+   
 </asp:Content>
