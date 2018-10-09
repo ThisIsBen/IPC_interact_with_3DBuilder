@@ -332,6 +332,8 @@
                 }
 
             }
+
+           
         }
 
         function rearrangeQNo() {
@@ -387,10 +389,12 @@
                 <br />
                   <br />
                   <br />
-                <button type="button" id="HideNonQuestionTR"  onclick="hideNonQuestionTR()"></button>
+                <input type="button" id="HideNonQuestionTR"  value="Hide Non question rows" onclick="hideNonQuestionTR()"/>
                 
               
                 <input type="hidden" id="AllInOrVisible" runat="server" value="true">
+
+                <input type="hidden" id="hidden_HideNonQuestionTRS"  value="false">
             </div>
                 
                 
@@ -474,39 +478,6 @@
 
         $(document).ready(function () {
 
-            documentReadyFun();
-            loadAfterUpdatePanel();
-        });
-
-        
-
-        //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
-        function loadAfterUpdatePanel() {
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
-        }
-
-        function EndRequestHandler() {
-            //reset the question number array before doing the init ready function again
-            resetParameters();
-           
-            //do the init ready function again after coming back from UpdatePanel AJAX 
-            documentReadyFun();
-
-            //do the window.onload function again because AJAX doesn't trigger window.onload event.
-            onloadFun();
-            
-           
-        
-    
-
-        }
-
-
-        function resetParameters()
-        {
-            questionArray = [];
-        }
-        function documentReadyFun() {
             $.ajax({
                 type: "GET",
                 url: XMLFolder + questionXMLPath,
@@ -638,7 +609,7 @@
                         showTBOfQuestionOrgans(examMode);
 
 
-
+                       
                     }
 
 
@@ -652,7 +623,7 @@
                     }
                 }
 
-            });
+             });
 
 
             //Prevent users from submitting a TextBox content by hitting Enter
@@ -662,6 +633,169 @@
                     return false;//do not postBack
                 }
             });
+
+            loadAfterUpdatePanel();
+        });
+
+        
+
+        //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
+        function loadAfterUpdatePanel() {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+        }
+
+        function EndRequestHandler() {
+            
+           
+            //do the init ready function again after coming back from UpdatePanel AJAX 
+            partOf_documentReadyFun();
+
+            //do the window.onload function again because AJAX doesn't trigger window.onload event.
+            onloadFun();
+            
+           
+           
+        
+    
+
+        }
+        function recoverHideShowStatus_ofNonQuestionTRs() {
+
+            if (document.getElementById("hidden_HideNonQuestionTRS").value == "true") {
+                
+                hideNonQuestionTR();
+
+
+                //document.getElementById("hidden_HideNonQuestionTRS").value = "false";
+            }
+
+           
+        }
+
+        function resetParameters()
+        {
+            questionArray = [];
+        }
+        function partOf_documentReadyFun() {
+           
+                    //activate exam mode
+
+                    if ($.urlParam('examMode') == "Yes") {
+
+                        
+
+
+                        //get the randomized  Question Numbers picked by instructor to IPC.aspx sent through Session
+                        var pickedRandQNo = [];
+                        <% 
+        
+                            
+                            var randomQuestionNoArrayData = RandomQuestionNoSession;
+
+                            //if RandomQuestionNoSession is not null
+                            if (randomQuestionNoArrayData[0] != -1)
+                                for (int i = 0; i < randomQuestionNoArrayData.Length; i++)
+                                {
+                                
+                         
+                        %>
+
+                        pickedRandQNo.push('<%= randomQuestionNoArrayData[i] %>');
+
+                        <% 
+                                }
+                        %>
+                        //alert(pickedRandQNo);
+
+
+
+                        //對調IPC table rows ,改tableID ,rowID與pickedRandQNo 與questionList :1~n即可符合使用
+                        //對調IPC table rows according to the pickedRandQNo array sent through Session
+                        //give tr unique id
+                        tableID = "MainContent_gvScore"
+                        rowID = "tableRowID"
+                        var tableTr = $("#" + tableID + " tr");
+                        //var countTr = tableTr.size();
+                        var countTr = document.getElementById(tableID).rows.length;
+                        //alert(countTr);
+                        for (i = 0; i < countTr; i++) {
+
+                            tableTr.eq(i).attr('id', 'tableRowID' + i);
+
+                        }
+
+
+
+
+
+
+
+                        var questionList = [];
+                        for (i = 0; i < countTr; i++) {
+                            questionList[i] = i + 1;
+                        }
+
+                        var $elem1;
+                        var $elem2;
+                        var $placeholder = $("<tr><td></td></tr>");
+                        var swapTarget;
+                        for (i = 0; i < pickedRandQNo.length; i++) {
+
+
+                            //swap swapTarget and i can get the ideal random question number array.
+
+                            //swap keypoint1 for 3DBuilder
+                            swapTarget = questionList.indexOf(parseInt(pickedRandQNo[i]));
+
+
+                            //test
+                            console.log(questionList[swapTarget]);
+                            console.log(questionList[i]);
+                            console.log("\n");
+
+
+                            $elem1 = $("#" + rowID + questionList[swapTarget]);
+                            $elem2 = $("#" + rowID + questionList[i]);
+                            $elem2.after($placeholder);
+                            $elem1.after($elem2);
+                            $placeholder.replaceWith($elem1);
+
+
+
+                            //swap keypoint2 for 3DBuilder
+                            swapElement(questionList, swapTarget, i);
+
+                        }
+
+
+
+                        //rearrange Question numbers in ascending order to keep Question numbers being arranged as ususal order.
+                        rearrangeQNo();
+
+                        //show the TextBox of the question Organs.
+                        examMode = true;
+                        showTBOfQuestionOrgans(examMode);
+
+
+                        //recover the hide or show status of the non question TRs
+                        recoverHideShowStatus_ofNonQuestionTRs();
+                    }
+
+
+
+
+                    if ($.urlParam('examMode') == 0) {
+
+                        //show the TextBox of the question Organs.
+                        examMode = false;
+                        showTBOfQuestionOrgans(examMode);
+                    }
+                
+
+           
+
+
+            
 
 
         }
@@ -678,11 +812,17 @@
         function hideNonQuestionTR() {
             var x = document.getElementsByClassName("nonQuestionTR");
             
+            
+
             for (i = 0; i < x.length; i++) {
                 x[i].classList.toggle("hidden");
             }
 
-            
+
+           if( x[0].classList.contains('hidden'))
+               document.getElementById("hidden_HideNonQuestionTRS").value = "true";
+            else 
+               document.getElementById("hidden_HideNonQuestionTRS").value = "false";
             
             //assign the image of the hide non question <tr> btn
             //$('#HideNonQuestionTR').innerHTML = '<img src="' + visibleImg + '" />';

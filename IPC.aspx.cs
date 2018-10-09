@@ -410,10 +410,12 @@ public partial class IPC : CsSessionManager
          
            
             //get the corresponding correct organ name 
-            var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo) - 1];
+           // var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo) - 1];
+
+            var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo)];
                 
             
-            string input = tbx.Text.Replace(" ","");
+            string input = tbx.Text.Replace(" ","_");
             //Bent 2017 test
             string contact = "5 " + input + " " + QuestionNo + " " + answer.ToString();
             //string contact = "5 " + input + " "  + answer.Value.ToString();
