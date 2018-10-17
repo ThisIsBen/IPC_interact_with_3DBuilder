@@ -34,7 +34,7 @@
             visibility: hidden;
         }
         .menu_img {
-            width: 100%;
+            width: 50%;
            
         }
         .hideIfNotQuestion {
@@ -44,7 +44,11 @@
         .nonQuestionTR {
             background-color:gray;
         }
+        .questionNoFontStyle {
 
+           font-size: 35px;
+
+        }
 
 
     </style>
@@ -378,18 +382,15 @@
 
         <div class="row">
             
-            <asp:Panel ID="scorePanel" runat="server" Width="60%" HorizontalAlign="Center">
+            <asp:Panel ID="scorePanel" runat="server" Width="90%" HorizontalAlign="Center">
                 <div>
                 <label>Show all hidden organs</label>
             </div>
             <div>
 
-                <input type="image" id="ShowOrHideAll" src="" runat="server" onserverclick="ShowOrHideAll_Click"/>
+                
                
-                <br />
-                  <br />
-                  <br />
-                <input type="button" id="HideNonQuestionTR"  value="Hide Non question rows" onclick="hideNonQuestionTR()"/>
+                 
                 
               
                 <input type="hidden" id="AllInOrVisible" runat="server" value="true">
@@ -401,13 +402,20 @@
 
                 <asp:UpdatePanel ID="UpdatePanel1"   UpdateMode="Conditional"  runat="server">
                     <ContentTemplate>
+                        <input type="image" id="ShowOrHideAll" src="" runat="server" onserverclick="ShowOrHideAll_Click"/>
+                          <br />
+                          <br />
+                          <br />
+                        <input type="button" id="HideNonQuestionTR"  value="Hide Non question rows" onclick="hideNonQuestionTR()"/>
+
+                
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
                   
                     <Columns>
 
                         <asp:TemplateField HeaderText="Question Number">
                             <ItemTemplate>
-                                <asp:Label ID="TextBox_Number" CliendIDMode="static" name="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
+                                <asp:Label ID="TextBox_Number" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="Organ Name">
