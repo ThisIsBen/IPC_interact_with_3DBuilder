@@ -30,7 +30,7 @@
 
 
         .submit_img {
-            width: 100%;
+            width: 50%;
             visibility: hidden;
         }
         .menu_img {
@@ -367,7 +367,7 @@
             <div  class="container">
                 <div class="row">
                     <div class="col-sm-6">
-                        <asp:Button ID="FinishBtn" OnClick="FinishBtn_Click" Text="Finish" runat="server" />
+                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Finish" runat="server" />
                     </div>
                     <div class="col-sm-6">
                        
@@ -406,7 +406,7 @@
                           <br />
                           <br />
                           <br />
-                        <input type="button" id="HideNonQuestionTR"  value="Hide Non question rows" onclick="hideNonQuestionTR()"/>
+                        <input type="button" class='btn-info btn-lg' id="HideNonQuestionTR"  value="Hide Non question rows" onclick="hideNonQuestionTR()"/>
 
                 
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
