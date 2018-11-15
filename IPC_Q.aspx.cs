@@ -29,13 +29,13 @@ public partial class IPC: System.Web.UI.Page
     string questionXMLPath = "SceneFile_Q1.xml";
 
     //11/9 set string cActivityID = "006" temporarily
-    string cActivityID = "006";
+    string cActivityID = "009";
     //11/9 string QuestionBodyPart="Knee";
     string QuestionBodyPart = "Knee";
     //string QuestionBodyPart = "Stomach";
     protected void Page_Load(object sender, EventArgs e)
     {
-        questionXMLPath = XMLFolder + questionXMLPath;
+        
 
         Page.MaintainScrollPositionOnPostBack = true;
         if (!IsPostBack)

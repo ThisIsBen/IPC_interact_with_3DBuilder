@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeFile="IPC.aspx.cs" Inherits="IPC" MaintainScrollPositionOnPostback="true"%>
 
-
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
     <!--Include Bootstrap -->
@@ -115,7 +114,7 @@
             //recover visbility icon of hide_showAll
 
 
-            var hfHide_ShowAll = document.getElementById("<%= AllInOrVisible.ClientID %>");
+            var hfHide_ShowAll = document.getElementById("<%= hidden_AllInOrVisible.ClientID %>");
 
 
 
@@ -287,6 +286,13 @@
             return false;
         }
 
+        //store the Picked Organ Questions in a hidden field so that we can access it on backend
+        function sendThePickedOrganQuestions2Backend() {
+
+            document.getElementById("<%= hidden_pickedQuestions.ClientID %>").value = questionArray.join(',');  // convert the array into a string using , (comma) as a separator
+
+
+        }
 
 
         function showTBOfQuestionOrgans(inExamMode) {
@@ -367,7 +373,7 @@
             <div  class="container">
                 <div class="row">
                     <div class="col-sm-6">
-                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Finish" runat="server" />
+                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Finish" runat="server" />
                     </div>
                     <div class="col-sm-6">
                        
@@ -393,9 +399,14 @@
                  
                 
               
-                <input type="hidden" id="AllInOrVisible" runat="server" value="true">
+                <input type="hidden" id="hidden_AllInOrVisible"  runat="server" value="true">
 
                 <input type="hidden" id="hidden_HideNonQuestionTRS"  value="false">
+
+                <input type="hidden" id="hidden_pickedQuestions" runat="server" value="false">
+               
+               
+                
             </div>
                 
                 
@@ -460,7 +471,7 @@
             </asp:Panel>
         </div>
     </div>
-     
+
     <script>
         //to keep all the organ numbers that are assigned as questions 
         var questionArray = []
@@ -486,21 +497,20 @@
 
         $(document).ready(function () {
 
+
+            //read the organ questiones picked by the instructor from the organ XML file. 
             $.ajax({
                 type: "GET",
                 url: XMLFolder + questionXMLPath,
                 dataType: "xml",
                 success: function (xml) {
 
-
-
-
-
-
+                    //access each <Organ>
                     $(xml).find('Organ').each(function () {
-
+                        //access each <Question> in the <Organ>
                         $title = $(this).find("Question");
 
+                        //access the value of each <Question> in the <Organ>
                         var val = $title.text();
 
                         if (val == "Yes") {

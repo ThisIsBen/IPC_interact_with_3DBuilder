@@ -14,6 +14,10 @@ using System.Threading;
 
 
 
+
+
+
+
 public partial class IPC : CsSessionManager 
 {
     //private static System.Diagnostics.Process os = new System.Diagnostics.Process();
@@ -25,11 +29,12 @@ public partial class IPC : CsSessionManager
     string XMLFolder = "IPC_Questions/";
     string questionXMLPath = "SceneFile_Q1.xml";
     string QuestionFileName = "SceneFile_Q1.xml";//只有檔名，沒有資料夾名稱
-    string _StuCouHWDe_ID = "1226";
+    string _StuCouHWDe_ID = "1381";//We just temporarily hard code it.This ID should be retrieved from a session variable or URL variable.
     string cActivityID = "009";
 
     protected void Page_Load(object sender, EventArgs e)
     {
+
         questionXMLPath = XMLFolder + questionXMLPath;
 
         Page.MaintainScrollPositionOnPostBack = true;
@@ -167,11 +172,17 @@ public partial class IPC : CsSessionManager
         
           
         //Begin: The followings are  for temporary use ,and should be removed before push to github
+
+        //get the Question Number of organs picked by instructor sent from the front end (These Question Numbers are passed by using a hidden field).
+        string[] str_pickedQuestions = hidden_pickedQuestions.Value.ToString().Split(",".ToCharArray());
+        int[] pickedQuestions = Array.ConvertAll<string, int>(str_pickedQuestions, int.Parse);
+
+        string _QuesOrdering = "";
+
+        /*
         int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor
         RandomQuestionNoSession = pickedQuestions;        
-       
-        string _QuesOrdering = "";
-        
+       */
         //End: The followings are  for temporary use ,and should be removed before push to github
         /*
         String[] values = new String[10];
@@ -202,8 +213,8 @@ public partial class IPC : CsSessionManager
 
             //trim space of QuestionFileName e.g., "   SceneFile_Q12.xml   "=>"SceneFile_Q12.xml"
             QuestionFileName = QuestionFileName.Trim();
-            StudentAnswer._QuesOrdering += QuestionFileName + ",";
-            StudentAnswer._StudentAnswer += QuestionFileName + ",";
+            StudentAnswer._QuesOrdering += XMLFolder + QuestionFileName + ",";
+            StudentAnswer._StudentAnswer += XMLFolder + QuestionFileName + ",";
             
             for (int i = 0; i < RandomQuestionNoSession.Length; i++)
             {
