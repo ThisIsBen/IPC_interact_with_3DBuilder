@@ -94,7 +94,7 @@ public class XMLHandler
 
 
      //set the Visibility of skin to false 
-    private void invisibleSkin()
+    private void hideSkin()
     {
         var skin = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value.ToString().Equals("Skin")).Single();
 
@@ -159,7 +159,7 @@ public class XMLHandler
     public void saveXML(string xmlStorePath)
     {  
         //turn skin to invisible
-        invisibleSkin();
+        hideSkin();
 
         xDoc.Save(xmlStorePath);
 

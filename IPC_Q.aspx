@@ -37,6 +37,15 @@
             width: 100%;
         }
 
+        .questionNoFontStyle {
+
+           font-size: 35px;
+
+        }
+
+        .organNameoFontStyle {
+             font-size: 30px;
+        }
         
     </style>
 
@@ -261,7 +270,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-6">
-                        <asp:Button ID="FinishBtn" OnClick="FinishBtn_Click" Text="Finish" runat="server" />
+                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Finish" runat="server" />
                     </div>
                     <div class="col-sm-6">
                        
@@ -276,7 +285,7 @@
 
         <div class="row">
             
-            <asp:Panel ID="scorePanel" runat="server" Width="60%" HorizontalAlign="Center">
+            <asp:Panel ID="scorePanel" runat="server" Width="90%" HorizontalAlign="Center">
                 <div>
                     
             
@@ -291,21 +300,21 @@
                   
                     <Columns>
 
-                        <asp:TemplateField HeaderText="號碼">
+                        <asp:TemplateField HeaderText="Organ Number">
                             <ItemTemplate>
-                                <asp:Label ID="TextBox_Number" CliendIDMode="static" name="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
+                                <asp:Label ID="TextBox_Number" CssClass="questionNoFontStyle" CliendIDMode="static" name="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="名稱">
+                        <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="Organ Name">
                             <ItemTemplate>
                               
-                                <asp:Label ID="LBTextBox_OrganName" runat="server" Text='<%# Eval("Name") %>' />
+                                <asp:Label ID="LBTextBox_OrganName"  CssClass="organNameoFontStyle" runat="server" Text='<%# Eval("Name") %>' />
                                 
 
                             </ItemTemplate>
 
                         </asp:TemplateField>
-                         <asp:TemplateField HeaderText="是否要排入考題">
+                         <asp:TemplateField HeaderText="Set it as a question?">
                             <ItemTemplate>
                                  <asp:CheckBox runat="server" ID="checkbox_pickedOrgan" />
 
