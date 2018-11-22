@@ -148,7 +148,7 @@ public partial class IPC: System.Web.UI.Page
         CsDBOp.InsertIPCExamHWCorrectAns(cActivityID, CA, QBP, CAO);
        
        //store as XML
-        xmlHandler.saveXML(Server.MapPath(questionXMLPath));
+        xmlHandler.saveXML(Server.MapPath(xmlpath));
         
         
     }
