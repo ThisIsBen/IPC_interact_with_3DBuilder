@@ -25,7 +25,7 @@ public partial class IPC: System.Web.UI.Page
     string IPC_Question_OriginXMLPath = "./IPC_Question_Origin/SceneFile_ex.xml";
     
     //In the near future ,we will get the Path from URL para or other para transmission method.
-    string XMLFolder = "IPC_Questions/";
+    string XMLFolder = "IPC_Questions/1161-1450/";
     string questionXMLPath = "SceneFile_Q1.xml";
 
     //11/9 set string cActivityID = "006" temporarily

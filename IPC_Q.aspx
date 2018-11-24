@@ -337,7 +337,7 @@
     <script type="text/javascript">
 
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
-        XMLFolder = "IPC_Questions/";
+        XMLFolder = "IPC_Questions/1161-1450/";
         questionXMLPath = "SceneFile_Q1.xml";
          
         //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";

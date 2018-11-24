@@ -26,7 +26,9 @@ public partial class IPC : CsSessionManager
 
     
     //In the near future ,we will get the Path from URL para or other para transmission method.
-    string XMLFolder = "IPC_Questions/";
+    string XMLFolder = "IPC_Questions/1161-1450/";
+   
+    
     string questionXMLPath = "SceneFile_Q1.xml";
     string QuestionFileName = "SceneFile_Q1.xml";//只有檔名，沒有資料夾名稱
     string _StuCouHWDe_ID = "1381";//We just temporarily hard code it.This ID should be retrieved from a session variable or URL variable.

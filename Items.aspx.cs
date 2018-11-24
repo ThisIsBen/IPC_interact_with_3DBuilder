@@ -11,9 +11,10 @@ public partial class Items : CsSessionManager
 {
     //In the near future ,we will get the IPC_Question_OriginXMLPath from URL para or other para transmission method.
     //this XML file contains all organs of a certain body part.
-    string IPC_QuestionXMLFolder = "IPC_Questions/";
+    string IPC_QuestionXMLFolder = "IPC_Questions/1161-1450/";
     //In the near future ,we will get the Path from URL para or other para transmission method.
-    string XMLFolder = "D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\";
+    //string XMLFolder = "D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\";
+    string XMLFolder = "D:\\IPC_interact_with_3DBuilder\\IPC_Questions\\1161-1450\\";
     string questionXMLPath = "SceneFile_Q1.xml";
 
 
@@ -109,7 +110,7 @@ public partial class Items : CsSessionManager
             
             StreamWriter wr = (StreamWriter)Session["Writer"];
             wr.WriteLine( "3 " + XMLFolder + questionXMLPath +" "+ strRandomQuestionNo);//send protocol,Data to 3DBuilder.
-
+            
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 
             //head to IPC.aspx
