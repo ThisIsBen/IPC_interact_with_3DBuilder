@@ -63,23 +63,31 @@ public class XMLHandler
         return pickedQuestions;
  
     }
-    
-    
 
-
-     //set the checked organs as Questions by setting its Question tag to "Yes"
-    public void setAsQuestion( Label OrganName)
+    /*
+    Arg description:
+    targetTagName: the target tag name
+    organName: the target organ name
+    newValue: We will use this new Value to update the value of the target organ 
+    */
+    //set the checked organs as Questions by setting its Question tag to "Yes"
+    public void setATargetTag2ANewValue(string targetTagName, string organName, string newValue)
     {
-       
-
-        var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value == OrganName.Text).Single();
-        var test = target.Element("Question").Value;
 
 
-        target.Element("Question").Value = "Yes";
-        
-        correctAnswer.Append(","+OrganName.Text);
-        correctAnswerOrder.Append(","+target.Element("Number").Value);
+        var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value == organName).Single();
+        var test = target.Element(targetTagName).Value;
+
+
+        target.Element(targetTagName).Value = newValue;
+
+        //if the target name is "Question", we append the  organ Name and its Number 
+        //to the StringBuilder as the correct answer for this AI type question.
+        if (targetTagName == "Question")
+        {
+            correctAnswer.Append("," + organName);
+            correctAnswerOrder.Append("," + target.Element("Number").Value);
+        }
         
 
         //11/9 Add a function in XMLHandler.cs  to accumulate all the selected organName.Text in a list.
@@ -91,25 +99,38 @@ public class XMLHandler
 
     }
 
+    /*Arg description:
+     * targetOrganName: the name of the target organ name.
+     * targetAttrTag: the target attribute tag of the target organ.
+     * targetAttrTagValue: the attribute value that we want to check of the target organ
+     * 
+     * return true/false whether the specific attribute of a given target organ name is the same as targetAttrTagValue argument.
+     * */
 
-
-     //set the Visibility of skin to false 
-    private void hideSkin()
+    //check a specific attribute of a given target organ name
+    public bool checkOrganAttrValue(string targetOrganName, string targetAttrTag, string targetAttrTagValue)
     {
-        var skin = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value.ToString().Equals("Skin")).Single();
+        var targetOrgan = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value.ToString().Equals(targetOrganName)).Single();
 
-        skin.Element("Visible").Value = "0";
+        if (targetOrgan.Element(targetAttrTag).Value == targetAttrTagValue)
+            return true;
+        return false;
+
 
 
 
     }
 
-
-
-      //set the Visibility of all the organs to visible by setting its Visible tag to "1" except for skin 
+    /*
+    Arg description:
+    tagName: the target tag name.
+    withSpecificValue: it is used to locate the target tag whose value is this specific value.
+    newValue: We use the new Value to update the value of the target tag.
+    */
+    //set the Visibility of all the organs to visible by setting its Visible tag to "1" except for skin 
     //first para is the tag name of the target tag,the second is the Specific Value,and the third is the new value that user wants to set as the tags new value.
 
-    public void setValueOfSpecificTagsWithSpecificValue(string tagName,string withSpecificValue, string initValue)
+    public void setValueOfSpecificTagsWithSpecificValue(string tagName,string withSpecificValue, string newValue)
     {
 
         //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value != OrganName.Text).Single();
@@ -117,7 +138,7 @@ public class XMLHandler
         //set the Visibility of all the organs to visible by setting its Visible tag to "1"
         foreach (XmlNode node in xmlDoc.SelectNodes(".//"+tagName+"[text()="+withSpecificValue+"]"))
         {
-            node.InnerText = initValue;
+            node.InnerText = newValue;
         }
 
       
@@ -133,17 +154,43 @@ public class XMLHandler
     }
 
     //append Question tag to each Organ
-    public void appendTag2EachOrgan(string tagName,string initValue)
+    /*
+     Arg description:
+     tagName: the name of the new tag you want to append 
+     initValue: the init value of the new tag you want to append
+     appendOneEle_InNestedStructure: append the new tag as an One element to the XML file or append it to a nested structure.
+     parentTag: to indicate under which tag you want to append the new tag to
+    */
+    public void appendTag2EachOrgan(string tagName,string initValue,string appendOneEle_InNestedStructure="OneElememt", string parentTag="")
     {
-        XmlNodeList elemList = xmlDoc.GetElementsByTagName("Organ");
-        for (int i = 0; i < elemList.Count; i++)
+        
+
+        if (appendOneEle_InNestedStructure == "NestedStructure")
         {
+                XmlNodeList elemList = xmlDoc.GetElementsByTagName(parentTag);
+                for (int i = 0; i < elemList.Count; i++)
+                {
+                    //Create a new node.
+                    XmlElement elem = xmlDoc.CreateElement(tagName);
+                    elem.InnerText = initValue;
+
+
+                    elemList[i].AppendChild(elem);
+                }
+
+            
+        }
+
+
+        else 
+        {
+
             //Create a new node.
             XmlElement elem = xmlDoc.CreateElement(tagName);
             elem.InnerText = initValue;
+            xmlDoc.DocumentElement.AppendChild(elem);
 
 
-            elemList[i].AppendChild(elem);
         }
     }
 
@@ -157,11 +204,12 @@ public class XMLHandler
 
     //save the content of XML data in XElement object.
     public void saveXML(string xmlStorePath)
-    {  
-        //turn skin to invisible
-        hideSkin();
+    {
+        
+            xDoc.Save(xmlStorePath);
 
-        xDoc.Save(xmlStorePath);
+        
+        
 
         /*
         //sync the organ XML file which is just saved to xmlStorePath with the corresponding organ XML file in D:\Mirac3DBuilder\HintsAccounts\Student\Mirac\1161-1450 for 3DBuilder to read.

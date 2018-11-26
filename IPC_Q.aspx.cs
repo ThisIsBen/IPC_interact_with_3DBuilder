@@ -94,15 +94,29 @@ public partial class IPC: System.Web.UI.Page
 
         //read in the XML files that contains all organs of a certain body part. e.g., Knee 
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_Question_OriginXMLPath));
-       
 
-        //XDocument xdoc = XDocument.Load(Server.MapPath("./IPC_Question_Origin/SceneFile_ex.xml"));
+        
+        //if the selected AITypeQuestionMode is the "SurgeryMode", we append AITypeQuestionMode tag to "SurgeryMode".
+        if (Request.Form["radioBtn_AITypeQuestionMode"] != null)
+        {
+            string selectedAITypeQuestionMode = Request.Form["radioBtn_AITypeQuestionMode"].ToString();
+            
+            //append AITypeQuestionMode tag to "SurgeryMode".
+            if (selectedAITypeQuestionMode == "Surgery Mode")
+            {
+                xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");
+            }
+          
+
+        }
+        
+        
 
         //append Question tag to each Organ with init value = No.
-        xmlHandler.appendTag2EachOrgan("Question","No");
+        xmlHandler.appendTag2EachOrgan("Question","No","NestedStructure","Organ");
 
 
-         //set the Visibility of all the organs to visible by setting its Visible tag to "1" except for skin 
+        //set the Visibility of all the organs to visible by setting its Visible tag to "1" except for skin 
         //first para is the tag name of the target tag,the second is the Specific Value,and the third is the new value that user wants to set as the tags new value.
         xmlHandler.setValueOfSpecificTagsWithSpecificValue("Visible", "0", "1");
 
@@ -118,7 +132,7 @@ public partial class IPC: System.Web.UI.Page
                 var OrganName = row.FindControl("LBTextBox_OrganName") as Label;
                
                 //set the checked organs as Questions by set its Question tag to "Yes".
-                xmlHandler.setAsQuestion( OrganName);
+                xmlHandler.setATargetTag2ANewValue("Question", OrganName.Text, "Yes");
 
                 /*
                 //use JS alert() in C#
@@ -146,7 +160,26 @@ public partial class IPC: System.Web.UI.Page
 
 
         CsDBOp.InsertIPCExamHWCorrectAns(cActivityID, CA, QBP, CAO);
-       
+
+        if (Request.Form["radioBtn_AITypeQuestionMode"].ToString() == "Surgery Mode")
+        {
+
+            //set Skin to be cuttable     
+            xmlHandler.setATargetTag2ANewValue("Cut", "Skin", "1");
+
+        }
+        else
+        {
+            //if Skin is not picked as a question, we can hide the Skin
+            if (!xmlHandler.checkOrganAttrValue("Skin", "Question", "Yes"))
+            {
+                //hide the Skin
+                xmlHandler.setATargetTag2ANewValue("Visible", "Skin", "0");
+            }
+
+           
+        }
+
        //store as XML
         xmlHandler.saveXML(Server.MapPath(xmlpath));
         

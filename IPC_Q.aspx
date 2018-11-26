@@ -273,7 +273,14 @@
                         <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Finish" runat="server" />
                     </div>
                     <div class="col-sm-6">
-                       
+                       <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input"  name="radioBtn_AITypeQuestionMode" value="Surgery Mode" checked>
+                            <label class="custom-control-label" for="radioBtn_AITypeQuestionMode">Surgery Mode</label>
+                       </div>
+                       <div class="custom-control custom-radio">
+                            <input type="radio" class="custom-control-input"  name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" >
+                            <label class="custom-control-label" for="radioBtn_AITypeQuestionMode">Anatomy Mode</label>
+                       </div>
                     </div>
                 </div>
                 <%--<input type="text" id="TBX_Input" runat="server" />--%>
