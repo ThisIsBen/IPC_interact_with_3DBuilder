@@ -29,7 +29,7 @@ public partial class IPC: System.Web.UI.Page
     string questionXMLPath = "SceneFile_Q1.xml";
 
     //11/9 set string cActivityID = "006" temporarily
-    string cActivityID = "009";
+    string cActivityID = "010";
     //11/9 string QuestionBodyPart="Knee";
     string QuestionBodyPart = "Knee";
     //string QuestionBodyPart = "Stomach";
@@ -149,6 +149,10 @@ public partial class IPC: System.Web.UI.Page
         // determine whether add data to DB, question reload、no bodypart
         if (xmlHandler.correctAnswer.Length == 0)
             return;
+        /*
+        //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
+        questionXMLPath = hidden_AITypeQuestionTitle.Value;
+        */
 
         //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
         //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer

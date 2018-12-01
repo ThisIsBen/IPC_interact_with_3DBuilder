@@ -10,6 +10,7 @@ using System.Security;
 using System.Xml;
 using System.Data;
 using System.Threading;
+using System.Data.Entity;
 
 
 
@@ -88,6 +89,53 @@ public partial class IPC : CsSessionManager
            
            
         }
+        
+
+
+        /*This block should be implemented in the Hints set timer for the exam page
+         * */
+        //get the exam timespan from the UI , and convert it to Second format.
+        int hardCodeExamTimespanSec = 15; //now I just hard code it to 15 sec
+        Double examTimespan = hardCodeExamTimespanSec * 1.0;
+        DateTime deadlineDateTime=DateTime.Now.AddSeconds(examTimespan); // return Datetime format
+        /*psedo code:
+         * store deadlineDateTime to DB
+         * */
+        /*This block should be implemented in the Hints set timer for the exam page
+        * */
+
+
+
+        /*psedo code
+         * retrieve deadlineDateTime from DB,which is stored in the datetime format
+         * */
+        //check count down timer to decide whether time is already up.
+        CheckCountDownTimer(deadlineDateTime);
+
+       
+        
+       
+    }
+
+    private void CheckCountDownTimer(DateTime deadlineDateTime)
+    {
+        
+        int serverSideRemainingTimeSec = Convert.ToInt32((deadlineDateTime - DateTime.Now).TotalSeconds);
+
+        //if time is already up, force submit the AI type exam paper. 
+        if (serverSideRemainingTimeSec <= 0)
+        {
+            //call the Finish button event handler to force submit the AI type exam paper.
+            FinishBtn_ClickEventHandler();
+        }
+        else //let the front end JS count down timer to count down.
+        {
+            //pass the server Side Remaining Time (Sec) to front end through hidden field
+            hidden_serverSideRemainingTimeSec.Value = serverSideRemainingTimeSec.ToString();
+           
+
+        }
+
     }
    
 
@@ -113,7 +161,7 @@ public partial class IPC : CsSessionManager
         }
       */
 
-        
+
         //send cmd1
         try
         {
@@ -165,14 +213,22 @@ public partial class IPC : CsSessionManager
 
     public void FinishBtn_Click(object sender, EventArgs e)
     {
+
+        FinishBtn_ClickEventHandler();
+
+    }
+
+    private void FinishBtn_ClickEventHandler()
+    {
+
         //commented it for Peter work on storing student's answer to DB
         //Break 3DBuilder connection 
         /*    
         Process os = (Process)Session["Process"];       
         os.Kill();
         */
-        
-          
+
+
         //Begin: The followings are  for temporary use ,and should be removed before push to github
 
         //get the Question Number of organs picked by instructor sent from the front end (These Question Numbers are passed by using a hidden field).
@@ -209,52 +265,52 @@ public partial class IPC : CsSessionManager
             StuAnsM StudentAnswer = new StuAnsM();
             int RandomQuestionNum;//將題號一個一個取出來
             string strTB1;//暫儲存學生每格答案
-                          /*
-                          List<string> StudentAnswerList = new List<string>();//to store student's answer.
-                          */
+            /*
+            List<string> StudentAnswerList = new List<string>();//to store student's answer.
+            */
 
             //trim space of QuestionFileName e.g., "   SceneFile_Q12.xml   "=>"SceneFile_Q12.xml"
             QuestionFileName = QuestionFileName.Trim();
             StudentAnswer._QuesOrdering += XMLFolder + QuestionFileName + ",";
             StudentAnswer._StudentAnswer += XMLFolder + QuestionFileName + ",";
-            
+
             for (int i = 0; i < RandomQuestionNoSession.Length; i++)
             {
-               
+
                 RandomQuestionNum = RandomQuestionNoSession[i];
                 TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
                 strTB1 = tb.Text.Trim();
                 if (i == (RandomQuestionNoSession.Length - 1))
                 {
                     _QuesOrdering = RandomQuestionNum.ToString();
-                    StudentAnswer._StudentAnswer += strTB1;                  
+                    StudentAnswer._StudentAnswer += strTB1;
                 }
                 else
                 {
                     _QuesOrdering = RandomQuestionNum + ",";
-                    StudentAnswer._StudentAnswer += strTB1 + ",";                  
+                    StudentAnswer._StudentAnswer += strTB1 + ",";
                 }
                 StudentAnswer._QuesOrdering += _QuesOrdering;
             }
             StudentAnswer._QuesOrdering += ":";
             StudentAnswer._StudentAnswer += ":";
             //測試將session回歸0
-           // if (Num_Of_Question_Submision_Session > 2)
-           //{
-           //     Num_Of_Question_Submision_Session = 0;
-           // }
-           // else
-           // {
-                Num_Of_Question_Submision_Session++;
-           // }
-   
+            // if (Num_Of_Question_Submision_Session > 2)
+            //{
+            //     Num_Of_Question_Submision_Session = 0;
+            // }
+            // else
+            // {
+            Num_Of_Question_Submision_Session++;
+            // }
+
             //foreach (StuAnsM c in StudentAnswerList) //顯示list裡的資料
             //{
 
             //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
             //}
-            InsertStuIPCAns2DB(_StuCouHWDe_ID, cActivityID,StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
-                                                                                                          ///////////////////////////////////////
+            InsertStuIPCAns2DB(_StuCouHWDe_ID, cActivityID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+            ///////////////////////////////////////
             //DataTable dt = CsDBOp.GetStuIPCAns();
             //StuAnsM Stu_correct_papers = new StuAnsM();
             ////get the retrieved data from each row of the retrieved data table.
@@ -292,9 +348,8 @@ public partial class IPC : CsSessionManager
 
 
 
-
-
     }
+
 
     public String switchVisible_Invisible(GridViewRow selectedRow, string HFID, GridView gvScore)
     {

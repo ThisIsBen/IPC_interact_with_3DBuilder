@@ -13,8 +13,10 @@
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-    <!-- Latest compiled and minified JavaScript -->
+   
+    <link href="Content/IPC_Layout.css" rel="stylesheet" />
+   
+     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
     <script src="./bootstrap-checkbox/dist/js/bootstrap-checkbox.min.js" defer></script>
@@ -273,14 +275,21 @@
                         <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Finish" runat="server" />
                     </div>
                     <div class="col-sm-6">
-                       <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input"  name="radioBtn_AITypeQuestionMode" value="Surgery Mode" checked>
-                            <label class="custom-control-label" for="radioBtn_AITypeQuestionMode">Surgery Mode</label>
-                       </div>
-                       <div class="custom-control custom-radio">
-                            <input type="radio" class="custom-control-input"  name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" >
-                            <label class="custom-control-label" for="radioBtn_AITypeQuestionMode">Anatomy Mode</label>
-                       </div>
+
+                      
+
+                        <label class="radioBtnContainer">Surgery Mode
+                          <input type="radio"  name="radioBtn_AITypeQuestionMode" value="Surgery Mode" checked="checked">
+                          <span class="radioBtnCheckmark"></span>
+                        </label>
+                        <label class="radioBtnContainer">Anatomy Mode
+                          <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode">
+                          <span class="radioBtnCheckmark"></span>
+                        </label>
+                      
+
+                           
+                      
                     </div>
                 </div>
                 <%--<input type="text" id="TBX_Input" runat="server" />--%>
@@ -338,6 +347,7 @@
 
                     </Columns>
                 </asp:GridView>
+                  <input type="hidden" id="hidden_AITypeQuestionTitle"  runat="server" >
             </asp:Panel>
         </div>
     </div>
@@ -368,6 +378,13 @@
                 readInExistingQuestion();
             }
 
+            if ($.urlParam('AITypeQuestionTitle') != null) // Yes
+            {
+                //load XML to check the organs that are picked to be part of question.
+                var hidden_AITypeQuestionTitle = document.getElementById("<%= hidden_AITypeQuestionTitle.ClientID %>");
+                hidden_AITypeQuestionTitle.value = $.urlParam('AITypeQuestionTitle');
+
+            }
 
           
 

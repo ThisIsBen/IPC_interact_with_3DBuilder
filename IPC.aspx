@@ -18,7 +18,7 @@
             
             font-size:20px;
             text-align: center;         
-            background-color: #ffd800;
+            background-color: #ff6a00;
             
            
         }
@@ -51,9 +51,11 @@
 
 
     </style>
-
+    <link href="Content/CountDownTimer.css" rel="stylesheet" />
+    
+    
     <script type="text/javascript">
-
+        
         //if (a == 0) {; }
         
         //img source gallery 
@@ -367,16 +369,33 @@
    
     <div align="center">
         
-        <div class="jumbotron">
+        <div class="jumbotron" >
             <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
-            <div  class="container">
+            <div  class="container" style="position: fixed;" >
                 <div class="row">
                     <div class="col-sm-6">
                         <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Finish" runat="server" />
                     </div>
-                    <div class="col-sm-6">
-                       
+                    <div class="col-sm-6" >
+                      
+                        <div id="clockdiv">
+  
+                          <div>
+                            <span class="hours"></span>
+                            <div class="smalltext">Hours</div>
+                          </div>
+                          <div>
+                            <span class="minutes"></span>
+                            <div class="smalltext">Minutes</div>
+                          </div>
+                          <div>
+                            <span class="seconds"></span>
+                            <div class="smalltext">Seconds</div>
+                          </div>
+ 
+
+                        </div>
                     </div>
                 </div>
                 <%--<input type="text" id="TBX_Input" runat="server" />--%>
@@ -406,6 +425,10 @@
                 <input type="hidden" id="hidden_pickedQuestions" runat="server" value="false">
                
                
+                 <input type="hidden" id="hidden_serverSideRemainingTimeSec" runat="server" value="0">
+
+                
+                
                 
             </div>
                 
@@ -496,7 +519,9 @@
         //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
 
         $(document).ready(function () {
+            
 
+         
 
             //read the organ questiones picked by the instructor from the organ XML file. 
             $.ajax({
@@ -641,6 +666,8 @@
                     }
                 }
 
+
+
              });
 
 
@@ -653,9 +680,93 @@
             });
 
             loadAfterUpdatePanel();
+
+            //activate the count down timer
+            activateCountDownTimer();
+            
+
         });
 
         
+       
+
+       
+
+
+
+       
+        function activateCountDownTimer() {
+            /*get the remaining time (sec) and TimeIsUp value from server side*/
+            //set these 2 vars in the hidden field on server side
+            //read these 2 vars in the hidden field on client side
+
+
+            serverSideRemainingTimeSec = parseInt(document.getElementById('<%= hidden_serverSideRemainingTimeSec.ClientID %>').value)
+            
+
+            var deadline = new Date(Date.parse(new Date()) + serverSideRemainingTimeSec * 1000);
+
+
+           
+            initializeClock('clockdiv', deadline);
+           
+
+        }
+
+        function getTimeRemaining(endtime) {
+            var t = Date.parse(endtime) - Date.parse(new Date());
+            var seconds = Math.floor((t / 1000) % 60);
+            var minutes = Math.floor((t / 1000 / 60) % 60);
+            var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+
+            return {
+                'total': t,
+
+                'hours': hours,
+                'minutes': minutes,
+                'seconds': seconds
+            };
+        }
+
+        function initializeClock(id, endtime) {
+            var clock = document.getElementById(id);
+
+            var hoursSpan = clock.querySelector('.hours');
+            var minutesSpan = clock.querySelector('.minutes');
+            var secondsSpan = clock.querySelector('.seconds');
+
+
+
+
+
+
+            function updateClock() {
+                var t = getTimeRemaining(endtime);
+
+
+                hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+                minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+                secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+                if (t.total <= 0) {
+                    clearInterval(timeinterval);
+                    //alert("time is up");
+
+                    //force submit the AI type exam paper when time is up
+                    document.getElementById('<%= FinishBtn.ClientID %>').click();
+
+
+                }
+            }
+
+
+            //updateClock(endtime, hoursSpan, minutesSpan, secondsSpan);
+            updateClock();
+            var timeinterval = setInterval(updateClock, 1000);
+
+        }
+
+
 
         //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
         function loadAfterUpdatePanel() {
