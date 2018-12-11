@@ -136,12 +136,24 @@ using System.Threading.Tasks;
     {
         //first add
         //if (Num_Of_Question_Submision_Session == 1)
+
+
+        /*
         DataRowCollection DRC = GetDataTable(string.Format("Select * from IPCExamHWCorrectAnswer where cActivityID = {0:d}", _cActivityID)).Rows;
+        */
+
+        DataRowCollection DRC = GetDataTable(string.Format("Select * from [NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer] where cQID = {0:d}", _cActivityID)).Rows;
         
+
         if (DRC.Count == 0)
         {
+            /*
             string sql = string.Format("Insert into IPCExamHWCorrectAnswer(cActivityID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
-            return InsertData(sql);
+            
+             */
+            string sql = string.Format("Insert into [NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer](cQID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
+            
+           return InsertData(sql);
 
         }
         //update
@@ -159,19 +171,33 @@ using System.Threading.Tasks;
                 //subtrim end ":" from string 
                 _correctAnswer =_correctAnswer.Remove(_correctAnswer.Length - 1);
                 _QuesOrdering = _QuesOrdering.Remove(_QuesOrdering.Length - 1);
-
+                /*
                 sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer] SET correctAnswer = REPLACE(correctAnswer,'{0}','{1}')  where cActivityID =  '{2}' ",
                     DRC[0][1].ToString().Split(':')[index], _correctAnswer, _cActivityID);
+                */
+                sql = string.Format("UPDATE[NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer] SET correctAnswer = REPLACE(correctAnswer,'{0}','{1}')  where cQID =  '{2}' ",
+                    DRC[0][1].ToString().Split(':')[index], _correctAnswer, _cActivityID);
                 UpdateData(sql);
+
+                /*
                 sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer] SET correctAnswerOrdering = REPLACE(correctAnswerOrdering,'{0}','{1}') where cActivityID =  '{2}' ",
+                    DRC[0][3].ToString().Split(':')[index], _QuesOrdering, _cActivityID);
+                 * 
+                 */
+                sql = string.Format("UPDATE[NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer] SET correctAnswerOrdering = REPLACE(correctAnswerOrdering,'{0}','{1}') where cQID =  '{2}' ",
                     DRC[0][3].ToString().Split(':')[index], _QuesOrdering, _cActivityID);
                 return UpdateData(sql); 
 
             }
                 
             else{
+                /*
                 sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer]  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cActivityID =  '{3}'"
                 , _correctAnswer, _QuestionBodyPart,_QuesOrdering, _cActivityID);
+                 * */
+                sql = string.Format("UPDATE[NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer]  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cQID =  '{3}'"
+                , _correctAnswer, _QuestionBodyPart, _QuesOrdering, _cActivityID);
+
                 return UpdateData(sql);
             }
             
@@ -180,6 +206,319 @@ using System.Threading.Tasks;
 
     #endregion
 
+
+
+        #region set up AI type question in Hints DB
+
+    /// <summary>
+    /// 儲存一筆資料至QuestionIndex
+    /// </summary>
+    /// <param name="strQID"></param>
+    /// <param name="strQuestion"></param>
+    /// <param name="intLevel"></param>
+    public static int saveIntoQuestionIndex(string strQID, string strQuestion, string strAnswer, int intLevel)
+    {
+        string strSQL = "";
+        strSQL = "SELECT * FROM QuestionIndex WHERE cQID = '" + strQID + "' ";
+        DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;
+        
+        if (DRC.Count == 0)
+        {
+            //Insert the new questions in the QuestionIndex table, if there is not a question with the same cQID in the QuestionIndex table.
+            strSQL = "INSERT INTO QuestionIndex (cQID , cQuestion, cAnswer , sLevel) " +
+                     "VALUES ('" + strQID + "' , @cQuestion , @cANswer, '" + intLevel.ToString() + "') ";
+
+            return InsertData(strSQL);
+        }
+
+        else 
+        {
+            //Update the existing questions in the QuestionIndex table, if there is a question with the same cQID in the QuestionIndex table.
+            strSQL = "UPDATE QuestionIndex SET cQuestion = @cQuestion , cAnswer = @cAnswer , sLevel = '" + intLevel.ToString() + "' " +
+                     "WHERE cQID = '" + strQID + "' ";
+
+            return UpdateData(strSQL); 
+        }
+        
+        
+       
+    }
+
+    /// <summary>
+    /// 儲存一筆資料至QuestionMode
+    /// </summary>
+    /// <param name="strQID"></param>
+    /// <param name="strPaperID"></param>
+    /// <param name="strQuestionDivisionID"></param>
+    /// <param name="strQuestionGroupID"></param>
+    /// <param name="strQuestionMode"></param>
+    /// <param name="strQuestionType"></param>
+    /// <param name="templateQuestionQID"></param>
+    /// <param name="strUserID"></param>
+    public static void saveIntoQuestionMode(string strQID, string strPaperID, string strQuestionDivisionID, string strQuestionGroupID, string strQuestionMode, string strQuestionType, string templateQuestionQID, string strUserID)
+    //ben
+    //public void saveIntoQuestionMode(string strQID, string strPaperID, string strQuestionDivisionID, string strQuestionGroupID, string strQuestionMode, string strQuestionType, string templateQuestionQID = null, string strUserID=null)
+    {
+        string strSQL = "";
+        //取得QuestionGroupName
+        string strQuestionGroupName = getQuestionGroupNameByQuestionGroupID(strQuestionGroupID);
+
+
+        //if teacher save the edited question as a new question
+        //add similarID to the new question to show all the related similar question when the teacher picks one of the parent or offspring of this new question.
+        if (templateQuestionQID != null && strUserID != null)
+        {
+            //to contain similarID to assign to the new question
+            string similarID = "";
+            string TemplateQuesQuestionGroupID = "";
+            string TemplateQuesQuestionGroupName = "";
+            //Ben check whether the the value of “similarID”of the question that is used as a template is null or not.
+
+            strSQL = " SELECT similarID ,cQuestionGroupID,cQuestionGroupName FROM QuestionMode" +
+                            " WHERE cQID = '" + templateQuestionQID + "' and cQuestionType= '" + strQuestionType + "' and similarID IS NOT NULL";
+            DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;           
+    
+            //If the question that is used as a template already has similarID in QuestionMode table.
+            if (DRC.Count > 0)
+            {
+
+               
+                //set similarID the same as the that of the question that is used as a template
+                /*
+                similarID = similarIDCheck.Tables[0].Rows[0]["similarID"].ToString();
+                 * */
+                similarID = DRC[0]["similarID"].ToString();
+
+
+                //get the cQuestionGroupName and cQuestionGroupID of the template question
+                /*
+                TemplateQuesQuestionGroupID = similarIDCheck.Tables[0].Rows[0]["cQuestionGroupID"].ToString();
+                TemplateQuesQuestionGroupName = similarIDCheck.Tables[0].Rows[0]["cQuestionGroupName"].ToString();
+                */
+
+                TemplateQuesQuestionGroupID = DRC[0]["cQuestionGroupID"].ToString();
+                TemplateQuesQuestionGroupName = DRC[0]["cQuestionGroupName"].ToString();
+
+            }
+
+            //If the question that is used as a template doesn't have similarID in QuestionMode table.
+            else
+            {
+
+                //set new similarID to the template question and the new question.
+               
+                similarID = strUserID + "_simiID_" + getNowTime();
+
+                //assign the new similarID to the question that is used as a template
+                //Update similarID of the template question
+                strSQL = " UPDATE QuestionMode SET similarID = '" + similarID + "'  WHERE cQID = '" + templateQuestionQID + "' and cQuestionType='" + strQuestionType + "'";
+
+
+                UpdateData(strSQL); 
+
+
+
+
+                //strQuestionGroupID and strQuestionGroupName are all empty, just get these fields from the template question.
+                if (strQuestionGroupID == "" && strQuestionGroupName == "")
+                {
+                    //get the cQuestionGroupName and cQuestionGroupID of the template question
+                    strSQL = " SELECT cQuestionGroupID,cQuestionGroupName FROM QuestionMode" +
+                              " WHERE cQID = '" + templateQuestionQID + "' and cQuestionType= '" + strQuestionType + "' and similarID IS NOT NULL";
+
+
+                    DataRowCollection DRCsimilarID = GetDataTable(string.Format(strSQL)).Rows;    
+
+                    //If the question that is used as a template already has similarID in QuestionMode table.
+                    if (DRCsimilarID.Count > 0)
+                    {
+                        //set similarID the same as the that of the question that is used as a template
+                        similarID = DRCsimilarID[0]["similarID"].ToString();
+
+                        //get the cQuestionGroupName and cQuestionGroupID of the template question
+                        TemplateQuesQuestionGroupID = DRCsimilarID[0]["cQuestionGroupID"].ToString();
+                        TemplateQuesQuestionGroupName = DRCsimilarID[0]["cQuestionGroupName"].ToString();
+
+
+                    }
+                   
+                }
+
+                else//use the GroupID passed by parameter in to this function and the corresponding GroupName for the new question
+                {
+                    TemplateQuesQuestionGroupID = strQuestionGroupID;
+                    TemplateQuesQuestionGroupName = strQuestionGroupName;
+                }
+            }
+           
+
+
+
+
+
+            //store similarID along with all other related data to table QuestionMode
+            strSQL = " SELECT * FROM QuestionMode" +
+                            " WHERE cQID = '" + strQID + "' ";
+
+            DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
+
+
+           
+            //Do nothing if there is an existing question with the same cQID in QuestionMode table.
+            if (DRCcQID.Count > 0)
+            {
+                // 先註解，因為將QuestionMode資料表的QID欄位的Primary Key拿掉，所以若執行此Update會導致有重複筆資料。(功能上是為了可以將一題對話題放入不同的問題主題中。)  老詹 2015/09/06
+                /*{
+                    //Update
+                    strSQL = " UPDATE QuestionMode SET cPaperID = '" + strPaperID + "' , cDivisionID = '" + strQuestionDivisionID + "' , cQuestionGroupID = '" + strQuestionGroupID + "' , cQuestionGroupName = '" + strQuestionGroupName + "' , cQuestionMode = '" + strQuestionMode + "' , cQuestionType = '" + strQuestionType + "' " +
+                            " WHERE cQID = '" + strQID + "' ";
+                }*/
+            }
+
+            //Insert the new question to QuestionMode table, if there is no existing questions with the same cQID.
+            else
+            {
+                //Insert
+                strSQL = " INSERT INTO QuestionMode (cQID , cPaperID , cDivisionID , cQuestionGroupID , cQuestionGroupName , cQuestionMode , cQuestionType,similarID) " +
+                        " VALUES ('" + strQID + "' , '" + strPaperID + "' , '" + strQuestionDivisionID + "' , '" + TemplateQuesQuestionGroupID + "' , '" + strQuestionGroupName + "' , '" + strQuestionMode + "' , '" + strQuestionType + "' , '" + similarID + "') ";
+                /*write SQL to file to 
+                //to inspect the SQL cmd when something went wrong with SQL cmd 
+                // Create a file to write to.              
+                File.WriteAllText("D:/Hints_on_60/Hints/App_Code/AuthoringTool/CaseEditor/Paper/updateSimilarIDSQL.txt", strSQL);
+                */
+
+            }
+
+            InsertData(strSQL);
+
+
+        }
+
+
+        //store a record to table QuestionMode(If it's not 另存新題)
+        else
+        {
+
+            strSQL = " SELECT * FROM QuestionMode" +
+                            " WHERE cQID = '" + strQID + "' ";
+
+            DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
+
+
+
+            
+            
+
+            //Do nothing if there is an existing question with the same cQID in QuestionMode table.
+            if (DRCcQID.Count > 0)
+            {
+                // 先註解，因為將QuestionMode資料表的QID欄位的Primary Key拿掉，所以若執行此Update會導致有重複筆資料。(功能上是為了可以將一題對話題放入不同的問題主題中。)  老詹 2015/09/06
+                /*{
+                    //Update
+                    strSQL = " UPDATE QuestionMode SET cPaperID = '" + strPaperID + "' , cDivisionID = '" + strQuestionDivisionID + "' , cQuestionGroupID = '" + strQuestionGroupID + "' , cQuestionGroupName = '" + strQuestionGroupName + "' , cQuestionMode = '" + strQuestionMode + "' , cQuestionType = '" + strQuestionType + "' " +
+                            " WHERE cQID = '" + strQID + "' ";
+                }*/
+            }
+
+            //Insert the new question to QuestionMode table, if there is no existing questions with the same cQID.
+            else
+            {
+                //Insert
+                strSQL = " INSERT INTO QuestionMode (cQID , cPaperID , cDivisionID , cQuestionGroupID , cQuestionGroupName , cQuestionMode , cQuestionType) " +
+                        " VALUES ('" + strQID + "' , '" + strPaperID + "' , '" + strQuestionDivisionID + "' , '" + strQuestionGroupID + "' , '" + strQuestionGroupName + "' , '" + strQuestionMode + "' , '" + strQuestionType + "') ";
+            }
+           
+            //insert record to table QuestionMode 
+            InsertData(strSQL);
+        }
+
+    }
+
+
+
+    /// <summary>
+    /// 傳回某個QuestionGroupName by QuestionGroupID
+    /// </summary>
+    /// <returns></returns>
+    private static string getQuestionGroupNameByQuestionGroupID(string strQuestionGroupID)
+    {
+        string strReturn = "";
+
+        string strSQL = "SELECT cNodeName FROM QuestionGroupTree WHERE cNodeID = '" + strQuestionGroupID + "' ";
+        DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;
+
+
+
+        //Do nothing if there is an existing question with the same cQID in QuestionMode table.
+        if (DRC.Count > 0)
+        {
+            strReturn = DRC[0]["cNodeName"].ToString();
+        }
+       
+
+        return strReturn;
+    }
+
+
+
+    private static string getNowTime()
+    {
+        //此function會傳回符合資料庫定義的時間格式的現在時間
+        string strYear, strMonth, strDay, strHour, strMin, strSec;
+
+        //get year
+        strYear = DateTime.Now.Year.ToString();
+        //get month
+        if (DateTime.Now.Month > 9)
+        {
+            strMonth = DateTime.Now.Month.ToString();
+        }
+        else
+        {
+            strMonth = "0" + DateTime.Now.Month.ToString();
+        }
+        //get day
+        if (DateTime.Now.Day > 9)
+        {
+            strDay = DateTime.Now.Day.ToString();
+        }
+        else
+        {
+            strDay = "0" + DateTime.Now.Day.ToString();
+        }
+        //get Hour
+        if (DateTime.Now.Hour > 9)
+        {
+            strHour = DateTime.Now.Hour.ToString();
+        }
+        else
+        {
+            strHour = "0" + DateTime.Now.Hour.ToString();
+        }
+        //get min
+        if (DateTime.Now.Minute > 9)
+        {
+            strMin = DateTime.Now.Minute.ToString();
+        }
+        else
+        {
+            strMin = "0" + DateTime.Now.Minute.ToString();
+        }
+        //get sec
+        if (DateTime.Now.Second > 9)
+        {
+            strSec = DateTime.Now.Second.ToString();
+        }
+        else
+        {
+            strSec = "0" + DateTime.Now.Second.ToString();
+        }
+
+        string strReturn = strYear + strMonth + strDay + strHour + strMin + strSec;
+        return strReturn;
+    }
+
+        #endregion
 
         /*
         public static DataTable GetMOEManagerInfo(int uId)

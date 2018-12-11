@@ -8,7 +8,13 @@ using System.Web;
 
     public static class CsDBConnection
     {
+        /*
+        //connect to SCOREDB
         private static string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["SCOREDB"].ToString();
+        */
+
+        //connect to NewVersionHintsDB
+        private static string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NewVersionHintsDBConnectionString"].ToString();
         private static SqlConnection batchConn = new SqlConnection(connectionString);
         private static Dictionary<string, SqlTransaction> batchTransation = new Dictionary<string, SqlTransaction>();
 

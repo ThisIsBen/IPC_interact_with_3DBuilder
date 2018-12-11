@@ -378,11 +378,11 @@
                 readInExistingQuestion();
             }
 
-            if ($.urlParam('AITypeQuestionTitle') != null) // Yes
+            if ($.urlParam('cQID') != null) // Yes
             {
                 //load XML to check the organs that are picked to be part of question.
                 var hidden_AITypeQuestionTitle = document.getElementById("<%= hidden_AITypeQuestionTitle.ClientID %>");
-                hidden_AITypeQuestionTitle.value = $.urlParam('AITypeQuestionTitle');
+                hidden_AITypeQuestionTitle.value = $.urlParam('cQID')+".xml";
 
             }
 

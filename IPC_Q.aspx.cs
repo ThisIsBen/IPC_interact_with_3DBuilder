@@ -149,10 +149,10 @@ public partial class IPC: System.Web.UI.Page
         // determine whether add data to DB, question reload、no bodypart
         if (xmlHandler.correctAnswer.Length == 0)
             return;
-        /*
+        
         //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
         questionXMLPath = hidden_AITypeQuestionTitle.Value;
-        */
+        
 
         //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
         //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
@@ -163,6 +163,13 @@ public partial class IPC: System.Web.UI.Page
         string QBP = QuestionBodyPart;
 
 
+
+        //storing AI type question into NewVersionHintsDB QuestionIndex, QuestionMode datatable.
+        storeAITypeQuestion2HintsDB();
+        
+
+
+        //store correct answer of the AI type question to DB
         CsDBOp.InsertIPCExamHWCorrectAns(cActivityID, CA, QBP, CAO);
 
         if (Request.Form["radioBtn_AITypeQuestionMode"].ToString() == "Surgery Mode")
@@ -190,7 +197,30 @@ public partial class IPC: System.Web.UI.Page
         
     }
 
-  
+
+
+    //storing AI type question into NewVersionHintsDB QuestionIndex, QuestionMode datatable.
+    private void storeAITypeQuestion2HintsDB()
+    {
+        //get all the required parameter for storing AI type question into NewVersionHintsDB QuestionIndex, QuestionMode datatable.
+        string strQID = Request.QueryString["strQID"];
+        string strQuestion = "";
+        string strPaperID = Request.QueryString["strPaperID"];
+        string strQuestionDivisionID = Request.QueryString["strQuestionDivisionID"];
+        string strQuestionGroupID = Request.QueryString["strQuestionGroupID"];
+        string strQuestionMode = Request.QueryString["strQuestionMode"];
+
+        //All the questions need to store a record in QuestionIndex and QuestionMode table.
+        //儲存一筆資料至QuestionIndex //###parameter "strAnswer" can be set to NULL in 程式題 
+        CsDBOp.saveIntoQuestionIndex(strQID, strQuestion, null, 1);//set sLevel to 1 for the time being because although sLevel ranges from 0 to 12 ,only sLevel == 1 is used in the entire Hints system 
+
+        //儲存一筆資料至QuestionMode  //###with parameter "strQuestionType" set to 7 in 程式題,which is defined in Paper_QuestionTypeNew.aspx to represent the  QuestionType of  程式題
+        CsDBOp.saveIntoQuestionMode(strQID, strPaperID, strQuestionDivisionID, strQuestionGroupID, strQuestionMode, "9", null, null);
+
+
+
+
+    }
    
     //submit current edition to 3DBuilder
     protected void gvScore_RowCommand(Object sender, GridViewCommandEventArgs e)
