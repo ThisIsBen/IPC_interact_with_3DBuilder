@@ -508,14 +508,7 @@
         
 
         //to extract para in URL
-        $.urlParam = function (name) {
-            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-            if (!results)
-                return 0;
-                
-            else
-                return results[1];
-        }
+        var url = new URL(window.location.href);
         //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
 
         $(document).ready(function () {
@@ -554,7 +547,7 @@
 
                     //activate exam mode
 
-                    if ($.urlParam('examMode') == "Yes") {
+                    if (url.searchParams.get("examMode") == "Yes") {
 
                         //generate the exam question number according to pickedRandQNo,and swap the corresponding row in the table at the same time.
 
@@ -658,7 +651,7 @@
 
 
 
-                    if ($.urlParam('examMode') == 0) {
+                    if (url.searchParams.get("examMode") == 0) {
 
                         //show the TextBox of the question Organs.
                         examMode = false;
@@ -809,7 +802,7 @@
            
                     //activate exam mode
 
-                    if ($.urlParam('examMode') == "Yes") {
+            if (url.searchParams.get("examMode") == "Yes") {
 
                         
 
@@ -913,7 +906,7 @@
 
 
 
-                    if ($.urlParam('examMode') == 0) {
+                    if (url.searchParams.get("examMode") == 0) {
 
                         //show the TextBox of the question Organs.
                         examMode = false;

@@ -362,18 +362,15 @@
         //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
 
         //to extract para in URL
-        $.urlParam = function (name) {
-            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-            return results[1] || 0;
-        }
+        var url = new URL(window.location.href);
+       
 
         $(document).ready(function () {
             $(':checkbox').checkboxpicker();
 
-           // 12/15 comment temporarily.
-            /*
+          
             //load XML to check the organs that are picked to be part of question.
-            if ($.urlParam('viewContent') != null && $.urlParam('viewContent') == "Yes")
+            if (url.searchParams.get("viewContent") != null && url.searchParams.get("viewContent")  == "Yes")
             {
                
                 //load XML to check the organs that are picked to be part of question.
@@ -381,13 +378,13 @@
                 readInExistingQuestion();
                 
             }
-            */
+            
 
-            if ($.urlParam('strQID') != null)
+            if (url.searchParams.get("strQID")  != null)
             {
                 //load XML to check the organs that are picked to be part of question.
                 var hidden_AITypeQuestionTitle = document.getElementById("<%= hidden_AITypeQuestionTitle.ClientID %>");
-                hidden_AITypeQuestionTitle.value = $.urlParam('strQID');
+                hidden_AITypeQuestionTitle.value = url.searchParams.get("strQID");
 
             }
 
