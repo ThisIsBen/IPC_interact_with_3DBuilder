@@ -25,9 +25,10 @@ using System.Text.RegularExpressions;
         /// <returns></returns>
         private static int InsertData(string sql)
         {
-
-           
-            return CsDBConnection.ExecuteNonQuery(sql);
+            SqlCommand cmd = new SqlCommand(sql);
+            return CsDBConnection.ExecuteNonQuery(cmd);
+            
+            //return CsDBConnection.ExecuteNonQuery(sql);
         }
 
         private static int InsertUserEnteredData(string sql, object[] sqlParameterList)
@@ -35,15 +36,17 @@ using System.Text.RegularExpressions;
 
             SqlCommand cmd = new SqlCommand(sql);
             fillSqlParameters(cmd, sqlParameterList);
-            return CsDBConnection.ExecuteNonQuery(sql);
+            return CsDBConnection.ExecuteNonQuery(cmd);
         }
 
 
         private static int UpdateData(string sql)
         {
 
+            SqlCommand cmd = new SqlCommand(sql);
+            return CsDBConnection.ExecuteNonQuery(cmd);
             
-            return CsDBConnection.ExecuteNonQuery(sql);
+            //return CsDBConnection.ExecuteNonQuery(sql);
         }
 
         private static int UpdateUserEnteredData(string sql, object[] sqlParameterList)
@@ -51,12 +54,16 @@ using System.Text.RegularExpressions;
 
             SqlCommand cmd = new SqlCommand(sql);
             fillSqlParameters(cmd, sqlParameterList);
-            return CsDBConnection.ExecuteNonQuery(sql);
+            return CsDBConnection.ExecuteNonQuery(cmd);
         }
 
         private static int DeleteData(string sql)
         {
-            return CsDBConnection.ExecuteNonQuery(sql);
+            SqlCommand cmd = new SqlCommand(sql);
+            return CsDBConnection.ExecuteNonQuery(cmd);
+
+
+            //return CsDBConnection.ExecuteNonQuery(sql);
         }
 
 
@@ -175,7 +182,7 @@ using System.Text.RegularExpressions;
         DataRowCollection DRC = GetDataTable(string.Format("Select * from IPCExamHWCorrectAnswer where cActivityID = {0:d}", _cActivityID)).Rows;
         */
 
-        DataRowCollection DRC = GetDataTable(string.Format("Select * from AITypeQuestionCorrectAnswer where cQID = {0:d}", _cActivityID)).Rows;
+        DataRowCollection DRC = GetDataTable(string.Format("Select * from AITypeQuestionCorrectAnswer where cQID = '{0}'", _cActivityID)).Rows;
         
 
         if (DRC.Count == 0)
@@ -252,6 +259,11 @@ using System.Text.RegularExpressions;
         for (int i = 0; i < matches.Count; i++)
         {
             Match m = matches[i];
+            if (pList[i] == null)
+            {
+                pList[i] = " ";
+            }
+            
             cmd.Parameters.AddWithValue(m.Value, pList[i]);
         }
     }

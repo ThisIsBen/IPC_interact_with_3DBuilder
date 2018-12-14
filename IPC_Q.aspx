@@ -352,11 +352,13 @@
         </div>
     </div>
     <script type="text/javascript">
-
+        /*Temporary hard-code variable*/
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
         XMLFolder = "IPC_Questions/1161-1450/";
         questionXMLPath = "SceneFile_Q1.xml";
-         
+        /*Temporary hard-code variable*/
+
+
         //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
 
         //to extract para in URL
@@ -368,21 +370,24 @@
         $(document).ready(function () {
             $(':checkbox').checkboxpicker();
 
-            
-
+           // 12/15 comment temporarily.
+            /*
             //load XML to check the organs that are picked to be part of question.
-            if ($.urlParam('viewContent') == "Yes") // Yes
+            if ($.urlParam('viewContent') != null && $.urlParam('viewContent') == "Yes")
             {
+               
                 //load XML to check the organs that are picked to be part of question.
                 
                 readInExistingQuestion();
+                
             }
+            */
 
-            if ($.urlParam('cQID') != null) // Yes
+            if ($.urlParam('strQID') != null)
             {
                 //load XML to check the organs that are picked to be part of question.
                 var hidden_AITypeQuestionTitle = document.getElementById("<%= hidden_AITypeQuestionTitle.ClientID %>");
-                hidden_AITypeQuestionTitle.value = $.urlParam('cQID')+".xml";
+                hidden_AITypeQuestionTitle.value = $.urlParam('strQID');
 
             }
 

@@ -16,23 +16,33 @@ using System.Text;
 
 public partial class IPC: System.Web.UI.Page
 {
-    //private static System.Diagnostics.Process os = new System.Diagnostics.Process();
-   // public static System.Diagnostics.Process rd = new System.Diagnostics.Process();
-   // private StreamWriter myStreamWriter = null; 
     
-    
-    //In the near future ,we will get the IPC_Question_OriginXMLPath from URL para or other para transmission method.
-    string IPC_Question_OriginXMLPath = "./IPC_Question_Origin/SceneFile_ex.xml";
-    
-    //In the near future ,we will get the Path from URL para or other para transmission method.
-    string XMLFolder = "IPC_Questions/1161-1450/";
-    string questionXMLPath = "SceneFile_Q1.xml";
 
-    //11/9 set string cActivityID = "006" temporarily
-    string cActivityID = "010";
-    //11/9 string QuestionBodyPart="Knee";
+    /*Temporary hard-code variable*/
     string QuestionBodyPart = "Knee";
     //string QuestionBodyPart = "Stomach";
+
+    //In the near future ,we will get the Path from URL para or other para transmission method.
+    string XMLFolder = "IPC_Questions/1161-1450/";
+    /*Temporary hard-code variable*/
+
+
+    //In the near future ,we will get the IPC_Question_OriginXMLPath from URL para or other para transmission method.
+    string IPC_Question_OriginXMLPath = "./IPC_Question_Origin/SceneFile_ex.xml";
+
+    string questionXMLPath = "";
+
+    //11/9 set string cActivityID = "006" temporarily
+    //string cActivityID = "010";
+   
+    //use cQID to replace cActivityID after the integration with Hints system
+    string cQID = "";
+    
+
+   
+
+
+   
     protected void Page_Load(object sender, EventArgs e)
     {
         
@@ -151,7 +161,10 @@ public partial class IPC: System.Web.UI.Page
             return;
         
         //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
-        questionXMLPath = hidden_AITypeQuestionTitle.Value;
+        questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
+
+        //retrieve the cQID from the URL parameter 
+        cQID = hidden_AITypeQuestionTitle.Value;
         
 
         //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
@@ -170,7 +183,7 @@ public partial class IPC: System.Web.UI.Page
 
 
         //store correct answer of the AI type question to DB
-        CsDBOp.InsertIPCExamHWCorrectAns(cActivityID, CA, QBP, CAO);
+        CsDBOp.InsertIPCExamHWCorrectAns(cQID, CA, QBP, CAO);
 
         if (Request.Form["radioBtn_AITypeQuestionMode"].ToString() == "Surgery Mode")
         {

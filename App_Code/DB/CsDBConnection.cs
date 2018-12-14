@@ -18,16 +18,26 @@ using System.Web;
         private static SqlConnection batchConn = new SqlConnection(connectionString);
         private static Dictionary<string, SqlTransaction> batchTransation = new Dictionary<string, SqlTransaction>();
 
-        public static int ExecuteNonQuery(string sql)
+        public static int ExecuteNonQuery(SqlCommand cmd)
         {
+            
             try
             {
+                /*
                 SqlConnection conn = new SqlConnection(connectionString);
                 conn.Open();
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 int connInt = cmd.ExecuteNonQuery();
                 conn.Close();
                 conn.Dispose();
+                 * */
+
+                cmd.Connection = new SqlConnection(connectionString);
+                cmd.Connection.Open();
+                int connInt = cmd.ExecuteNonQuery();
+                cmd.Connection.Close();
+                cmd.Connection.Dispose();
+                
                 return connInt;
             }
 
@@ -46,7 +56,7 @@ using System.Web;
 
                 //把例外狀況寫到目的檔案，若檔案存在則附加在原本內容之後(換行)
 
-                File.AppendAllText(string.Format(HttpContext.Current.Server.MapPath("~") + "\\SQLLog\\{0}.txt", Tody), string.Format("\r\n{0} ： 查詢函式 「{1}」\r\n\t\t\t錯誤內容「{2}」\r\n\r\n", TodyMillisecond, sql, e ));
+                File.AppendAllText(string.Format(HttpContext.Current.Server.MapPath("~") + "\\SQLLog\\{0}.txt", Tody), string.Format("\r\n{0} ： 查詢函式 「{1}」\r\n\t\t\t錯誤內容「{2}」\r\n\r\n", TodyMillisecond, cmd.CommandText, e ));
                 //File.AppendAllText("J:\\Thisway_Log\\" + Tody + ".txt", "\r\n" + TodyMillisecond + "：" +  e);
                 throw e;
             }
