@@ -204,7 +204,7 @@ public partial class IPC: System.Web.UI.Page
     {
         //get all the required parameter for storing AI type question into NewVersionHintsDB QuestionIndex, QuestionMode datatable.
         string strQID = Request.QueryString["strQID"];
-        string strQuestion = "";
+        string strQuestion = "AI Type Question Description";
         string strPaperID = Request.QueryString["strPaperID"];
         string strQuestionDivisionID = Request.QueryString["strQuestionDivisionID"];
         string strQuestionGroupID = Request.QueryString["strQuestionGroupID"];

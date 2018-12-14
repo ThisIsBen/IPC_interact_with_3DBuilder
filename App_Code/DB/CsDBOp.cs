@@ -5,8 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
     public class CsDBOp
     {
@@ -25,11 +25,32 @@ using System.Threading.Tasks;
         /// <returns></returns>
         private static int InsertData(string sql)
         {
+
+           
             return CsDBConnection.ExecuteNonQuery(sql);
         }
 
+        private static int InsertUserEnteredData(string sql, object[] sqlParameterList)
+        {
+
+            SqlCommand cmd = new SqlCommand(sql);
+            fillSqlParameters(cmd, sqlParameterList);
+            return CsDBConnection.ExecuteNonQuery(sql);
+        }
+
+
         private static int UpdateData(string sql)
         {
+
+            
+            return CsDBConnection.ExecuteNonQuery(sql);
+        }
+
+        private static int UpdateUserEnteredData(string sql, object[] sqlParameterList)
+        {
+
+            SqlCommand cmd = new SqlCommand(sql);
+            fillSqlParameters(cmd, sqlParameterList);
             return CsDBConnection.ExecuteNonQuery(sql);
         }
 
@@ -59,7 +80,10 @@ using System.Threading.Tasks;
     //get 
     public static DataTable GetStuIPCAns()
     {
-        string sql = string.Format("Select * From StuCouHWDe_IPC ");
+       //string sql = string.Format("Select * From StuCouHWDe_IPC ");
+
+
+        string sql = string.Format("Select * From AITypeQuestionStudentAnswer ");
         return GetDataTable(sql);
     }
     //set
@@ -67,14 +91,21 @@ using System.Threading.Tasks;
     {
         if (Num_Of_Question_Submision_Session==1)
         {
-            string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cActivityID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cActivityID, _StudentAnswer, _QuesOrdering);
-            return InsertData(sql);
+            //string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cActivityID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cActivityID, _StudentAnswer, _QuesOrdering);
+
+            string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}' )", _StuCouHWDe_ID, cActivityID, _QuesOrdering);
+            
+            object[] sqlParametersList = { _StudentAnswer }; 
+            return InsertUserEnteredData(sql,sqlParametersList);
         }
 
         else {
             
-            string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cActivityID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cActivityID);
-            return UpdateData(sql);
+            //string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cActivityID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cActivityID);
+
+            string sql = string.Format("UPDATE AITypeQuestionStudentAnswer  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( @StudentAnswer as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{0}' as nvarchar(max)) where cUserID =  '{1}' and cQID =  '{2}'", _QuesOrdering, _StuCouHWDe_ID, cActivityID);
+            object[] sqlParametersList = { _StudentAnswer };
+            return UpdateUserEnteredData(sql, sqlParametersList);
         }
     }
 
@@ -128,7 +159,9 @@ using System.Threading.Tasks;
     #region Access IPCExamHWCorrectAnswer DB Data
     public static DataTable GetIPCExamHWCorrectAns()
     {
-        string sql = string.Format("Select * From IPCExamHWCorrectAnswer ");
+        //string sql = string.Format("Select * From IPCExamHWCorrectAnswer ");
+
+        string sql = string.Format("Select * From AITypeQuestionCorrectAnswer ");
         return GetDataTable(sql);
     }
     //set
@@ -142,7 +175,7 @@ using System.Threading.Tasks;
         DataRowCollection DRC = GetDataTable(string.Format("Select * from IPCExamHWCorrectAnswer where cActivityID = {0:d}", _cActivityID)).Rows;
         */
 
-        DataRowCollection DRC = GetDataTable(string.Format("Select * from [NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer] where cQID = {0:d}", _cActivityID)).Rows;
+        DataRowCollection DRC = GetDataTable(string.Format("Select * from AITypeQuestionCorrectAnswer where cQID = {0:d}", _cActivityID)).Rows;
         
 
         if (DRC.Count == 0)
@@ -151,7 +184,7 @@ using System.Threading.Tasks;
             string sql = string.Format("Insert into IPCExamHWCorrectAnswer(cActivityID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
             
              */
-            string sql = string.Format("Insert into [NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer](cQID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
+            string sql = string.Format("Insert into AITypeQuestionCorrectAnswer (cQID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
             
            return InsertData(sql);
 
@@ -175,7 +208,7 @@ using System.Threading.Tasks;
                 sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer] SET correctAnswer = REPLACE(correctAnswer,'{0}','{1}')  where cActivityID =  '{2}' ",
                     DRC[0][1].ToString().Split(':')[index], _correctAnswer, _cActivityID);
                 */
-                sql = string.Format("UPDATE[NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer] SET correctAnswer = REPLACE(correctAnswer,'{0}','{1}')  where cQID =  '{2}' ",
+                sql = string.Format("UPDATE AITypeQuestionCorrectAnswer SET correctAnswer = REPLACE(correctAnswer,'{0}','{1}')  where cQID =  '{2}' ",
                     DRC[0][1].ToString().Split(':')[index], _correctAnswer, _cActivityID);
                 UpdateData(sql);
 
@@ -184,7 +217,7 @@ using System.Threading.Tasks;
                     DRC[0][3].ToString().Split(':')[index], _QuesOrdering, _cActivityID);
                  * 
                  */
-                sql = string.Format("UPDATE[NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer] SET correctAnswerOrdering = REPLACE(correctAnswerOrdering,'{0}','{1}') where cQID =  '{2}' ",
+                sql = string.Format("UPDATE AITypeQuestionCorrectAnswer SET correctAnswerOrdering = REPLACE(correctAnswerOrdering,'{0}','{1}') where cQID =  '{2}' ",
                     DRC[0][3].ToString().Split(':')[index], _QuesOrdering, _cActivityID);
                 return UpdateData(sql); 
 
@@ -195,7 +228,7 @@ using System.Threading.Tasks;
                 sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer]  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cActivityID =  '{3}'"
                 , _correctAnswer, _QuestionBodyPart,_QuesOrdering, _cActivityID);
                  * */
-                sql = string.Format("UPDATE[NewVersionHintsDB].[dbo].[AITypeQuestionCorrectAnswer]  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cQID =  '{3}'"
+                sql = string.Format("UPDATE AITypeQuestionCorrectAnswer  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cQID =  '{3}'"
                 , _correctAnswer, _QuestionBodyPart, _QuesOrdering, _cActivityID);
 
                 return UpdateData(sql);
@@ -209,6 +242,21 @@ using System.Threading.Tasks;
 
 
         #region set up AI type question in Hints DB
+
+    //使用SQLParameter to make the value of the variable to be a parameter to prevent SQL Injection Attack.
+    //Parameter 可以 (1)檢查參數的型別 (2)檢查資料長度 (3)確保參數為非可執行的SQL命令 
+    private static void fillSqlParameters(SqlCommand cmd, object[] pList)
+    {
+        Regex r = new Regex("(@\\w+)", RegexOptions.IgnoreCase);
+        MatchCollection matches = r.Matches(cmd.CommandText);
+        for (int i = 0; i < matches.Count; i++)
+        {
+            Match m = matches[i];
+            cmd.Parameters.AddWithValue(m.Value, pList[i]);
+        }
+    }
+
+    
 
     /// <summary>
     /// 儲存一筆資料至QuestionIndex
@@ -228,7 +276,10 @@ using System.Threading.Tasks;
             strSQL = "INSERT INTO QuestionIndex (cQID , cQuestion, cAnswer , sLevel) " +
                      "VALUES ('" + strQID + "' , @cQuestion , @cANswer, '" + intLevel.ToString() + "') ";
 
-            return InsertData(strSQL);
+            //make the content entered by users be SQL Parameters when we execute the SQL Command to prevent SQL Injection Attack.
+            object[] sqlParametersList = { strQuestion, strAnswer };
+
+            return InsertUserEnteredData(strSQL, sqlParametersList);
         }
 
         else 
@@ -237,7 +288,10 @@ using System.Threading.Tasks;
             strSQL = "UPDATE QuestionIndex SET cQuestion = @cQuestion , cAnswer = @cAnswer , sLevel = '" + intLevel.ToString() + "' " +
                      "WHERE cQID = '" + strQID + "' ";
 
-            return UpdateData(strSQL); 
+            //make the content entered by users be SQL Parameters when we execute the SQL Command to prevent SQL Injection Attack.
+            object[] sqlParametersList = { strQuestion, strAnswer };
+
+            return UpdateUserEnteredData(strSQL, sqlParametersList); 
         }
         
         
@@ -878,7 +932,7 @@ using System.Threading.Tasks;
                 sql = string.Format("Insert Into ScoreItem(FID,_Index,Name,MaxScore,Seq,State) Values( '{0}', {1:d}, '{2}', {3}, {4},{5:d})", fId, scoreitemdetail.ReviewLevel,
                                 scoreitem.Name, scoreitem.MaxScore, scoreitem.Seq , state);
                 BatchInsertData(SCOREITEM_TRANSACTION, sql);
-            }
+            }InsertData
             sql = string.Format("Insert Into ScoreDescription(FID,ReviewLevel,Description,State) Values('{0}', {1:d}, '{2}',{3:d} )", fId, scoreitemdetail.ReviewLevel, scoreitemdetail.ScoreDescription,state);
             BatchInsertData(SCOREITEM_TRANSACTION, sql);
             sql = string.Format("Insert Into ReviewConfig(FID,_index,CID,Value,State) Values('{0}', {1:d}, 'TeachingMemberScore', '{2}',{3:d})", fId, scoreitemdetail.ReviewLevel, scoreitemdetail.AdditionScore,state);
