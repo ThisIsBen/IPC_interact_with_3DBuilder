@@ -226,6 +226,10 @@
             }
         }
         function readInExistingQuestion() {
+
+            //get the QID from URL parameter as the target file name if the instructor wants to check the contnet of the existing AI Type question.
+            questionXMLPath = url.searchParams.get("strQID") + ".xml";
+
             $.ajax({
                 type: "GET",
                 url: XMLFolder + questionXMLPath,
@@ -274,10 +278,22 @@
                     <div class="col-sm-6">
                         <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Finish" runat="server" />
                     </div>
-                    <div class="col-sm-6">
+
+                    <div class="col-sm-3">
+                      <h2>Please write down the question description here. </h2>
+                     
+                      
+                        <div >
+                          <label for="comment">Comment:</label>
+                          <textarea class="form-control" rows="5" name="AITypeQuestionDescription" ></textarea>
+                        </div>
+                     
+                    </div>
+
+                    <div class="col-sm-2">
 
                       
-
+                        <h2>Please choose the question mode here(Surgery/Anatomy Mode).</h2>
                         <label class="radioBtnContainer">Surgery Mode
                           <input type="radio"  name="radioBtn_AITypeQuestionMode" value="Surgery Mode" checked="checked">
                           <span class="radioBtnCheckmark"></span>
@@ -355,9 +371,10 @@
         /*Temporary hard-code variable*/
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
         XMLFolder = "IPC_Questions/1161-1450/";
-        questionXMLPath = "SceneFile_Q1.xml";
+        
         /*Temporary hard-code variable*/
 
+       
 
         //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
 

@@ -175,11 +175,8 @@ public partial class IPC: System.Web.UI.Page
         string CAO = xmlpath + xmlHandler.correctAnswerOrder+":";
         string QBP = QuestionBodyPart;
 
-
-
-        //storing AI type question into NewVersionHintsDB QuestionIndex, QuestionMode datatable.
-        storeAITypeQuestion2HintsDB();
-        
+        //create Or update required AITypeQuestion attributes in HintsDB 
+        createOrUpdateAITypeQuestionInHintsDB();
 
 
         //store correct answer of the AI type question to DB
@@ -204,32 +201,72 @@ public partial class IPC: System.Web.UI.Page
            
         }
 
-       //store as XML
+        //store as XML
         xmlHandler.saveXML(Server.MapPath(xmlpath));
-        
+
+        //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
+        redirectBack2HintsPaper_MainPage();
         
     }
 
+    //create Or update required AITypeQuestion attributes in HintsDB 
+    private void createOrUpdateAITypeQuestionInHintsDB()
+    {
+        //get all the required parameter for creating a new AITypeQuestion or modifying an existing AITypeQuestion in the NewVersionHintsDB  .
+        string strQID = Request.QueryString["strQID"];
+        string strQuestion = Request.Form["AITypeQuestionDescription"];
+        string strPaperID = Request.QueryString["strPaperID"];
+
+        //When creating a new AITypeQuestion, we must store the AITypeQuestion into NewVersionHintsDB QuestionIndex, QuestionMode,Paper_Content datatable  
+        //if Request.QueryString["viewContent"] == null means it is a new question rather than an existing one, which is opened again for modification.
+        if (Request.QueryString["viewContent"] == null || Request.QueryString["viewContent"] != "Yes")
+        {
+
+            storeAITypeQuestion2HintsDB(strQID, strQuestion, strPaperID);
+
+
+        }
+
+        //When modifying an existing AITypeQuestion, we only need to update the content of the question description textarea.
+        //Because the instructor can only modify its question description and the organs that are set as the questions.
+        else
+        {
+            CsDBOp.updateAITypeQuestionDescription_QuestionIndex(strQID, strQuestion, null, 1);
+        }
+
+    }
+
+    //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
+    private void redirectBack2HintsPaper_MainPage()
+    {
+        string strCaseID = Request.QueryString["cCaseID"];
+        string strSectionName = Request.QueryString["cSectionName"];
+        string strPaperID = Request.QueryString["strPaperID"];
+        Response.Redirect("../../../../Hints/AuthoringTool/CaseEditor/Paper/Paper_MainPage.aspx?Opener=SelectPaperMode&cCaseID=" + strCaseID + "&cSectionName=" + strSectionName + "&cPaperID=" + strPaperID);
+
+
+    }
 
 
     //storing AI type question into NewVersionHintsDB QuestionIndex, QuestionMode datatable.
-    private void storeAITypeQuestion2HintsDB()
+    private void storeAITypeQuestion2HintsDB(string strQID,string strQuestion,string strPaperID)
     {
+        
+        
         //get all the required parameter for storing AI type question into NewVersionHintsDB QuestionIndex, QuestionMode datatable.
-        string strQID = Request.QueryString["strQID"];
-        string strQuestion = "AI Type Question Description";
-        string strPaperID = Request.QueryString["strPaperID"];
         string strQuestionDivisionID = Request.QueryString["strQuestionDivisionID"];
         string strQuestionGroupID = Request.QueryString["strQuestionGroupID"];
         string strQuestionMode = Request.QueryString["strQuestionMode"];
 
         //All the questions need to store a record in QuestionIndex and QuestionMode table.
-        //儲存一筆資料至QuestionIndex //###parameter "strAnswer" can be set to NULL in 程式題 
+        //儲存一筆資料至QuestionIndex //
         CsDBOp.saveIntoQuestionIndex(strQID, strQuestion, null, 1);//set sLevel to 1 for the time being because although sLevel ranges from 0 to 12 ,only sLevel == 1 is used in the entire Hints system 
 
-        //儲存一筆資料至QuestionMode  //###with parameter "strQuestionType" set to 7 in 程式題,which is defined in Paper_QuestionTypeNew.aspx to represent the  QuestionType of  程式題
+        //儲存一筆資料至QuestionMode  //###with parameter "strQuestionType" set to 9 in AITypeQuestion,which is defined in Paper_QuestionTypeNew.aspx to represent the  QuestionType of  AITypeQuestion
         CsDBOp.saveIntoQuestionMode(strQID, strPaperID, strQuestionDivisionID, strQuestionGroupID, strQuestionMode, "9", null, null);
 
+        //儲存一筆資料至Paper_Content //add the AI Type Question to the exam paper.
+        CsDBOp.saveToPaper_Content(strPaperID, strQID, "9", strQuestionMode);
 
 
 

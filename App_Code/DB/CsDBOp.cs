@@ -268,7 +268,28 @@ using System.Text.RegularExpressions;
         }
     }
 
-    
+    /// <summary>
+    /// 儲存一筆資料至QuestionIndex
+    /// </summary>
+    /// <param name="strQID"></param>
+    /// <param name="strQuestion"></param>
+    /// <param name="intLevel"></param>
+    public static int updateAITypeQuestionDescription_QuestionIndex(string strQID, string strQuestion, string strAnswer, int intLevel)
+    {
+       
+            //Update the existing questions in the QuestionIndex table, if there is a question with the same cQID in the QuestionIndex table.
+            string strSQL = "UPDATE QuestionIndex SET cQuestion = @cQuestion , cAnswer = @cAnswer , sLevel = '" + intLevel.ToString() + "' " +
+                     "WHERE cQID = '" + strQID + "' ";
+
+            //make the content entered by users be SQL Parameters when we execute the SQL Command to prevent SQL Injection Attack.
+            object[] sqlParametersList = { strQuestion, strAnswer };
+
+            return UpdateUserEnteredData(strSQL, sqlParametersList);
+        
+
+
+
+    }  
 
     /// <summary>
     /// 儲存一筆資料至QuestionIndex
@@ -500,6 +521,60 @@ using System.Text.RegularExpressions;
 
     }
 
+
+    /// <summary>
+    /// 取得某問卷在Paper_Content中最高的問題順序。
+    /// </summary>
+    /// <param name="strPaperID"></param>
+    /// <returns></returns>
+    private int getPaperContentMaxSeq(string strPaperID)
+    {
+        int intReturn = 0;
+
+        string strSQL = "SELECT MAX(sSeq) AS 'sSeq' FROM Paper_Content WHERE cPaperID = '" + strPaperID + "' ";
+        DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
+        if (DRCcQID.Count > 0)
+        {
+            try
+            {
+                intReturn = Convert.ToInt32(DRCcQID[0]["sSeq"]);
+            }
+            catch
+            {
+            }
+        }
+        
+        return intReturn;
+    }
+
+    /// 將值存入Paper_Content
+    public static  void  saveToPaper_Content(string strPaperID, string strQID, string strQuestionType, string strQuestionMode, string strStandardScore = "0")
+    {
+        //get the seq for the new AITypeQuestion when adding it to the exam paper.
+        string strSeq = Convert.ToString(getPaperContentMaxSeq(strPaperID) + 1);
+
+        string strSQL = "SELECT * FROM Paper_Content WHERE cPaperID = '" + strPaperID + "' AND cQID = '" + strQID + "' ";
+        DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
+        if (DRCcQID.Count > 0)
+        {
+            //Update
+            strSQL = " UPDATE Paper_Content SET  sStandardScore = '" + strStandardScore + "' , cQuestionType = '" + strQuestionType + "' , cQuestionMode = '" + strQuestionMode + 
+                " WHERE cPaperID = '" + strPaperID + "' AND cQID = '" + strQID + "' ";
+
+            UpdateData(strSQL);
+
+        }
+        else
+        {
+            //Insert
+            strSQL = " INSERT INTO Paper_Content (cPaperID , cQID , sStandardScore , cQuestionType , cQuestionMode , sSeq) " +
+                " VALUES ('" + strPaperID + "' , '" + strQID + "'  ,'" + strStandardScore + "'  ,'" + strQuestionType + "'  ,'" + strQuestionMode + "'  ,'" + strSeq + "')";
+
+            InsertData(strSQL);
+        }
+       
+        
+    }
 
 
     /// <summary>
