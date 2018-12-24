@@ -264,6 +264,12 @@
             });
         }
 
+
+        function goBack2PreviousPage()
+        {
+            window.history.back();
+
+        }
     </script>
 
 
@@ -275,34 +281,41 @@
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-6">
-                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Finish" runat="server" />
+                    <div class="col-sm-3">
+                        <div>
+                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Save the Question" runat="server" />
+                        </div>
+                            <br />
+                        <div>
+                        <input type="button" class='btn-danger btn-lg' value="Go back" onclick="goBack2PreviousPage()">
+                        </div>
                     </div>
 
-                    <div class="col-sm-3">
-                      <h2>Please write down the question description here. </h2>
+                    <div class="col-sm-6">
+                      <h3>Please write down <br />the question description here. </h3>
                      
                       
                         <div >
-                          <label for="comment">Comment:</label>
-                          <textarea class="form-control" rows="5" name="AITypeQuestionDescription" ></textarea>
+                         
+                          <textarea class="form-control" rows="9" style="min-width: 100%" id="AITypeQuestionDescription" runat="server" ></textarea>
                         </div>
                      
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
 
                       
-                        <h2>Please choose the question mode here(Surgery/Anatomy Mode).</h2>
-                        <label class="radioBtnContainer">Surgery Mode
-                          <input type="radio"  name="radioBtn_AITypeQuestionMode" value="Surgery Mode" checked="checked">
-                          <span class="radioBtnCheckmark"></span>
-                        </label>
-                        <label class="radioBtnContainer">Anatomy Mode
-                          <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode">
-                          <span class="radioBtnCheckmark"></span>
-                        </label>
+                        <h3>Please choose the question mode here.</h3><h4>(Surgery/Anatomy Mode)</h4>
+                        
                       
+
+                        <div class="roles">
+                            <input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="Surgery Mode" checked="checked">
+                            <label class="role" for="Surgery Mode">Surgery&nbsp  </label>
+                       <br />
+                            <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="Anatomy Mode">
+                            <label class="role" for="Anatomy Mode">Anatomy</label>
+                        </div>
 
                            
                       

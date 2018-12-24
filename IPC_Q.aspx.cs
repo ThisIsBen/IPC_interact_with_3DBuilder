@@ -69,10 +69,13 @@ public partial class IPC: System.Web.UI.Page
             gvScore.HeaderRow.TableSection = TableRowSection.TableHeader;
 
 
+            //if the instructor wants to check or modify the existing AITypeQuestion, 
+            //we retrieve the existing question description and display it for the instructor to modify.
+            if (Request.QueryString["viewContent"] != null && Request.QueryString["viewContent"] == "Yes")
+            {
+                AITypeQuestionDescription.InnerText = CsDBOp.getAITypeQuestion_QuestionDescription(Request.QueryString["strQID"]);
 
-
-
-
+            }
             //add an invisible row which contains a btn to activate ShowAll 
             
         }
@@ -214,7 +217,7 @@ public partial class IPC: System.Web.UI.Page
     {
         //get all the required parameter for creating a new AITypeQuestion or modifying an existing AITypeQuestion in the NewVersionHintsDB  .
         string strQID = Request.QueryString["strQID"];
-        string strQuestion = Request.Form["AITypeQuestionDescription"];
+        string strQuestion = AITypeQuestionDescription.InnerText;
         string strPaperID = Request.QueryString["strPaperID"];
 
         //When creating a new AITypeQuestion, we must store the AITypeQuestion into NewVersionHintsDB QuestionIndex, QuestionMode,Paper_Content datatable  
@@ -242,7 +245,7 @@ public partial class IPC: System.Web.UI.Page
         string strCaseID = Request.QueryString["cCaseID"];
         string strSectionName = Request.QueryString["cSectionName"];
         string strPaperID = Request.QueryString["strPaperID"];
-        Response.Redirect("../../../../Hints/AuthoringTool/CaseEditor/Paper/Paper_MainPage.aspx?Opener=SelectPaperMode&cCaseID=" + strCaseID + "&cSectionName=" + strSectionName + "&cPaperID=" + strPaperID);
+        Response.Redirect("../Hints/AuthoringTool/CaseEditor/Paper/Paper_MainPage.aspx?Opener=SelectPaperMode&cCaseID=" + strCaseID + "&cSectionName=" + strSectionName + "&cPaperID=" + strPaperID);
 
 
     }

@@ -268,6 +268,18 @@ using System.Text.RegularExpressions;
         }
     }
 
+
+    //get the question description of an existing  AITypeQuestion when the instructor wants to edit it.
+    public static string getAITypeQuestion_QuestionDescription(string strQID)
+    {
+       
+        string strSQL = "SELECT * FROM QuestionIndex WHERE cQID = '" + strQID + "' ";
+        DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;
+
+        return DRC[0]["cQuestion"].ToString();
+
+    }
+
     /// <summary>
     /// 儲存一筆資料至QuestionIndex
     /// </summary>
@@ -527,7 +539,7 @@ using System.Text.RegularExpressions;
     /// </summary>
     /// <param name="strPaperID"></param>
     /// <returns></returns>
-    private int getPaperContentMaxSeq(string strPaperID)
+    private static int getPaperContentMaxSeq(string strPaperID)
     {
         int intReturn = 0;
 
@@ -551,7 +563,7 @@ using System.Text.RegularExpressions;
     public static  void  saveToPaper_Content(string strPaperID, string strQID, string strQuestionType, string strQuestionMode, string strStandardScore = "0")
     {
         //get the seq for the new AITypeQuestion when adding it to the exam paper.
-        string strSeq = Convert.ToString(getPaperContentMaxSeq(strPaperID) + 1);
+        string strSeq = Convert.ToString(CsDBOp.getPaperContentMaxSeq(strPaperID) + 1);
 
         string strSQL = "SELECT * FROM Paper_Content WHERE cPaperID = '" + strPaperID + "' AND cQID = '" + strQID + "' ";
         DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
