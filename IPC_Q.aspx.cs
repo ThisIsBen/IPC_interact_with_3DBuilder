@@ -242,12 +242,14 @@ public partial class IPC: System.Web.UI.Page
     //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
     private void redirectBack2HintsPaper_MainPage()
     {
+        /*
         string strCaseID = Request.QueryString["cCaseID"];
         string strSectionName = Request.QueryString["cSectionName"];
         string strPaperID = Request.QueryString["strPaperID"];
         Response.Redirect("../Hints/AuthoringTool/CaseEditor/Paper/Paper_MainPage.aspx?Opener=SelectPaperMode&cCaseID=" + strCaseID + "&cSectionName=" + strSectionName + "&cPaperID=" + strPaperID);
-
-
+        */
+        ClientScript.RegisterClientScriptBlock(this.GetType(), "Refresh", "opener.document.getElementById('btnRefresh').click();window.close();", true);
+        
     }
 
 
