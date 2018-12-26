@@ -242,9 +242,12 @@ public partial class IPC: System.Web.UI.Page
     //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
     private void redirectBack2HintsPaper_MainPage()
     {
-       
+        //if the opener page is still opened, refresh it and close the current page.
         ClientScript.RegisterClientScriptBlock(this.GetType(), "Refresh", "opener.document.getElementById('btnRefresh').click();window.close();", true);
         
+        //if the opener page is already closed, direct back to the opener page.
+        ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "history.go(-2);", true);
+       
     }
 
 

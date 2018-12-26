@@ -46,7 +46,8 @@
         }
 
         .organNameoFontStyle {
-             font-size: 30px;
+             font-size: 35px;
+             text-align: left;
         }
         
     </style>
@@ -230,12 +231,19 @@
             //get the QID from URL parameter as the target file name if the instructor wants to check the contnet of the existing AI Type question.
             questionXMLPath = url.searchParams.get("strQID") + ".xml";
 
+            //clear the ajax cache to read the latest content from the organ xml file
+            $.ajaxSetup({
+                cache: false
+            });
+
+
             $.ajax({
                 type: "GET",
                 url: XMLFolder + questionXMLPath,
                 dataType: "xml",
                 success: function (xml) {
 
+                    //get the organs No that are set to be the question
                     var questionArray = []
 
                     $(xml).find('Organ').each(function () {
@@ -249,26 +257,56 @@
 
                             //push to questionArray
                             questionArray.push($no.text());
-                            //alert($no.text());
+                            
 
                         }
+
+
+                        
+
 
 
 
 
                     });
-                    console.log(questionArray);
+
+
+                    //check the mode of the AITypeQuestion and check its radio buttn accordingly.
+                    checkAITypeQuestionMode_RadioBtn(xml);
+                    
+                    
+                    //check the radio buttons of the organs that are set to be the question
                     checkPickedOrgans(questionArray);
                 }
 
             });
         }
 
-
+        //direct back the Hints exam editing page
         function goBack2PreviousPage()
         {
             window.history.back();
 
+        }
+
+        //check the mode of the AITypeQuestion and check its radio buttn accordingly.
+        function checkAITypeQuestionMode_RadioBtn(xml)
+        {
+            //if the mode of the AITypeQuestion is "Surgery Mode"   
+            if ($(xml).find("AITypeQuestionMode").text() == "Surgery Mode") {
+                //check the radio button of the Surgery Mode
+                document.getElementById("SurgeryModeRadioBtn").checked = true;
+                       
+
+            }
+
+            //if the mode of the AITypeQuestion is "Anatomy Mode"
+            else {
+            //check the radio button of the Anatomy Mode
+                document.getElementById("AnatomyModeRadioBtn").checked = true;
+
+
+            }
         }
     </script>
 
@@ -276,7 +314,7 @@
    
     <div align="center">
        
-        <div class="jumbotron">
+        <div class="jumbotron" >
             <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
             <div class="container">
@@ -287,39 +325,37 @@
                         </div>
                             <br />
                         <div>
-                        <input type="button" class='btn-danger btn-lg' value="Go back" onclick="goBack2PreviousPage()">
+                        <input type="button" class='btn-danger btn-lg' value="<< Back" id="BackBtn"onclick="goBack2PreviousPage()">
                         </div>
                     </div>
 
-                    <div class="col-sm-6">
-                      <h3>Please write down <br />the question description here. </h3>
+                    <div class="col-sm-9">
                      
-                      
+                     
+                     
                         <div >
-                         
-                          <textarea class="form-control" rows="9" style="min-width: 100%" id="AITypeQuestionDescription" runat="server" ></textarea>
+                          <h3 style="text-align: left;">Please write down <br />the question description here. </h3>
+                          <textarea class="form-control" rows="5" style="min-width: 100%;font-size: 22px;" id="AITypeQuestionDescription" runat="server" ></textarea>
                         </div>
-                     
-                    </div>
 
-                    <div class="col-sm-3">
 
-                      
-                        <h3>Please choose the question mode here.</h3><h4>(Surgery/Anatomy Mode)</h4>
+                        
                         
                       
 
-                        <div class="roles">
-                            <input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="Surgery Mode" checked="checked">
-                            <label class="role" for="Surgery Mode">Surgery&nbsp  </label>
+                        <div class="roles" style="text-align: left;">
+                            <h3 >Please choose the question mode here.</h3><h4>(Surgery/Anatomy Mode)</h4>
+                            <input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" >
+                            <label class="role" for="SurgeryModeRadioBtn">Surgery&nbsp  </label>
                        <br />
-                            <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="Anatomy Mode">
-                            <label class="role" for="Anatomy Mode">Anatomy</label>
+                            <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn" checked="checked">
+                            <label class="role" for="AnatomyModeRadioBtn">Anatomy</label>
                         </div>
 
-                           
-                      
+                     
                     </div>
+
+                    
                 </div>
                 <%--<input type="text" id="TBX_Input" runat="server" />--%>
                 <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
@@ -330,7 +366,7 @@
 
         <div class="row">
             
-            <asp:Panel ID="scorePanel" runat="server" Width="90%" HorizontalAlign="Center">
+            <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
                 <div>
                     
             
@@ -350,7 +386,7 @@
                                 <asp:Label ID="TextBox_Number" CssClass="questionNoFontStyle" CliendIDMode="static" name="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="Organ Name">
+                        <asp:TemplateField ControlStyle-Width="90%" ControlStyle-Height="5px" HeaderText="Organ Name">
                             <ItemTemplate>
                               
                                 <asp:Label ID="LBTextBox_OrganName"  CssClass="organNameoFontStyle" runat="server" Text='<%# Eval("Name") %>' />
