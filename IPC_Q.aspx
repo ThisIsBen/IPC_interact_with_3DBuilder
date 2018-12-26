@@ -50,6 +50,14 @@
              text-align: left;
         }
         
+        .template-checkbox {
+           text-align:center;
+        }
+
+        .jumbotron {
+            padding-bottom: 0;
+            padding-top: 0;
+        }
     </style>
 
     <script type="text/javascript">
@@ -226,15 +234,23 @@
 
             }
         }
+
+        //clear the ajax cache to read the latest content from the organ xml file
+        function clearAjaxCache() {
+            $.ajaxSetup({
+                cache: false
+            });
+        }
+
+
         function readInExistingQuestion() {
 
             //get the QID from URL parameter as the target file name if the instructor wants to check the contnet of the existing AI Type question.
             questionXMLPath = url.searchParams.get("strQID") + ".xml";
 
             //clear the ajax cache to read the latest content from the organ xml file
-            $.ajaxSetup({
-                cache: false
-            });
+            //if we don't clear the cache, ajax will return an old version of the organ xml file cached in the memory.
+            clearAjaxCache();
 
 
             $.ajax({
@@ -248,9 +264,8 @@
 
                     $(xml).find('Organ').each(function () {
 
-                        $title = $(this).find("Question");
-
-                        var val = $title.text();
+                        
+                        var val = $(this).find("Question").text();
 
                         if (val == "Yes") {
                             $no = $(this).find("Number");
@@ -319,22 +334,24 @@
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
             <div class="container">
                 <div class="row">
-                    <div class="col-sm-3">
-                        <div>
+                    <div  style="text-align: center;">
+                       <div class="col-sm-6">
                         <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Save the Question" runat="server" />
                         </div>
-                            <br />
-                        <div>
+                           
+                       <div class="col-sm-6">
                         <input type="button" class='btn-danger btn-lg' value="<< Back" id="BackBtn"onclick="goBack2PreviousPage()">
-                        </div>
+                       </div>
                     </div>
+                   </div>
 
-                    <div class="col-sm-9">
+                <div class="row">
+                    <div >
                      
                      
                      
                         <div >
-                          <h3 style="text-align: left;">Please write down <br />the question description here. </h3>
+                          <h3 style="text-align: left;">Please write down the question description here. </h3>
                           <textarea class="form-control" rows="5" style="min-width: 100%;font-size: 22px;" id="AITypeQuestionDescription" runat="server" ></textarea>
                         </div>
 
@@ -345,11 +362,11 @@
 
                         <div class="roles" style="text-align: left;">
                             <h3 >Please choose the question mode here.</h3><h4>(Surgery/Anatomy Mode)</h4>
-                            <input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" >
-                            <label class="role" for="SurgeryModeRadioBtn">Surgery&nbsp  </label>
+                            
+                            <label class="role" for="SurgeryModeRadioBtn"><input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" >&nbsp Surgery Mode <br/><h4>(The skin of the body part will be displayed and can not be hidden.<br/>The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) </h4> </label>
                        <br />
-                            <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn" checked="checked">
-                            <label class="role" for="AnatomyModeRadioBtn">Anatomy</label>
+                           
+                            <label class="role" for="AnatomyModeRadioBtn"> <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn" checked="checked">&nbsp Anatomy Mode <h4>(The skin of the body part will be hidden.)</h4></label>
                         </div>
 
                      
@@ -361,6 +378,7 @@
                 <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
             </div>
         </div>
+    </div>
         
 
 
@@ -381,7 +399,7 @@
                   
                     <Columns>
 
-                        <asp:TemplateField HeaderText="Organ Number">
+                        <asp:TemplateField ItemStyle-Width="40px" HeaderText="Organ Number">
                             <ItemTemplate>
                                 <asp:Label ID="TextBox_Number" CssClass="questionNoFontStyle" CliendIDMode="static" name="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
@@ -395,7 +413,7 @@
                             </ItemTemplate>
 
                         </asp:TemplateField>
-                         <asp:TemplateField HeaderText="Set it as a question?">
+                         <asp:TemplateField ItemStyle-Width="150px" ItemStyle-CssClass="template-checkbox" HeaderText="Select for testing">
                             <ItemTemplate>
                                  <asp:CheckBox runat="server" ID="checkbox_pickedOrgan" />
 

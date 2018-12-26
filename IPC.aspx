@@ -375,7 +375,7 @@
             <div  class="container" style="position: fixed;" >
                 <div class="row">
                     <div class="col-sm-6">
-                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Finish" runat="server" />
+                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
                     </div>
                     <div class="col-sm-6" >
                       
@@ -407,7 +407,7 @@
 
         <div class="row">
             
-            <asp:Panel ID="scorePanel" runat="server" Width="90%" HorizontalAlign="Center">
+            <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
                 <div>
                 <label>Show all hidden organs</label>
             </div>
@@ -452,7 +452,7 @@
                                 <asp:Label ID="TextBox_Number" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField ControlStyle-Width="80%" ControlStyle-Height="40px" HeaderText="Organ Name">
+                        <asp:TemplateField ControlStyle-Width="90%" ControlStyle-Height="40px" HeaderText="Organ Name">
                             <ItemTemplate>
                                 <asp:TextBox ID="TextBox_Text" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
                                 
