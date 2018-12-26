@@ -360,13 +360,13 @@
                         
                       
 
-                        <div class="roles" style="text-align: left;">
+                        <div class="roles" style="text-align: left; width:100%">
                             <h3 >Please choose the question mode here.</h3><h4>(Surgery/Anatomy Mode)</h4>
                             
-                            <label class="role" for="SurgeryModeRadioBtn"><input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" >&nbsp Surgery Mode <br/><h4>(The skin of the body part will be displayed and can not be hidden.<br/>The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) </h4> </label>
+                            <label class="role" for="SurgeryModeRadioBtn"><input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" >&nbsp <b >Surgery Mode</b> <br/><h4>(The skin of the body part will be displayed and can not be hidden.The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) </h4> </label>
                        <br />
                            
-                            <label class="role" for="AnatomyModeRadioBtn"> <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn" checked="checked">&nbsp Anatomy Mode <h4>(The skin of the body part will be hidden.)</h4></label>
+                            <label class="role" for="AnatomyModeRadioBtn"> <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn" checked="checked">&nbsp <b >Anatomy Mode</b> <h4>(The skin of the body part will be hidden.)</h4></label>
                         </div>
 
                      
