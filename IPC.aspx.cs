@@ -95,7 +95,7 @@ public partial class IPC : CsSessionManager
         /*This block should be implemented in the Hints set timer for the exam page
          * */
         //get the exam timespan from the UI , and convert it to Second format.
-        int hardCodeExamTimespanSec = 15; //now I just hard code it to 15 sec
+        int hardCodeExamTimespanSec = 120; //now I just hard code it to 15 sec
         Double examTimespan = hardCodeExamTimespanSec * 1.0;
         DateTime deadlineDateTime=DateTime.Now.AddSeconds(examTimespan); // return Datetime format
         /*psedo code:

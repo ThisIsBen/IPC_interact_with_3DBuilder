@@ -38,6 +38,8 @@
         }
         .hideIfNotQuestion {
            visibility: hidden;
+           font-size: 30px; 
+           
         }
 
         .nonQuestionTR {
@@ -65,11 +67,11 @@
         giveUpImg = "image/giveUp.png";
         notSureClickImg = "image/notSureClick.png";
         giveUpClickImg = "image/giveUpClick.png";
-        checkMarkImg = "Image/checkmark2.png";
+        organSubmitImg = "Image/checkmark2.png";
+        clickedOrganSubmitImg = "Image/checkmark2_marked.png";
+       
+
         
-
-
-
 
 
 
@@ -160,8 +162,9 @@
                 //recover visbility icon of each row
 
                 //keep submit btn visible at all times
-                gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = checkMarkImg;
-
+                gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = organSubmitImg;
+                
+                
                 //keep Mark icons visible at all times
                 gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureImg;
                 gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpImg;
@@ -181,8 +184,58 @@
 
 
             }
+           
+            //recover the click status of the OrganSubmitBtn
+            //we mark the OrganSubmitBtn in the GridView to let the student know he has submitted the answer of the organ. 
+            recoverOrganSumbitBtnStatus(gvDrv);
+            
+           
+            //recover the click status of the NotSure/GiveUp icon after coming back from UpdatePanel AJAX
+            recoverNotSure_GiveUpIconStatus(gvDrv);
 
 
+
+            
+            
+            //////////////////////////////////////////////////////////////
+        }
+
+
+        //mark the OrganSubmitBtn in the GridView to let the student know he has submitted the answer of the organ. 
+        function recoverOrganSumbitBtnStatus(gvDrv) {
+            
+            //retrieve the lately clicked OrganSubmitBtn Number from the sessionStorage
+            //this OrganSubmitBtn Number is stored before the UpdatePanel updates the content via AJAX
+            clickedOrganSubmitBtnNo = parseInt(sessionStorage.getItem('clickedOrganSubmitBtnNo'));
+
+            if (!isNaN(clickedOrganSubmitBtnNo))
+            {
+                //mark the OrganSubmitBtn in the GridView to let the student know he has submitted the answer of the organ.
+                gvDrv.rows[clickedOrganSubmitBtnNo].cells[1].getElementsByTagName("input")[3].value = 1;
+
+
+                //change the icon of the OrganSubmitBtn to let the student know he has submitted the answer of the organ.
+                for (i = 1; i < gvDrv.rows.length; i++) {
+
+                    
+                    if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[3].value == "1") {
+                        
+                        gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = clickedOrganSubmitImg;
+
+                    }
+
+                    
+
+                }
+
+
+            }
+            
+        }
+
+
+        function recoverNotSure_GiveUpIconStatus(gvDrv)
+        {
             for (i = 1; i < gvDrv.rows.length; i++) {
 
                 //recover mark icon of each row
@@ -206,9 +259,9 @@
                     }
                 }
             }
-            //////////////////////////////////////////////////////////////
         }
 
+       
         //change mark icon to "not sure " icon and remove the mark when the mark has existed with single click.
         function toNotSureIcon(lnk) {
             //get the clicked row of TemplageField
@@ -256,113 +309,113 @@
             //return false;
         }
 
-        //change mark icon to "give up " icon with double click.
-        function toGiveUpIcon(lnk) {
-            //get the clicked row of TemplageField
-            var row = lnk.parentNode.parentNode;
-            var rowIndex = row.rowIndex;
+            //change mark icon to "give up " icon with double click.
+            function toGiveUpIcon(lnk) {
+                //get the clicked row of TemplageField
+                var row = lnk.parentNode.parentNode;
+                var rowIndex = row.rowIndex;
 
            
-            //change to "give up" icon
-            var img = row.cells[4].getElementsByTagName("input")[1].src;
-            var imgBesideIt = row.cells[4].getElementsByTagName("input")[0].src;
-            if (img.indexOf(giveUpClickImg) != -1) {
+                //change to "give up" icon
+                var img = row.cells[4].getElementsByTagName("input")[1].src;
+                var imgBesideIt = row.cells[4].getElementsByTagName("input")[0].src;
+                if (img.indexOf(giveUpClickImg) != -1) {
 
-                row.cells[4].getElementsByTagName("input")[1].src = giveUpImg;
-                //record the current mark icon in the hidden field,0 means empty
-                row.cells[1].getElementsByTagName("input")[2].value = 0;
-            }
+                    row.cells[4].getElementsByTagName("input")[1].src = giveUpImg;
+                    //record the current mark icon in the hidden field,0 means empty
+                    row.cells[1].getElementsByTagName("input")[2].value = 0;
+                }
           
-            else {
-                if (imgBesideIt.indexOf(notSureClickImg) != -1)
-                {
-                    row.cells[4].getElementsByTagName("input")[0].src = notSureImg;
-                }
-                row.cells[4].getElementsByTagName("input")[1].src = giveUpClickImg;
+                else {
+                    if (imgBesideIt.indexOf(notSureClickImg) != -1)
+                    {
+                        row.cells[4].getElementsByTagName("input")[0].src = notSureImg;
+                    }
+                    row.cells[4].getElementsByTagName("input")[1].src = giveUpClickImg;
 
-                //record the current mark icon in the hidden field,1 means notSure.png
-                row.cells[1].getElementsByTagName("input")[2].value = 2;
+                    //record the current mark icon in the hidden field,1 means notSure.png
+                    row.cells[1].getElementsByTagName("input")[2].value = 2;
+                }
+
+                //to prevent refreshing of page when button inside form clicked
+                return false;
             }
 
-            //to prevent refreshing of page when button inside form clicked
-            return false;
-        }
+            //store the Picked Organ Questions in a hidden field so that we can access it on backend
+            function sendThePickedOrganQuestions2Backend() {
 
-        //store the Picked Organ Questions in a hidden field so that we can access it on backend
-        function sendThePickedOrganQuestions2Backend() {
-
-            document.getElementById("<%= hidden_pickedQuestions.ClientID %>").value = questionArray.join(',');  // convert the array into a string using , (comma) as a separator
+                document.getElementById("<%= hidden_pickedQuestions.ClientID %>").value = questionArray.join(',');  // convert the array into a string using , (comma) as a separator
 
 
-        }
+            }
 
 
-        function showTBOfQuestionOrgans(inExamMode) {
-            //console.log(inExamMode);
-            //console.log(questionArray);
+            function showTBOfQuestionOrgans(inExamMode) {
+                //console.log(inExamMode);
+                //console.log(questionArray);
 
             
 
-            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
            
 
-            for (i = 0; i < questionArray.length; i++) {
+                for (i = 0; i < questionArray.length; i++) {
 
-                showTBItems = questionArray[i];
-                if (inExamMode)//if it's in exam mode,do showTBItems = i
-                    showTBItems = i+1;
+                    showTBItems = questionArray[i];
+                    if (inExamMode)//if it's in exam mode,do showTBItems = i
+                        showTBItems = i+1;
                 
-                //change the background color of the organs that have been chosen as part of question.
-                gvDrv.rows[showTBItems].style.backgroundColor = questionTRBgColor;
+                    //change the background color of the organs that have been chosen as part of question.
+                    gvDrv.rows[showTBItems].style.backgroundColor = questionTRBgColor;
 
-                //show the textbox of the organs that have been chosen as part of question.
-                gvDrv.rows[showTBItems].cells[1].getElementsByTagName("input")[0].style.visibility = 'visible';
-                //show the submit button of the organs that have been chosen as part of question.
-                gvDrv.rows[showTBItems].cells[2].getElementsByTagName("input")[0].style.visibility = 'visible';
+                    //show the textbox of the organs that have been chosen as part of question.
+                    gvDrv.rows[showTBItems].cells[1].getElementsByTagName("input")[0].style.visibility = 'visible';
+                    //show the submit button of the organs that have been chosen as part of question.
+                    gvDrv.rows[showTBItems].cells[2].getElementsByTagName("input")[0].style.visibility = 'visible';
 
-                //show the markicona of the organs that have been chosen as part of question.
-                gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[0].style.visibility = 'visible';
-                gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[1].style.visibility = 'visible';
-            }
-
-            //assign a class to the non question TRs
-            assignClass2NonQuestionTR();
-            
-
-        }
-
-        function assignClass2NonQuestionTR() {
-
-            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
-
-            //assign a common class to all the non question TRs for the further control.
-            for (i = 1; i < gvDrv.rows.length; i++) {
-                if (gvDrv.rows[i].style.backgroundColor != questionTRBgColor) {
-                    var nonQuestionRow = gvDrv.rows[i];
-                    nonQuestionRow.classList.add('nonQuestionTR');
+                    //show the markicona of the organs that have been chosen as part of question.
+                    gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[0].style.visibility = 'visible';
+                    gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[1].style.visibility = 'visible';
                 }
 
+                //assign a class to the non question TRs
+                assignClass2NonQuestionTR();
+            
+
             }
 
+            function assignClass2NonQuestionTR() {
+
+                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+
+                //assign a common class to all the non question TRs for the further control.
+                for (i = 1; i < gvDrv.rows.length; i++) {
+                    if (gvDrv.rows[i].style.backgroundColor != questionTRBgColor) {
+                        var nonQuestionRow = gvDrv.rows[i];
+                        nonQuestionRow.classList.add('nonQuestionTR');
+                    }
+
+                }
+
            
-        }
+            }
 
-        function rearrangeQNo() {
-            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+            function rearrangeQNo() {
+                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
            
 
-            for (i = 1; i < gvDrv.rows.length; i++) {
+                for (i = 1; i < gvDrv.rows.length; i++) {
 
              
                
-                //show the textbox of the organs that have been chosen as part of question.
+                    //show the textbox of the organs that have been chosen as part of question.
                
                
-                gvDrv.rows[i].cells[0].getElementsByTagName("span")[0].innerHTML = i;
+                    gvDrv.rows[i].cells[0].getElementsByTagName("span")[0].innerHTML = i;
+                }
             }
-        }
     </script>
 
 
@@ -401,7 +454,7 @@
                 <%--<input type="text" id="TBX_Input" runat="server" />--%>
                 <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
             </div>
-        </div>
+       </div>
         
 
 
@@ -431,30 +484,32 @@
                 
                 
             </div>
-                
+          
                 
 
                 <asp:UpdatePanel ID="UpdatePanel1"   UpdateMode="Conditional"  runat="server">
                     <ContentTemplate>
-                        <input type="image" id="ShowOrHideAll" src="" runat="server" onserverclick="ShowOrHideAll_Click"/>
+                        <input type="image" id="ShowOrHideAll" src="" style=" max-height: 60px; max-width: 60px;" runat="server" onserverclick="ShowOrHideAll_Click"/>
                           <br />
                           <br />
                           <br />
-                        <input type="button" class='btn-info btn-lg' id="HideNonQuestionTR"  value="Hide Non question rows" onclick="hideNonQuestionTR()"/>
-
+                        <input type="button" class='btn-info btn-md' id="HideNonQuestionTR"  value="Toggle(Hide/Show)Non Question Rows" onclick="hideNonQuestionTR()"/>
+                        <br />
+                        <br />
+                
                 
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
                   
                     <Columns>
 
-                        <asp:TemplateField HeaderText="Question Number">
+                        <asp:TemplateField ItemStyle-Width="40px"  HeaderText="Question Number">
                             <ItemTemplate>
                                 <asp:Label ID="TextBox_Number" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
-                        <asp:TemplateField ControlStyle-Width="90%" ControlStyle-Height="40px" HeaderText="Organ Name">
-                            <ItemTemplate>
-                                <asp:TextBox ID="TextBox_Text" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
+                        <asp:TemplateField ControlStyle-Width="100%"   ControlStyle-Height="40px" HeaderText="Organ Name">
+                            <ItemTemplate >
+                                <asp:TextBox ID="TextBox_Text" ItemStyle-Width="130%" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
                                 
                                 <%--show the corresponding correct organ name for debugging purpose--%>
                               <%-- <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />--%>
@@ -464,20 +519,22 @@
                                <%-- <asp:HiddenField ID="markRecord" runat="server" Value="0" />--%>
                                <%-- <input type="hidden" id="InOrVisible" runat="server" value="true">--%>
                                 <input type="hidden" id="markRecord" runat="server" value="0">
+
+                                <input type="hidden" id="clickedOrganSubmitBtn" runat="server" value="99">
                             </ItemTemplate>
 
                         </asp:TemplateField>
 
 
 
-                        <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Submit">
+                        <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Submit" >
                             <ControlStyle CssClass=" submit_img" />
                         </asp:ButtonField>
-                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Show/Hide">
+                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px"  ControlStyle-Width="40px" HeaderText="Show/Hide">
                             <ControlStyle CssClass=" menu_img" />
                         </asp:ButtonField>
 
-                        <asp:TemplateField HeaderText="Mark<br/>Not sure  /&nbsp;&nbsp;&nbsp;&nbsp;  Give up">
+                        <asp:TemplateField HeaderText="Mark<br/>Not sure  / Give up">
                             <ItemTemplate>
                                 <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="if (!toNotSureIcon(this)) return false;  " ControlStyle-Height="40px" />
                                 <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick=" if (!toGiveUpIcon(this)) return false; " ControlStyle-Height="40px" />
@@ -672,20 +729,31 @@
                 }
             });
 
+           
+           
+            
+
+            //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
+            //This is the fix terms for using ASP UpdatePanel AJAX
             loadAfterUpdatePanel();
 
             //activate the count down timer
             activateCountDownTimer();
             
 
+            
+
+            
+
+
+
         });
 
         
        
-
+        
        
-
-
+        
 
        
         function activateCountDownTimer() {
@@ -760,8 +828,9 @@
         }
 
 
-
+        
         //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
+        //This is the fix terms for using ASP UpdatePanel AJAX
         function loadAfterUpdatePanel() {
             Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
         }
@@ -952,7 +1021,27 @@
         }
 
 
-        if (a == 0) {; }
+      
+
+        //store the clickedOrganSubmitBtnNo to a sessionStorage on Client side for setting the value of the corresponding hidden field in the GridView in the UpdatePanel
+        //after the UpdatePanel updates the content via AJAX.
+        $(document).on("click", ".submit_img", function () {
+
+            //to know which row's OrganSubmitBtn is clicked
+            clickedOrganSubmitBtnNo = parseInt($('.submit_img').index(this)) + 1;
+            
+            
+            //store the clickedOrganSubmitBtnNo to a sessionStorage on Client side
+            //We will use it to change the value of the corresponding hidden field in the GridView in the UpdatePanel
+            //after the UpdatePanel updates the content via AJAX.
+            //If we set the value of the corresponding hidden field in the GridView here, the modification will be overwritten by the AJAX used by the UpdatePanel.
+            sessionStorage.setItem('clickedOrganSubmitBtnNo', clickedOrganSubmitBtnNo);
+
+        });
+
+
+        
+
     </script>
 
 

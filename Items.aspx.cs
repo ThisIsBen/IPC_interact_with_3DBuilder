@@ -15,8 +15,9 @@ public partial class Items : CsSessionManager
     //In the near future ,we will get the Path from URL para or other para transmission method.
     //string XMLFolder = "D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\";
     string XMLFolder = "D:\\IPC_interact_with_3DBuilder\\IPC_Questions\\1161-1450\\";
-    string questionXMLPath = "SceneFile_Q1.xml";
-
+    //string questionXMLPath = "SceneFile_Q1.xml";
+    //string questionXMLPath = "tea1_Q_20181225162522.xml";//AITypeQuestion in Anatomy mode
+    string questionXMLPath = "tea1_Q_20181225165447.xml";//AITypeQuestion in Surgery mode
 
     protected void Page_Load(object sender, EventArgs e)
     {
