@@ -416,12 +416,23 @@
                             </ItemTemplate>
 
                         </asp:TemplateField>
-                         <asp:TemplateField ItemStyle-Width="150px" ItemStyle-CssClass="template-checkbox" HeaderText="Select for testing">
+
+                         <asp:TemplateField ItemStyle-Width="30px" ItemStyle-CssClass="template-checkbox" HeaderText="Visibility">
                             <ItemTemplate>
                                 <input type="image" class="img-thumbnail hideShowOrganBtn"  id="btnHideShowOrgan" onclick="if (!hideShowSelectedOrgan(this)) return false; " src="Image/visible.png">
                                  
-                                <%-- <input type="hidden" id="hidden_markHideShowOrgan" runat="server" value="-1"> --%>
+                                <%-- <input type="hidden" id="hidden_markHideShowOrgan" runat="server" value="-1"> It doesn't work in Gridview--%>
                                 <asp:HiddenField ID="hidden_markHideShowOrgan" runat="server" Value="-1"/>
+                                
+
+                             
+                            </ItemTemplate>
+                        </asp:TemplateField>
+
+
+                         <asp:TemplateField ItemStyle-Width="150px" ItemStyle-CssClass="template-checkbox" HeaderText="Select for testing">
+                            <ItemTemplate>
+                               
                                  <asp:CheckBox runat="server" ID="checkbox_pickedOrgan" />
 
 

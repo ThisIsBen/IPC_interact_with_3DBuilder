@@ -223,7 +223,7 @@ public partial class IPC: System.Web.UI.Page
         //store the content of the AITypeQuestion as XML
         xmlHandler.saveXML(Server.MapPath(xmlpath));
 
-
+        
         //store the AITypeQuestion to DB
         store2DB(CA, CAO, QBP);
 
