@@ -140,9 +140,12 @@ public partial class IPC: System.Web.UI.Page
         //check if a check box is checked
         foreach (GridViewRow row in gvScore.Rows)
         {
+            //get the organ name of the current row
+            var OrganName = row.FindControl("LBTextBox_OrganName") as Label;
+
             if (((row.FindControl("checkbox_pickedOrgan"))as CheckBox).Checked)
             {
-                var OrganName = row.FindControl("LBTextBox_OrganName") as Label;
+               
                
                 //set the checked organs as Questions by set its Question tag to "Yes".
                 xmlHandler.setATargetTag2ANewValue("Question", OrganName.Text, "Yes");
@@ -156,12 +159,27 @@ public partial class IPC: System.Web.UI.Page
                  "<script>alert('" + target.Element("Question").Value + "');</script>",
                  false);
                */
+
+                 
+                
+                
+
             }
+
+            if ((row.FindControl("hidden_markHideShowOrgan") as HiddenField).Value != "-1")
+            {
+                //2019/1/12 set the "Visible" tag of the organ to be hidden if the teacher set it to be invisible on AITypeQuestion editing page
+                xmlHandler.setATargetTag2ANewValue("Visible", OrganName.Text, "0");
+            }
+            
         }
 
         // determine whether add data to DB, question reload、no bodypart
         if (xmlHandler.correctAnswer.Length == 0)
             return;
+
+
+        
         
         //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
         questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
@@ -170,21 +188,7 @@ public partial class IPC: System.Web.UI.Page
         cQID = hidden_AITypeQuestionTitle.Value;
         
 
-        //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
-        //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
-        //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering
-        string xmlpath = XMLFolder + questionXMLPath;
-        string CA=xmlpath+xmlHandler.correctAnswer+":";
-        string CAO = xmlpath + xmlHandler.correctAnswerOrder+":";
-        string QBP = QuestionBodyPart;
-
-        //create Or update required AITypeQuestion attributes in HintsDB 
-        createOrUpdateAITypeQuestionInHintsDB();
-
-
-        //store correct answer of the AI type question to DB
-        CsDBOp.InsertIPCExamHWCorrectAns(cQID, CA, QBP, CAO);
-
+       
         if (Request.Form["radioBtn_AITypeQuestionMode"].ToString() == "Surgery Mode")
         {
 
@@ -204,11 +208,42 @@ public partial class IPC: System.Web.UI.Page
            
         }
 
-        //store as XML
+        
+
+
+
+        //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
+        //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
+        //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering
+        string xmlpath = XMLFolder + questionXMLPath;
+        string CA = xmlpath + xmlHandler.correctAnswer + ":";
+        string CAO = xmlpath + xmlHandler.correctAnswerOrder + ":";
+        string QBP = QuestionBodyPart;
+
+        //store the content of the AITypeQuestion as XML
         xmlHandler.saveXML(Server.MapPath(xmlpath));
+
+
+        //store the AITypeQuestion to DB
+        store2DB(CA, CAO, QBP);
+
 
         //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
         redirectBack2HintsPaper_MainPage();
+        
+    }
+
+
+    private void store2DB(string CA, string QBP, string CAO)
+    {
+        //create Or update required AITypeQuestion attributes in HintsDB 
+        createOrUpdateAITypeQuestionInHintsDB();
+
+
+        //store correct answer of the AI type question to DB
+        CsDBOp.InsertIPCExamHWCorrectAns(cQID, CA, QBP, CAO);
+
+
         
     }
 

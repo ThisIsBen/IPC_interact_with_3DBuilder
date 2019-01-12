@@ -61,6 +61,9 @@
     </style>
 
     <script type="text/javascript">
+
+        visibleImg = "Image/visible.png";
+        invisibleImg = "Image/invisible.png";
        
         //Close CSNamePipe.exe before close the webpage.
         //$(window).unload(function () {
@@ -415,7 +418,12 @@
                         </asp:TemplateField>
                          <asp:TemplateField ItemStyle-Width="150px" ItemStyle-CssClass="template-checkbox" HeaderText="Select for testing">
                             <ItemTemplate>
+                                <input type="image" class="img-thumbnail hideShowOrganBtn"  id="btnHideShowOrgan" onclick="if (!hideShowSelectedOrgan(this)) return false; " src="Image/visible.png">
+                                 
+                                <%-- <input type="hidden" id="hidden_markHideShowOrgan" runat="server" value="-1"> --%>
+                                <asp:HiddenField ID="hidden_markHideShowOrgan" runat="server" Value="-1"/>
                                  <asp:CheckBox runat="server" ID="checkbox_pickedOrgan" />
+
 
                              
                             </ItemTemplate>
@@ -475,6 +483,28 @@
           
 
         });
+
+        function hideShowSelectedOrgan(selectedHideShowOrganBtn) {
+            
+            //to know which row's OrganSubmitBtn is clicked
+            //get the clicked row of TemplageField
+            var row = selectedHideShowOrganBtn.parentNode.parentNode;
+           
+
+
+            
+            
+            //set the icon of the btn of the selected organ to be invisibleBtn                       
+            row.cells[2].getElementsByTagName("input")[0].src = invisibleImg;
+
+            //store the name of the seleted organ in hidden field
+            row.cells[2].getElementsByTagName("input")[1].value = row.cells[1].getElementsByTagName("span")[0].innerHTML;
+
+            console.log(row.cells[2].getElementsByTagName("input")[1].value);
+
+            
+            
+        }
        
      </script>
 

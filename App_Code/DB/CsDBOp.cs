@@ -94,13 +94,13 @@ using System.Text.RegularExpressions;
         return GetDataTable(sql);
     }
     //set
-    public static int InsertStuIPCAns(string _StuCouHWDe_ID, string cActivityID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session)
+    public static int InsertStuIPCAns(string cUserID, string cQID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session)
     {
         if (Num_Of_Question_Submision_Session==1)
         {
             //string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cActivityID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cActivityID, _StudentAnswer, _QuesOrdering);
 
-            string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}' )", _StuCouHWDe_ID, cActivityID, _QuesOrdering);
+            string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}' )", cUserID, cQID, _QuesOrdering);
             
             object[] sqlParametersList = { _StudentAnswer }; 
             return InsertUserEnteredData(sql,sqlParametersList);
@@ -110,7 +110,7 @@ using System.Text.RegularExpressions;
             
             //string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cActivityID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cActivityID);
 
-            string sql = string.Format("UPDATE AITypeQuestionStudentAnswer  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( @StudentAnswer as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{0}' as nvarchar(max)) where cUserID =  '{1}' and cQID =  '{2}'", _QuesOrdering, _StuCouHWDe_ID, cActivityID);
+            string sql = string.Format("UPDATE AITypeQuestionStudentAnswer  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( @StudentAnswer as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{0}' as nvarchar(max)) where cUserID =  '{1}' and cQID =  '{2}'", _QuesOrdering, cUserID, cQID);
             object[] sqlParametersList = { _StudentAnswer };
             return UpdateUserEnteredData(sql, sqlParametersList);
         }
@@ -172,7 +172,7 @@ using System.Text.RegularExpressions;
         return GetDataTable(sql);
     }
     //set
-    public static int InsertIPCExamHWCorrectAns(string _cActivityID, string _correctAnswer, string _QuestionBodyPart, string _QuesOrdering)
+    public static int InsertIPCExamHWCorrectAns(string cQID, string _correctAnswer, string _QuestionBodyPart, string _QuesOrdering)
     {
         //first add
         //if (Num_Of_Question_Submision_Session == 1)
@@ -182,7 +182,7 @@ using System.Text.RegularExpressions;
         DataRowCollection DRC = GetDataTable(string.Format("Select * from IPCExamHWCorrectAnswer where cActivityID = {0:d}", _cActivityID)).Rows;
         */
 
-        DataRowCollection DRC = GetDataTable(string.Format("Select * from AITypeQuestionCorrectAnswer where cQID = '{0}'", _cActivityID)).Rows;
+        DataRowCollection DRC = GetDataTable(string.Format("Select * from AITypeQuestionCorrectAnswer where cQID = '{0}'", cQID)).Rows;
         
 
         if (DRC.Count == 0)
@@ -191,7 +191,7 @@ using System.Text.RegularExpressions;
             string sql = string.Format("Insert into IPCExamHWCorrectAnswer(cActivityID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
             
              */
-            string sql = string.Format("Insert into AITypeQuestionCorrectAnswer (cQID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _cActivityID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
+            string sql = string.Format("Insert into AITypeQuestionCorrectAnswer (cQID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", cQID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
             
            return InsertData(sql);
 
@@ -216,7 +216,7 @@ using System.Text.RegularExpressions;
                     DRC[0][1].ToString().Split(':')[index], _correctAnswer, _cActivityID);
                 */
                 sql = string.Format("UPDATE AITypeQuestionCorrectAnswer SET correctAnswer = REPLACE(correctAnswer,'{0}','{1}')  where cQID =  '{2}' ",
-                    DRC[0][1].ToString().Split(':')[index], _correctAnswer, _cActivityID);
+                    DRC[0][1].ToString().Split(':')[index], _correctAnswer, cQID);
                 UpdateData(sql);
 
                 /*
@@ -225,7 +225,7 @@ using System.Text.RegularExpressions;
                  * 
                  */
                 sql = string.Format("UPDATE AITypeQuestionCorrectAnswer SET correctAnswerOrdering = REPLACE(correctAnswerOrdering,'{0}','{1}') where cQID =  '{2}' ",
-                    DRC[0][3].ToString().Split(':')[index], _QuesOrdering, _cActivityID);
+                    DRC[0][3].ToString().Split(':')[index], _QuesOrdering, cQID);
                 return UpdateData(sql); 
 
             }
@@ -236,7 +236,7 @@ using System.Text.RegularExpressions;
                 , _correctAnswer, _QuestionBodyPart,_QuesOrdering, _cActivityID);
                  * */
                 sql = string.Format("UPDATE AITypeQuestionCorrectAnswer  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cQID =  '{3}'"
-                , _correctAnswer, _QuestionBodyPart, _QuesOrdering, _cActivityID);
+                , _correctAnswer, _QuestionBodyPart, _QuesOrdering, cQID);
 
                 return UpdateData(sql);
             }
