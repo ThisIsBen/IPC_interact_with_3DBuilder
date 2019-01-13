@@ -564,20 +564,30 @@
             //get the clicked row of TemplageField
             var row = selectedHideShowOrganBtn.parentNode.parentNode;
 
+           
+
             //set the icon of the btn of the selected organ to be invisibleBtn 
-            if (row.cells[2].getElementsByTagName("input")[0].src == visibleImg) {
-                alert("bb");
+            if (row.cells[2].getElementsByTagName("input")[0].src.includes(visibleImg)) {
+               
                 row.cells[2].getElementsByTagName("input")[0].src = invisibleImg;
+
+                //store the name of the selected organ in hidden field
+                row.cells[2].getElementsByTagName("input")[1].value = row.cells[1].getElementsByTagName("span")[0].innerHTML;
+
+                //console.log(row.cells[2].getElementsByTagName("input")[1].value);
             }
             else {
 
+                //switch the icon of the btn of the selected organ to be visibleBtn
                 row.cells[2].getElementsByTagName("input")[0].src = visibleImg;
+
+                //restore hidden field from invisible organ to visible organ
+                row.cells[2].getElementsByTagName("input")[1].value = "-1";
+
+               
+
             }
 
-            //store the name of the seleted organ in hidden field
-            row.cells[2].getElementsByTagName("input")[1].value = row.cells[1].getElementsByTagName("span")[0].innerHTML;
-
-            //console.log(row.cells[2].getElementsByTagName("input")[1].value);
             
             
             

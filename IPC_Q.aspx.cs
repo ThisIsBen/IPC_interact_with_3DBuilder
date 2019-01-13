@@ -176,14 +176,14 @@ public partial class IPC: System.Web.UI.Page
         //store the content of the AITypeQuestion as XML
         xmlHandler.saveXML(Server.MapPath(xmlpath));
 
-        /*
+        
         //store the AITypeQuestion to DB
         store2DB(CA, CAO, QBP);
 
 
         //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
         redirectBack2HintsPaper_MainPage();
-        */
+        
     }
 
     private void recordQuestionOrgan_InvisibleOrgan(XMLHandler xmlHandler)
@@ -236,13 +236,16 @@ public partial class IPC: System.Web.UI.Page
             //set Skin to be cuttable     
             xmlHandler.setATargetTag2ANewValue("Cut", "Skin", "1");
 
+            //set Skin to be visible
+            xmlHandler.setATargetTag2ANewValue("Visible", "Skin", "1");
+
         }
         else
         {
             //if Skin is not picked as a question, we can hide the Skin
             if (!xmlHandler.checkOrganAttrValue("Skin", "Question", "Yes"))
             {
-                //hide the Skin
+                //set Skin to be invisible
                 xmlHandler.setATargetTag2ANewValue("Visible", "Skin", "0");
             }
 
