@@ -135,18 +135,69 @@ public partial class IPC: System.Web.UI.Page
 
         //convert  XmlDocument object to XElement object to use "where" phrase to locate a specific tag;
         xmlHandler.convertXmlDoc2XElement();
+
+        //record which organ is stored as a question, and which organ is set to be visible. 
+        recordQuestionOrgan_InvisibleOrgan(xmlHandler);
+        
+        // we won't store the AITypeQuestion if there is no organ picked as a question.
+        if (xmlHandler.correctAnswer.Length == 0)
+            return;
+
+
+        
+        
+       
         
 
+       //handle the mode of the AITypeQuestion e.g.,Suergery Mode 
+        handleAITypeQuestionMode(xmlHandler);
+        
+
+        
+
+
+
+        //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
+        questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
+
+        //retrieve the cQID from the hidden field   
+        cQID = hidden_AITypeQuestionTitle.Value;
+
+        //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
+        //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
+        //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering        
+        string xmlpath = XMLFolder + questionXMLPath;
+        string CA = xmlpath + xmlHandler.correctAnswer + ":";
+        string CAO = xmlpath + xmlHandler.correctAnswerOrder + ":";
+        string QBP = QuestionBodyPart;
+
+        
+        
+        //store the content of the AITypeQuestion as XML
+        xmlHandler.saveXML(Server.MapPath(xmlpath));
+
+        /*
+        //store the AITypeQuestion to DB
+        store2DB(CA, CAO, QBP);
+
+
+        //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
+        redirectBack2HintsPaper_MainPage();
+        */
+    }
+
+    private void recordQuestionOrgan_InvisibleOrgan(XMLHandler xmlHandler)
+    {
         //check if a check box is checked
         foreach (GridViewRow row in gvScore.Rows)
         {
             //get the organ name of the current row
             var OrganName = row.FindControl("LBTextBox_OrganName") as Label;
 
-            if (((row.FindControl("checkbox_pickedOrgan"))as CheckBox).Checked)
+            if (((row.FindControl("checkbox_pickedOrgan")) as CheckBox).Checked)
             {
-               
-               
+
+
                 //set the checked organs as Questions by set its Question tag to "Yes".
                 xmlHandler.setATargetTag2ANewValue("Question", OrganName.Text, "Yes");
 
@@ -160,9 +211,9 @@ public partial class IPC: System.Web.UI.Page
                  false);
                */
 
-                 
-                
-                
+
+
+
 
             }
 
@@ -171,24 +222,14 @@ public partial class IPC: System.Web.UI.Page
                 //2019/1/12 set the "Visible" tag of the organ to be hidden if the teacher set it to be invisible on AITypeQuestion editing page
                 xmlHandler.setATargetTag2ANewValue("Visible", OrganName.Text, "0");
             }
-            
+
         }
 
-        // determine whether add data to DB, question reload、no bodypart
-        if (xmlHandler.correctAnswer.Length == 0)
-            return;
 
+    }
 
-        
-        
-        //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
-        questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
-
-        //retrieve the cQID from the URL parameter 
-        cQID = hidden_AITypeQuestionTitle.Value;
-        
-
-       
+    private void handleAITypeQuestionMode(XMLHandler xmlHandler)
+    {
         if (Request.Form["radioBtn_AITypeQuestionMode"].ToString() == "Surgery Mode")
         {
 
@@ -205,33 +246,11 @@ public partial class IPC: System.Web.UI.Page
                 xmlHandler.setATargetTag2ANewValue("Visible", "Skin", "0");
             }
 
-           
+
         }
 
-        
-
-
-
-        //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
-        //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
-        //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering
-        string xmlpath = XMLFolder + questionXMLPath;
-        string CA = xmlpath + xmlHandler.correctAnswer + ":";
-        string CAO = xmlpath + xmlHandler.correctAnswerOrder + ":";
-        string QBP = QuestionBodyPart;
-
-        //store the content of the AITypeQuestion as XML
-        xmlHandler.saveXML(Server.MapPath(xmlpath));
-
-        
-        //store the AITypeQuestion to DB
-        store2DB(CA, CAO, QBP);
-
-
-        //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
-        redirectBack2HintsPaper_MainPage();
-        
     }
+
 
 
     private void store2DB(string CA, string QBP, string CAO)

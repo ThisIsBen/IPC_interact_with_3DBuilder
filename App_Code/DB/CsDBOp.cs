@@ -276,6 +276,10 @@ using System.Text.RegularExpressions;
         string strSQL = "SELECT * FROM QuestionIndex WHERE cQID = '" + strQID + "' ";
         DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;
 
+        //return empty string if there is no AITypeQuestion_QuestionDescription
+        if (DRC.Count == 0)
+            return "";
+
         return DRC[0]["cQuestion"].ToString();
 
     }

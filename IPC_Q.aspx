@@ -225,18 +225,59 @@
         }
 
 
-        function checkPickedOrgans(questionArray) {
+        function checkPickedOrgans_InvisibleOrgans(questionOrganArray, invisibleOrganArray) {
 
             var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
-            for (i = 0; i < questionArray.length; i++) {
-
-
-                //check the organ that has been chosen as part of question.
-                $("#" + gvDrv.rows[questionArray[i]].cells[2].getElementsByTagName("input")[0].id ).prop('checked', true);
+            //create an organ Name_Number HashMap with Name as key and Number as value.
+            var organName_NumberHashMap = {};
+            //put all the organ name in the GridView table to a hash map
+            for (i = 1; i < gvDrv.rows.length; i++) {
+                organName_NumberHashMap[gvDrv.rows[i].cells[1].getElementsByTagName("span")[0].innerHTML] = i;
 
             }
+
+
+            //check the radio buttons of the organs that are set to be the question
+            checkPickedOrgans(gvDrv, organName_NumberHashMap, questionOrganArray);
+
+            //switch the icon of the visibility column if the organ is set to be invisible
+            recoverVisibilityBtnIcon(gvDrv, organName_NumberHashMap, invisibleOrganArray);
         }
+      
+
+        //check the radio buttons of the organs that are set to be the question
+        function checkPickedOrgans(gvDrv, organName_NumberHashMap, questionOrganArray) {
+
+            //check the checkbox of the organ that has been chosen as part of question.
+            for (j = 0; j < questionOrganArray.length; j++) {
+
+                questionOrganRow = organName_NumberHashMap[questionOrganArray[j]];
+                //check the organ that has been chosen as part of question.
+                $("#" + gvDrv.rows[questionOrganRow].cells[3].getElementsByTagName("input")[0].id).prop('checked', true);
+
+            }
+
+
+        }
+
+
+
+        //switch the icon of the visibility column if the organ is set to be invisible
+        function recoverVisibilityBtnIcon(gvDrv, organName_NumberHashMap, invisibleOrganArray) {
+
+
+            for (j = 0; j < invisibleOrganArray.length; j++) {
+
+                questionOrganRow = organName_NumberHashMap[invisibleOrganArray[j]];
+
+                //set the icon of the visibility column if the organ is set to be invisibleIcon 
+                gvDrv.rows[questionOrganRow].cells[2].getElementsByTagName("input")[0].src = invisibleImg
+                
+            }
+
+        }
+
 
         //clear the ajax cache to read the latest content from the organ xml file
         function clearAjaxCache() {
@@ -262,20 +303,39 @@
                 dataType: "xml",
                 success: function (xml) {
 
-                    //get the organs No that are set to be the question
-                    var questionArray = []
+                    //store the organs Name that are set to be the question
+                    var questionOrganArray = []
+
+                    //store the organs that are set to be invisible
+                    var inivisbleOrganArray = []
+
 
                     $(xml).find('Organ').each(function () {
 
-                        
-                        var val = $(this).find("Question").text();
+                        //keep the organs Name that are set to be the question in the questionOrganArray
+                        var isQuestion = $(this).find("Question").text();
 
-                        if (val == "Yes") {
-                            $no = $(this).find("Number");
+                        if (isQuestion == "Yes") {
+                            $questionOrganName = $(this).find("Name");
 
-                            //push to questionArray
-                            questionArray.push($no.text());
+                            //push to questionOrganArray
+                            questionOrganArray.push($questionOrganName.text());
                             
+
+                        }
+
+
+
+
+                        //keep the organs that are set to be invisible in the inivisbleOrganArray
+                        var isInvisible = $(this).find("Visible").text();
+
+                        if (isInvisible == "0") {
+                            $invisibleOrganName = $(this).find("Name");
+
+                            //push to questionOrganArray
+                            inivisbleOrganArray.push($invisibleOrganName.text());
+
 
                         }
 
@@ -294,7 +354,11 @@
                     
                     
                     //check the radio buttons of the organs that are set to be the question
-                    checkPickedOrgans(questionArray);
+                    //and switch the icon of the visibility column if the organ is set to be invisible
+                    checkPickedOrgans_InvisibleOrgans(questionOrganArray, inivisbleOrganArray);
+
+
+                  
                 }
 
             });
@@ -419,7 +483,7 @@
 
                          <asp:TemplateField ItemStyle-Width="30px" ItemStyle-CssClass="template-checkbox" HeaderText="Visibility">
                             <ItemTemplate>
-                                <input type="image" class="img-thumbnail hideShowOrganBtn"  id="btnHideShowOrgan" onclick="if (!hideShowSelectedOrgan(this)) return false; " src="Image/visible.png">
+                                <input type="image" class="img-thumbnail hideShowOrganBtn"  id="btnHideShowOrgan" onclick="if (!hideShowSelectedOrgan(this)) return false;" src="Image/visible.png">
                                  
                                 <%-- <input type="hidden" id="hidden_markHideShowOrgan" runat="server" value="-1"> It doesn't work in Gridview--%>
                                 <asp:HiddenField ID="hidden_markHideShowOrgan" runat="server" Value="-1"/>
@@ -476,8 +540,7 @@
             if (url.searchParams.get("viewContent") != null && url.searchParams.get("viewContent")  == "Yes")
             {
                
-                //load XML to check the organs that are picked to be part of question.
-                
+                //load XML to check the organs that are picked to be part of question.              
                 readInExistingQuestion();
                 
             }
@@ -500,19 +563,22 @@
             //to know which row's OrganSubmitBtn is clicked
             //get the clicked row of TemplageField
             var row = selectedHideShowOrganBtn.parentNode.parentNode;
-           
 
+            //set the icon of the btn of the selected organ to be invisibleBtn 
+            if (row.cells[2].getElementsByTagName("input")[0].src == visibleImg) {
+                alert("bb");
+                row.cells[2].getElementsByTagName("input")[0].src = invisibleImg;
+            }
+            else {
 
-            
-            
-            //set the icon of the btn of the selected organ to be invisibleBtn                       
-            row.cells[2].getElementsByTagName("input")[0].src = invisibleImg;
+                row.cells[2].getElementsByTagName("input")[0].src = visibleImg;
+            }
 
             //store the name of the seleted organ in hidden field
             row.cells[2].getElementsByTagName("input")[1].value = row.cells[1].getElementsByTagName("span")[0].innerHTML;
 
-            console.log(row.cells[2].getElementsByTagName("input")[1].value);
-
+            //console.log(row.cells[2].getElementsByTagName("input")[1].value);
+            
             
             
         }
