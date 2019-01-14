@@ -52,19 +52,8 @@
            font-size: 35px;
 
         }
-        .fitInTableCell {
-
-           
-        }
-        input[type="text"] {
-  
-   
-   
-     width:800px;
-      margin:auto;   
-     -webkit-box-sizing:border-box;
-     -moz-box-sizing: border-box;
-}
+       
+        
 
     </style>
     <link href="Content/CountDownTimer.css" rel="stylesheet" />
@@ -456,7 +445,7 @@
     <div >
 
 
-       <div class="row">
+        <div class="row">
             
             <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
                 
@@ -518,17 +507,15 @@
             <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
             <div  class="container" style="position: fixed;"  >
                 <div class="row"  >
-                    <div class="col-sm-3" >
-                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
-                        
-                         <br />
-                         <br />
-                            <input type="button" class='btn-info btn-lg' id="HideNonQuestionTR"  value="Hide/Show Non Question Rows" onclick="hideNonQuestionTR()"/>
-                       
-                        
-                              
+                    <div class="col-sm-5 ">
+                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg ' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
+                        &nbsp&nbsp&nbsp&nbsp
+                        <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR"  value="Hide/Show Non Question Rows" onclick="hideNonQuestionTR()"/>
+                               
+                    
+                    
                     </div>
-                    <div class="col-sm-5" >
+                    <div class="col-sm-3" >
                          <div>
                                     <label style="font-size:20px;">Show all hidden organs</label>
                    
@@ -552,8 +539,7 @@
             </br>
             </br>
             </br>
-            </br>
-            </br>
+            
             
 
                         
