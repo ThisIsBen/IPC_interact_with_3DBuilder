@@ -17,7 +17,9 @@ public partial class Items : CsSessionManager
     string XMLFolder = "D:\\IPC_interact_with_3DBuilder\\IPC_Questions\\1161-1450\\";
     //string questionXMLPath = "SceneFile_Q1.xml";
     //string questionXMLPath = "tea1_Q_20181225162522.xml";//AITypeQuestion in Anatomy mode
-    string questionXMLPath = "tea1_Q_20181225165447.xml";//AITypeQuestion in Surgery mode
+    //string questionXMLPath = "tea1_Q_20181225165447.xml";//AITypeQuestion in Surgery mode
+
+    string questionXMLPath = "tea1_Q_20181210231100.xml";
 
     protected void Page_Load(object sender, EventArgs e)
     {

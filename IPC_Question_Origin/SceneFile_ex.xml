@@ -389,17 +389,6 @@
 <Cut>0</Cut>
 </Organ>
 </Organs>
-<CuttingCylinder>
-<CuttingCylinderPostion>369.000000 272.000000 137.000000</CuttingCylinderPostion>
-<CuttingCylinderPostion>368.500000 275.500000 170.500000</CuttingCylinderPostion>
-<CuttingCylinderPostion>368.000000 279.000000 204.000000</CuttingCylinderPostion>
-<CuttingCylinderPostion>416.000000 282.000000 103.000000</CuttingCylinderPostion>
-<CuttingCylinderPostion>418.000000 287.000000 131.500000</CuttingCylinderPostion>
-<CuttingCylinderPostion>420.000000 292.000000 160.000000</CuttingCylinderPostion>
-<CuttingCylinderPostion>444.000000 289.000000 176.000000</CuttingCylinderPostion>
-<CuttingCylinderPostion>429.000000 299.000000 197.000000</CuttingCylinderPostion>
-<CuttingCylinderPostion>414.000000 309.000000 218.000000</CuttingCylinderPostion>
-</CuttingCylinder>
 <Alpha>14</Alpha>
 <Beta>54</Beta>
 </Scene>
