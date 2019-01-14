@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeFile="IPC.aspx.cs" Inherits="IPC" MaintainScrollPositionOnPostback="true"%>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
+   
     <!--Include Bootstrap -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -14,11 +14,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
    
     <style type="text/css">
+
+        
         th {
             
             font-size:20px;
             text-align: center;         
-            background-color: #ff6a00;
+            background-color: #4fBBDB;
             
            
         }
@@ -50,7 +52,19 @@
            font-size: 35px;
 
         }
+        .fitInTableCell {
 
+           
+        }
+        input[type="text"] {
+  
+   
+   
+     width:800px;
+      margin:auto;   
+     -webkit-box-sizing:border-box;
+     -moz-box-sizing: border-box;
+}
 
     </style>
     <link href="Content/CountDownTimer.css" rel="stylesheet" />
@@ -392,14 +406,33 @@
                 //assign a common class to all the non question TRs for the further control.
                 for (i = 1; i < gvDrv.rows.length; i++) {
                     if (gvDrv.rows[i].style.backgroundColor != questionTRBgColor) {
+                        //if (i == 1)
+                        //    alert(gvDrv.rows[i].style.backgroundColor);
                         var nonQuestionRow = gvDrv.rows[i];
                         nonQuestionRow.classList.add('nonQuestionTR');
+
+
+                        //display the reminder on the Non Question Row to inform the student that this organ is not a question. 
+                        displayReminder_NonQuestionRow(nonQuestionRow);
+                       
                     }
 
                 }
 
            
             }
+
+        //display the reminder on the Non Question Row to inform the student that this organ is not a question. 
+        function displayReminder_NonQuestionRow(nonQuestionRow) {
+            var nonQuestionRowTextBox = nonQuestionRow.cells[1].getElementsByTagName("input")[0];
+            nonQuestionRowTextBox.value = "Non Question Row";
+            nonQuestionRowTextBox.disabled = true;
+            nonQuestionRowTextBox.style.backgroundColor = "gray";
+            nonQuestionRowTextBox.style.color = "white";
+            nonQuestionRowTextBox.style.borderStyle = "none"
+            nonQuestionRowTextBox.style.visibility = 'visible';
+
+        }
 
             function rearrangeQNo() {
                 var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
@@ -420,50 +453,13 @@
 
 
    
-    <div align="center">
-        
-        <div class="jumbotron" >
-            <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
-        <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
-            <div  class="container" style="position: fixed;" >
-                <div class="row">
-                    <div class="col-sm-6">
-                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
-                    </div>
-                    <div class="col-sm-6" >
-                      
-                        <div id="clockdiv">
-  
-                          <div>
-                            <span class="hours"></span>
-                            <div class="smalltext">Hours</div>
-                          </div>
-                          <div>
-                            <span class="minutes"></span>
-                            <div class="smalltext">Minutes</div>
-                          </div>
-                          <div>
-                            <span class="seconds"></span>
-                            <div class="smalltext">Seconds</div>
-                          </div>
- 
-
-                        </div>
-                    </div>
-                </div>
-                <%--<input type="text" id="TBX_Input" runat="server" />--%>
-                <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
-            </div>
-       </div>
-        
+    <div >
 
 
-        <div class="row">
+       <div class="row">
             
             <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
-                <div>
-                <label>Show all hidden organs</label>
-            </div>
+                
             <div>
 
                 
@@ -484,18 +480,85 @@
                 
                 
             </div>
-          
-                
+           <div  class="container" style=" position: fixed; background-color: lightblue;" >
+                <div class="row"  >
+                    <div class="col-sm-8" >
+
+                        </div>
+                 <div class="col-sm-4" >
+                      
+                        <div id="clockdiv">
+  
+                          <div>
+                            <span class="hours"></span>
+                            <div class="smalltext">Hours</div>
+                          </div>
+                          <div>
+                            <span class="minutes"></span>
+                            <div class="smalltext">Minutes</div>
+                          </div>
+                          <div>
+                            <span class="seconds"></span>
+                            <div class="smalltext">Seconds</div>
+                          </div>
+ 
+
+                        </div>
+                    </div>
+                </div>
+               <br />
+               
+               
+               </div>
 
                 <asp:UpdatePanel ID="UpdatePanel1"   UpdateMode="Conditional"  runat="server">
                     <ContentTemplate>
-                        <input type="image" id="ShowOrHideAll" src="" style=" max-height: 60px; max-width: 60px;" runat="server" onserverclick="ShowOrHideAll_Click"/>
-                          <br />
-                          <br />
-                          <br />
-                        <input type="button" class='btn-info btn-md' id="HideNonQuestionTR"  value="Toggle(Hide/Show)Non Question Rows" onclick="hideNonQuestionTR()"/>
-                        <br />
-                        <br />
+                         
+            <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
+            <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
+            <div  class="container" style="position: fixed;"  >
+                <div class="row"  >
+                    <div class="col-sm-3" >
+                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
+                        
+                         <br />
+                         <br />
+                            <input type="button" class='btn-info btn-lg' id="HideNonQuestionTR"  value="Hide/Show Non Question Rows" onclick="hideNonQuestionTR()"/>
+                       
+                        
+                              
+                    </div>
+                    <div class="col-sm-5" >
+                         <div>
+                                    <label style="font-size:20px;">Show all hidden organs</label>
+                   
+                                </div>
+                             <input type="image" id="ShowOrHideAll" class="img-thumbnail" src="" style=" max-height: 100px; max-width: 100px;" onserverclick="ShowOrHideAll_Click" runat="server" />
+                                  <br />
+                                 
+                            
+                    </div>
+                  
+                   
+                </div>
+                <%--<input type="text" id="TBX_Input" runat="server" />--%>
+                <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
+            </div>
+            
+            
+       
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            
+
+                        
+                               
+                          
                 
                 
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
@@ -530,11 +593,11 @@
                         <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Submit" >
                             <ControlStyle CssClass=" submit_img" />
                         </asp:ButtonField>
-                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px"  ControlStyle-Width="40px" HeaderText="Show/Hide">
+                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px"  ControlStyle-Width="40px" HeaderText="Show /<br/>Hide">
                             <ControlStyle CssClass=" menu_img" />
                         </asp:ButtonField>
 
-                        <asp:TemplateField HeaderText="Mark<br/>Not sure  / Give up">
+                        <asp:TemplateField HeaderText="Mark /<br/>Not sure">
                             <ItemTemplate>
                                 <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="if (!toNotSureIcon(this)) return false;  " ControlStyle-Height="40px" />
                                 <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick=" if (!toGiveUpIcon(this)) return false; " ControlStyle-Height="40px" />
@@ -557,11 +620,11 @@
         var questionArray = []
 
         //to decide the background color of the question TR.
-        questionTRBgColor = "red";
+        questionTRBgColor = "rgb(145, 201, 27)";
 
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
         XMLFolder = "IPC_Questions/1161-1450/";
-        questionXMLPath = "SceneFile_Q1.xml";
+        questionXMLPath = "tea1_Q_20181210231100.xml";//"SceneFile_Q1.xml";
         
 
         //to extract para in URL
@@ -698,7 +761,7 @@
 
 
                         //show the TextBox of the question Organs.
-                        examMode = true;
+                        examMode = true; //this should retrieve from URL para
                         showTBOfQuestionOrgans(examMode);
 
 
@@ -1004,12 +1067,12 @@
             var x = document.getElementsByClassName("nonQuestionTR");
             
             
-
+            //toggle the class to swich the hide and show 
             for (i = 0; i < x.length; i++) {
                 x[i].classList.toggle("hidden");
             }
 
-
+            //toggle the indicator of the hide and show Non Question Rows button
            if( x[0].classList.contains('hidden'))
                document.getElementById("hidden_HideNonQuestionTRS").value = "true";
             else 
@@ -1045,5 +1108,6 @@
     </script>
 
 
-   
+  
+ 
 </asp:Content>
