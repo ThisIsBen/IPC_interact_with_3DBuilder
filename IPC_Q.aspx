@@ -520,7 +520,8 @@
     <script type="text/javascript">
         /*Temporary hard-code variable*/
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
-        XMLFolder = "IPC_Questions/1161-1450/";
+        XMLFolder = "<%=  CsDynamicConstants.AITypeQuestionXMLFolder %>";
+
         
         /*Temporary hard-code variable*/
 

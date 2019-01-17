@@ -27,8 +27,8 @@ public partial class IPC : CsSessionManager
 
     
     //In the near future ,we will get the Path from URL para or other para transmission method.
-    string XMLFolder = "IPC_Questions/1161-1450/";
-    string specificXMLFolder = "D:\\IPC_interact_with_3DBuilder\\IPC_Questions\\1161-1450\\";//it's only used when we want the 3DBuilder to load the Organ XML
+    string XMLFolder = CsDynamicConstants.AITypeQuestionXMLFolder;
+    string ThreeDBuilderXMLFolder = CsDynamicConstants.ThreeDBuilderXMLFolder; //"D:\\IPC_interact_with_3DBuilder\\IPC_Questions\\1161-1450\\";//it's only used when we want the 3DBuilder to load the Organ XML
 
     string questionXMLPath = "";
     string QuestionFileName = "";//只有檔名，沒有資料夾名稱
@@ -273,7 +273,7 @@ public partial class IPC : CsSessionManager
 
 
             StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine("3 " + specificXMLFolder + QuestionFileName + " " + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+            wr.WriteLine("3 " + ThreeDBuilderXMLFolder + QuestionFileName + " " + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
 
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 
@@ -291,7 +291,7 @@ public partial class IPC : CsSessionManager
 
 
             StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine("3 " + specificXMLFolder + QuestionFileName);//send protocol,Data to 3DBuilder.
+            wr.WriteLine("3 " + ThreeDBuilderXMLFolder + QuestionFileName);//send protocol,Data to 3DBuilder.
 
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 

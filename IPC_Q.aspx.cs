@@ -19,16 +19,16 @@ public partial class IPC: System.Web.UI.Page
     
 
     /*Temporary hard-code variable*/
-    string QuestionBodyPart = "Knee";
+    string QuestionBodyPart = "Knee"; //this should be retrieved from query string or session variable in the future.
     //string QuestionBodyPart = "Stomach";
 
     //In the near future ,we will get the Path from URL para or other para transmission method.
-    string XMLFolder = "IPC_Questions/1161-1450/";
+    string XMLFolder = CsDynamicConstants.AITypeQuestionXMLFolder;
     /*Temporary hard-code variable*/
 
 
     //In the near future ,we will get the IPC_Question_OriginXMLPath from URL para or other para transmission method.
-    string IPC_Question_OriginXMLPath = "./IPC_Question_Origin/SceneFile_ex.xml";
+    string IPC_Question_OriginXMLPath = CsDynamicConstants.completeBodyPartOrgansXMLPath;
 
     string questionXMLPath = "";
 

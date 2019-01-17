@@ -27,7 +27,7 @@ public partial class IPC : CsSessionManager
 
     
     //In the near future ,we will get the Path from URL para or other para transmission method.
-    string XMLFolder = "IPC_Questions/1161-1450/";
+    string XMLFolder = CsDynamicConstants.AITypeQuestionXMLFolder;
    
     
     string questionXMLPath = "SceneFile_Q1.xml";
