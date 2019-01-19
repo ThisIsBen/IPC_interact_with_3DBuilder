@@ -19,7 +19,7 @@ public partial class IPC: System.Web.UI.Page
     
 
     /*Temporary hard-code variable*/
-    string QuestionBodyPart = "Knee"; //this should be retrieved from query string or session variable in the future.
+    //QuestionBodyPart is already retrieved from URL parameter now.
     //string QuestionBodyPart = "Stomach";
 
     //In the near future ,we will get the Path from URL para or other para transmission method.
@@ -167,9 +167,9 @@ public partial class IPC: System.Web.UI.Page
         //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
         //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering        
         string xmlpath = XMLFolder + questionXMLPath;
-        string CA = xmlpath + xmlHandler.correctAnswer + ":";
-        string CAO = xmlpath + xmlHandler.correctAnswerOrder + ":";
-        string QBP = QuestionBodyPart;
+        string CA = xmlpath + xmlHandler.correctAnswer + ":";//compose the required format of the correct answer
+        string CAO = xmlpath + xmlHandler.correctAnswerOrder + ":";//compose the required format of the correct answer order
+        string QBP = Request.QueryString["QuestionBodyPart"];//get the  body part that is used for the  question
 
         
         
