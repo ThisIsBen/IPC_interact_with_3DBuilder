@@ -407,7 +407,7 @@
             //display the reminder on the Non Question Row to inform the student that this organ is not a question. 
             function displayReminder_NonQuestionRow(nonQuestionRow) {
                 var nonQuestionRowTextBox = nonQuestionRow.cells[1].getElementsByTagName("input")[0];
-                nonQuestionRowTextBox.value = "Non Question Row";
+                nonQuestionRowTextBox.value = "Non Answer Row";
                 nonQuestionRowTextBox.disabled = true;
                 nonQuestionRowTextBox.style.backgroundColor = "gray";
                 nonQuestionRowTextBox.style.color = "white";
@@ -510,7 +510,7 @@
                     <div class="col-sm-5 ">
                         <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg ' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
                         &nbsp&nbsp&nbsp&nbsp
-                        <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR"  value="Hide/Show Non Question Rows" onclick="hideNonQuestionTR()"/>
+                        <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR"  value="Hide/Show Non Answer Rows" onclick="hideNonQuestionTR()"/>
                                
                     
                     
