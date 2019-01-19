@@ -26,9 +26,11 @@ public partial class IPC: System.Web.UI.Page
     string XMLFolder = CsDynamicConstants.AITypeQuestionXMLFolder;
     /*Temporary hard-code variable*/
 
+    //store which body part is being used in this question
+    string QuestionBodyPart = "";
 
-    //In the near future ,we will get the IPC_Question_OriginXMLPath from URL para or other para transmission method.
-    string IPC_Question_OriginXMLPath = CsDynamicConstants.completeBodyPartOrgansXMLPath;
+    //store which OriginalBodyOrgan xml  file should be loaded according to which body part is being used in this question
+    string completeBodyPartOrgansXMLPath = "";
 
     string questionXMLPath = "";
 
@@ -50,6 +52,11 @@ public partial class IPC: System.Web.UI.Page
         Page.MaintainScrollPositionOnPostBack = true;
         if (!IsPostBack)
         {
+            //decide which body part organ xml file should be loaded according to which body part is being used in this question
+            decide_QuestionBodyPartOrganXML();
+
+           
+
             gvScore.AllowPaging = false;
             gvScore.AllowSorting = true;
             gvScore.AutoGenerateColumns = false;
@@ -57,7 +64,7 @@ public partial class IPC: System.Web.UI.Page
             gvScore.PageIndex = 0;
 
             DataSet ds = new DataSet();
-            ds.ReadXml(Server.MapPath(IPC_Question_OriginXMLPath)); //must synchronized with the XML file in Items.aspx.cs:  wr.WriteLine("3 D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\SceneFile13.xml");//send protocol,Data to 3DBuilder.
+            ds.ReadXml(Server.MapPath(completeBodyPartOrgansXMLPath)); //must synchronized with the XML file in Items.aspx.cs:  wr.WriteLine("3 D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\SceneFile13.xml");//send protocol,Data to 3DBuilder.
             //in Items.aspx.cs
 
             //DataRow dtRow = dtScore.NewRow();
@@ -79,6 +86,21 @@ public partial class IPC: System.Web.UI.Page
             //add an invisible row which contains a btn to activate ShowAll 
             
         }
+    }
+
+    //decide which body part organ xml file should be loaded according to which body part is being used in this question
+    private void decide_QuestionBodyPartOrganXML()
+    {
+
+            //check which body part is being used in this question
+            QuestionBodyPart = Request.QueryString["QuestionBodyPart"];
+
+            //decide which body part organ xml file should be loaded
+            if (QuestionBodyPart=="Knee")
+                completeBodyPartOrgansXMLPath = CsDynamicConstants.completeKneeOrgansXMLPath;
+           
+
+
     }
 
 
@@ -106,7 +128,7 @@ public partial class IPC: System.Web.UI.Page
 
 
         //read in the XML files that contains all organs of a certain body part. e.g., Knee 
-        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_Question_OriginXMLPath));
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(completeBodyPartOrgansXMLPath));
 
         
         //if the selected AITypeQuestionMode is the "SurgeryMode", we append AITypeQuestionMode tag to "SurgeryMode".
@@ -169,7 +191,7 @@ public partial class IPC: System.Web.UI.Page
         string xmlpath = XMLFolder + questionXMLPath;
         string CA = xmlpath + xmlHandler.correctAnswer + ":";//compose the required format of the correct answer
         string CAO = xmlpath + xmlHandler.correctAnswerOrder + ":";//compose the required format of the correct answer order
-        string QBP = Request.QueryString["QuestionBodyPart"];//get the  body part that is used for the  question
+        string QBP = QuestionBodyPart;//get the  body part that is used for the  question
 
         
         

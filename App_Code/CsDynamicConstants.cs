@@ -17,6 +17,6 @@ public class CsDynamicConstants
 
     //this is organ xml file contains all the organs in a certain body part.
     //e.g., ./IPC_Question_Origin/SceneFile_ex.xml stores all the organs in Knee.
-    public static string completeBodyPartOrgansXMLPath = "./IPC_Question_Origin/SceneFile_ex.xml";
+    public static string completeKneeOrgansXMLPath = "./IPC_Question_Origin/SceneFile_Knee_ex.xml";
 
 }
