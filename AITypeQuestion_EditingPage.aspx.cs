@@ -121,15 +121,16 @@ public partial class IPC: System.Web.UI.Page
 
         wr.WriteLine("1 2");
 
-
+        //wait for the 3DBuilder to respond
+        System.Threading.Thread.Sleep(10);
 
         //originating from Item.aspx
         string ThreeDBuilderXMLFolder = CsDynamicConstants.ThreeDBuilderXMLFolder;
         //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
         questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
 
+      
         wr.WriteLine("3 " + ThreeDBuilderXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
-
     }
 
 
