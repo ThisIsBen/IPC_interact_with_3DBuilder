@@ -15,11 +15,16 @@ public partial class Items : CsSessionManager
     //In the near future ,we will get the Path from URL para or other para transmission method.
     //string XMLFolder = "D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\";
     string ThreeDBuilderXMLFolder = CsDynamicConstants.ThreeDBuilderXMLFolder;
-    //string questionXMLPath = "SceneFile_Q1.xml";
-    //string questionXMLPath = "tea1_Q_20181225162522.xml";//AITypeQuestion in Anatomy mode
-    //string questionXMLPath = "tea1_Q_20181225165447.xml";//AITypeQuestion in Surgery mode
 
-    string questionXMLPath = "tea1_Q_20181210231100.xml";
+    //Ben temp hard-code variables:
+    //string questionXMLPath = "SceneFile_Q1.xml";
+    //string questionXMLPath = "tea1_Q_20181225162522";//AITypeQuestion in Anatomy mode xml file name
+    //string questionXMLPath = "tea1_Q_20181225165447";//AITypeQuestion in Surgery mode xml file name
+
+    string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
+    string studentUserID="stu2";
+    //end Ben temp hard-code variables
+
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -47,7 +52,7 @@ public partial class Items : CsSessionManager
     {
         ////Get The Question Number of organs  picked by instructor////////// 
         //read in the XML files that contains all organs of a certain body part. e.g., Knee 
-        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_QuestionXMLFolder + questionXMLPath));
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_QuestionXMLFolder + questionXMLPath + ".xml"));
 
         //convert  XmlDocument object to XElement object to use "where" phrase to locate a specific tag;
         xmlHandler.convertXmlDoc2XElement();
@@ -105,14 +110,14 @@ public partial class Items : CsSessionManager
             ScriptManager.RegisterStartupScript(this,
              typeof(Page),
              "Alert",
-             "<script>alert('" + "3 " + XMLFolder + questionXMLPath +" "+ strRandomQuestionNo + "');</script>",
+             "<script>alert('" + "3 " + XMLFolder + questionXMLPath+ ".xml" +" "+ strRandomQuestionNo + "');</script>",
              false);
             */
 
 
             
             StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine( "3 " + ThreeDBuilderXMLFolder + questionXMLPath +" "+ strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+            wr.WriteLine( "3 " + ThreeDBuilderXMLFolder + questionXMLPath + ".xml"+" "+ strRandomQuestionNo);//send protocol,Data to 3DBuilder.
             
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 
@@ -120,7 +125,7 @@ public partial class Items : CsSessionManager
             //Response.Redirect("IPC.aspx");
 
             ////head to IPC.aspx in exam mode
-            Response.Redirect("IPC.aspx?examMode=Yes");
+            Response.Redirect("IPC.aspx?examMode=Yes&strQID=" + questionXMLPath + "&cUserID="+studentUserID);
              
 
         }
@@ -138,7 +143,7 @@ public partial class Items : CsSessionManager
             //Response.Redirect("IPC.aspx");
 
             ////head to IPC.aspx in exam mode
-            Response.Redirect("IPC.aspx");
+            Response.Redirect("IPC.aspx&strQID=" + questionXMLPath + "&cUserID="+studentUserID);
         }
 
        

@@ -1,7 +1,7 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeFile="IPC.aspx.cs" Inherits="IPC" MaintainScrollPositionOnPostback="true"%>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-   
+
     <!--Include Bootstrap -->
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -14,8 +14,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
    
     <style type="text/css">
-
-        
         th {
             
             font-size:20px;
@@ -52,8 +50,7 @@
            font-size: 35px;
 
         }
-       
-        
+
 
     </style>
     <link href="Content/CountDownTimer.css" rel="stylesheet" />
@@ -395,15 +392,11 @@
                 //assign a common class to all the non question TRs for the further control.
                 for (i = 1; i < gvDrv.rows.length; i++) {
                     if (gvDrv.rows[i].style.backgroundColor != questionTRBgColor) {
-                        //if (i == 1)
-                        //    alert(gvDrv.rows[i].style.backgroundColor);
                         var nonQuestionRow = gvDrv.rows[i];
                         nonQuestionRow.classList.add('nonQuestionTR');
 
-
                         //display the reminder on the Non Question Row to inform the student that this organ is not a question. 
                         displayReminder_NonQuestionRow(nonQuestionRow);
-                       
                     }
 
                 }
@@ -411,17 +404,19 @@
            
             }
 
-        //display the reminder on the Non Question Row to inform the student that this organ is not a question. 
-        function displayReminder_NonQuestionRow(nonQuestionRow) {
-            var nonQuestionRowTextBox = nonQuestionRow.cells[1].getElementsByTagName("input")[0];
-            nonQuestionRowTextBox.value = "Non Answer Row";
-            nonQuestionRowTextBox.disabled = true;
-            nonQuestionRowTextBox.style.backgroundColor = "gray";
-            nonQuestionRowTextBox.style.color = "white";
-            nonQuestionRowTextBox.style.borderStyle = "none"
-            nonQuestionRowTextBox.style.visibility = 'visible';
+            //display the reminder on the Non Question Row to inform the student that this organ is not a question. 
+            function displayReminder_NonQuestionRow(nonQuestionRow) {
+                var nonQuestionRowTextBox = nonQuestionRow.cells[1].getElementsByTagName("input")[0];
+                nonQuestionRowTextBox.value = "Non Answer Row";
+                nonQuestionRowTextBox.disabled = true;
+                nonQuestionRowTextBox.style.backgroundColor = "gray";
+                nonQuestionRowTextBox.style.color = "white";
+                nonQuestionRowTextBox.style.borderStyle = "none"
+                nonQuestionRowTextBox.style.visibility = 'visible';
 
-        }
+            }
+
+
 
             function rearrangeQNo() {
                 var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
@@ -438,14 +433,19 @@
                     gvDrv.rows[i].cells[0].getElementsByTagName("span")[0].innerHTML = i;
                 }
             }
+
+        //clear the ajax cache to read the latest content from the organ xml file
+        function clearAjaxCache() {
+            $.ajaxSetup({
+                cache: false
+            });
+        }
     </script>
 
 
    
-    <div >
-
-
-        <div class="row">
+    <div > 
+          <div class="row">
             
             <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
                 
@@ -609,8 +609,8 @@
         questionTRBgColor = "rgb(145, 201, 27)";
 
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
-        XMLFolder = "<%=  CsDynamicConstants.AITypeQuestionXMLFolder %>";  //"IPC_Questions/1161-1450/";
-        questionXMLPath = "tea1_Q_20181210231100.xml";//"SceneFile_Q1.xml";
+        XMLFolder = "<%=  CsDynamicConstants.AITypeQuestionXMLFolder %>";//"IPC_Questions/1161-1450/";
+        questionXMLPath = "SceneFile_Q1.xml";
         
 
         //to extract para in URL
@@ -619,7 +619,14 @@
 
         $(document).ready(function () {
             
+            
 
+            //get the QID from URL parameter as the target file name if the instructor wants to check the contnet of the existing AI Type question.
+            questionXMLPath = url.searchParams.get("strQID") + ".xml";
+
+            //clear the ajax cache to read the latest content from the organ xml file
+            //if we don't clear the cache, ajax will return an old version of the organ xml file cached in the memory.
+            clearAjaxCache();
          
 
             //read the organ questiones picked by the instructor from the organ XML file. 
@@ -747,7 +754,7 @@
 
 
                         //show the TextBox of the question Organs.
-                        examMode = true; //this should retrieve from URL para
+                        examMode = true;
                         showTBOfQuestionOrgans(examMode);
 
 
@@ -1094,6 +1101,5 @@
     </script>
 
 
-  
- 
+   
 </asp:Content>

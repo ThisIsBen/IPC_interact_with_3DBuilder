@@ -104,6 +104,112 @@ public partial class IPC: System.Web.UI.Page
     }
 
 
+    public void btn_cutBodyPartIn3DBuilder_Onclick(object sender, EventArgs e)
+    {
+        //temporarily we only activate CSNamedPipe.exe, and manually activate 3DBuilder
+        //run CSNamedPipe.exe
+        runCSNamedPipe();
+    }
+
+    public void btn_connectTo3DBuilder_Onclick(object sender, EventArgs e)
+    {
+
+        //originating from ALHomePage.aspx
+        StreamWriter wr = (StreamWriter)Session["Writer"];
+        //Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('" + os.StartInfo.RedirectStandardInput + os.Id + "');</script>"); 
+        //StreamWriter wr = os.StandardInput;
+
+        wr.WriteLine("1 2");
+
+
+
+        //originating from Item.aspx
+        string ThreeDBuilderXMLFolder = CsDynamicConstants.ThreeDBuilderXMLFolder;
+        //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
+        questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
+
+        wr.WriteLine("3 " + ThreeDBuilderXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
+
+    }
+
+
+    private void activate3DBuilder()
+    {
+        //run CSNamedPipe.exe
+        runCSNamedPipe();
+
+
+        
+        //run 3DBuilder.exe
+        run3DBuilder();
+        
+
+        /*Ben test
+       //originating from ALHomePage.aspx
+       StreamWriter wr = (StreamWriter)Session["Writer"];
+       //Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('" + os.StartInfo.RedirectStandardInput + os.Id + "');</script>"); 
+       //StreamWriter wr = os.StandardInput;
+
+       wr.WriteLine("1 2");
+        */
+
+
+    }
+
+    private void runCSNamedPipe()
+    {
+        //originating from Default.aspx
+        Process os = new Process();
+        string hintID = "5555";//this hintID is hard-coded by 昇宏學長
+
+        os.StartInfo.WorkingDirectory = Request.MapPath("~/");
+        os.StartInfo.FileName = Request.MapPath("CSNamedPipe.exe");
+        os.StartInfo.UseShellExecute = false;
+        os.StartInfo.RedirectStandardInput = true;
+        os.StartInfo.Arguments = hintID;
+        os.Start();
+        StreamWriter wr = os.StandardInput;
+        //os.StandardInput.Close();
+        Session["Writer"] = wr;
+        Session["Process"] = os;
+
+
+
+
+
+    }
+
+    private void run3DBuilder()
+    {
+
+
+        //this works but 3DBuilder will be run in background
+
+        System.Diagnostics.Process process = new System.Diagnostics.Process();
+        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+        startInfo.Verb = "runas";
+        startInfo.WorkingDirectory = Request.MapPath("~/");
+        /*
+        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+        startInfo.CreateNoWindow = true;
+        */
+        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+        startInfo.CreateNoWindow = false;
+        startInfo.UseShellExecute = true;
+
+        startInfo.FileName = Request.MapPath("3DBuilder.lnk");
+        //startInfo.FileName = "C:\\Windows\\Microsoft.NET\\Framework\\v4.0.30319\\installutil.exe";
+        //startInfo.Arguments = "D:\\Projects\\MyNewService\\bin\\Release\\MyNewService.exe";
+        process.StartInfo = startInfo;
+        bool processStarted = process.Start();
+
+
+
+
+
+    }
+
+
     private static string GetXml(string url)
     {
         using (XmlReader xr = XmlReader.Create(url, new XmlReaderSettings() { IgnoreWhitespace = true }))
