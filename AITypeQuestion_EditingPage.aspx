@@ -567,19 +567,22 @@
         });
 
 
-        $('input[type=radio][name=radioBtn_AITypeQuestionMode]').change(function () {
-            if (this.value == 'Surgery Mode') {
-                $("#<%= btn_cutBodyPartIn3DBuilder.ClientID %>").css("display", "inline");
-                $("#<%= btn_connectTo3DBuilder.ClientID %>").css("display", "inline");
+        //Ben show the activate 3DBuilder btn be shown for the all time
+        
+       // $('input[type=radio][name=radioBtn_AITypeQuestionMode]').change(function () {
+       //    if (this.value == 'Surgery Mode') {
+       //         $("#<%= btn_cutBodyPartIn3DBuilder.ClientID %>").css("display", "inline");
+       //       $("#<%= btn_connectTo3DBuilder.ClientID %>").css("display", "inline");
                 
 
-            }
-            else {
-                $("#<%= btn_cutBodyPartIn3DBuilder.ClientID %>").css("display", "none");
-                $("#<%= btn_connectTo3DBuilder.ClientID %>").css("display", "none");
-            }
+       //     }
+       //     else {
+       //         $("#<%= btn_cutBodyPartIn3DBuilder.ClientID %>").css("display", "none");
+       //         $("#<%= btn_connectTo3DBuilder.ClientID %>").css("display", "none");
+       //     }
             
-        });
+       // });
+        
 
         function hideShowSelectedOrgan(selectedHideShowOrganBtn) {
             

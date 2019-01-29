@@ -103,12 +103,28 @@ public partial class IPC: System.Web.UI.Page
 
     }
 
+    //Store the content that the teacher has edited currently to the xml file when the teacher clicks the button to activate 3DBuilder.
+    public void saveCurrentEditionOnWebPage()
+    {
+        //to know which body part is using for the question now
+        decide_QuestionBodyPartOrganXML();
+
+        //save the currently edited content on the AITypeQuestion editor page to xml file 
+        FinishBtn_Click(this, null);
+        
+        //wait for the 3DBuilder to respond
+        System.Threading.Thread.Sleep(10);
+    }
 
     public void btn_cutBodyPartIn3DBuilder_Onclick(object sender, EventArgs e)
     {
         //temporarily we only activate CSNamedPipe.exe, and manually activate 3DBuilder
         //run CSNamedPipe.exe
         runCSNamedPipe();
+
+        //Store the content that the teacher has edited currently to the xml file when the teacher clicks the button to activate 3DBuilder.
+        saveCurrentEditionOnWebPage();
+       
     }
 
     public void btn_connectTo3DBuilder_Onclick(object sender, EventArgs e)
@@ -305,14 +321,24 @@ public partial class IPC: System.Web.UI.Page
         //store the content of the AITypeQuestion as XML
         xmlHandler.saveXML(Server.MapPath(xmlpath));
 
-        
+        //Ben temp comment  for demo and experiment
+        /*
         //store the AITypeQuestion to DB
-        store2DB(CA, CAO, QBP);
+        store2DB(CA, CAO, QBP); //可能有問題
+        */
+        //Ben temp comment for demo and experiment
 
-
-        //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
-        redirectBack2HintsPaper_MainPage();
+        // only when the teacher actually click the "Save the Question" button can the system redirect back to the previous page
+        if (e != null)
+        {
+            //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
+            redirectBack2HintsPaper_MainPage();
+        }
+          
         
+        
+
+
     }
 
     private void recordQuestionOrgan_InvisibleOrgan(XMLHandler xmlHandler)
