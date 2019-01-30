@@ -25,7 +25,8 @@ public class XMLHandler
         //load all the organ of the corresponding part of body.
         xmlDoc.Load(XMLSrcPath);
 
-
+        //create XElement xDoc to keep the content of xmlDoc for locate specific tag and modify it later.
+        xDoc = XElement.Load(new XmlNodeReader(xmlDoc));
     }
 
     //get  values from specific Tag name with specific value
@@ -127,29 +128,41 @@ public class XMLHandler
     withSpecificValue: it is used to locate the target tag whose value is this specific value.
     newValue: We use the new Value to update the value of the target tag.
     */
+    
     //set the Visibility of all the organs to visible by setting its Visible tag to "1" except for skin 
     //first para is the tag name of the target tag,the second is the Specific Value,and the third is the new value that user wants to set as the tags new value.
 
-    public void setValueOfSpecificTagsWithSpecificValue(string tagName,string withSpecificValue, string newValue)
+    public void setValueOfSpecificTagsWithSpecificValue(string SpecificTagName, string withSpecificValue, string newValue)
     {
 
-        //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value != OrganName.Text).Single();
-       
-        //set the Visibility of all the organs to visible by setting its Visible tag to "1"
-        foreach (XmlNode node in xmlDoc.SelectNodes(".//"+tagName+"[text()="+withSpecificValue+"]"))
+        //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Question").Value == "Yes").Single();
+        var targets = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element(SpecificTagName).Value == withSpecificValue);
+
+        foreach (var node in targets)
         {
-            node.InnerText = newValue;
+            node.Element(SpecificTagName).Value = newValue;
         }
+       
+       
 
       
     }
 
-    //convert  XmlDocument object to XElement object to use "where" phrase to locate a specific tag;
-    public void convertXmlDoc2XElement()
+
+   //set a given value to a specific tag
+    public void setValueOfSpecificTag(string SpecificTagName, string value)
     {
-        //create XElement xDoc to keep the content of xmlDoc for locate specific tag and modify it later.
-        xDoc = XElement.Load(new XmlNodeReader(xmlDoc));
-        
+
+        //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Question").Value == "Yes").Single();
+        var targets = xDoc.Elements(SpecificTagName);
+
+        foreach (var node in targets)
+        {
+            node.Value = value;
+        }
+
+
+
 
     }
 

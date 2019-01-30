@@ -9,19 +9,20 @@ using System.IO;
 
 public partial class Items : CsSessionManager
 {
+   
     //In the near future ,we will get the IPC_Question_OriginXMLPath from URL para or other para transmission method.
     //this XML file contains all organs of a certain body part.
-    string IPC_QuestionXMLFolder = CsDynamicConstants.AITypeQuestionXMLFolder;
+    string IPC_QuestionXMLFolder = CsDynamicConstants.relativeKneeXMLFolder;
     //In the near future ,we will get the Path from URL para or other para transmission method.
     //string XMLFolder = "D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\";
-    string ThreeDBuilderXMLFolder = CsDynamicConstants.ThreeDBuilderXMLFolder;
+    string absoluteKneeXMLFolder = CsDynamicConstants.absoluteKneeXMLFolder;
 
     //Ben temp hard-code variables:
     //string questionXMLPath = "SceneFile_Q1.xml";
     //string questionXMLPath = "tea1_Q_20181225162522";//AITypeQuestion in Anatomy mode xml file name
-    //string questionXMLPath = "tea1_Q_20181225165447";//AITypeQuestion in Surgery mode xml file name
+    string questionXMLPath = "tea1_Q_20181225165447";//AITypeQuestion in Surgery mode xml file name
 
-    string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
+    //string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
     string studentUserID="stu2";
     //end Ben temp hard-code variables
 
@@ -54,8 +55,7 @@ public partial class Items : CsSessionManager
         //read in the XML files that contains all organs of a certain body part. e.g., Knee 
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_QuestionXMLFolder + questionXMLPath + ".xml"));
 
-        //convert  XmlDocument object to XElement object to use "where" phrase to locate a specific tag;
-        xmlHandler.convertXmlDoc2XElement();
+        
 
         //get the number of the Organs whose Question tag are marked "Yes".
         return xmlHandler.getPickedQuestionNumber();
@@ -117,7 +117,7 @@ public partial class Items : CsSessionManager
 
             
             StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine( "3 " + ThreeDBuilderXMLFolder + questionXMLPath + ".xml"+" "+ strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+            wr.WriteLine( "3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml"+" "+ strRandomQuestionNo);//send protocol,Data to 3DBuilder.
             
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 
@@ -135,7 +135,7 @@ public partial class Items : CsSessionManager
 
 
             StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine("3 " + ThreeDBuilderXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
+            wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
 
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 

@@ -23,7 +23,7 @@ public partial class IPC: System.Web.UI.Page
     //string QuestionBodyPart = "Stomach";
 
     //In the near future ,we will get the Path from URL para or other para transmission method.
-    string XMLFolder = CsDynamicConstants.AITypeQuestionXMLFolder;
+    string XMLFolder = CsDynamicConstants.relativeKneeXMLFolder;
     /*Temporary hard-code variable*/
 
     //store which body part is being used in this question
@@ -52,6 +52,9 @@ public partial class IPC: System.Web.UI.Page
         Page.MaintainScrollPositionOnPostBack = true;
         if (!IsPostBack)
         {
+
+          
+
             //decide which body part organ xml file should be loaded according to which body part is being used in this question
             decide_QuestionBodyPartOrganXML();
 
@@ -91,13 +94,35 @@ public partial class IPC: System.Web.UI.Page
     //decide which body part organ xml file should be loaded according to which body part is being used in this question
     private void decide_QuestionBodyPartOrganXML()
     {
+            //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
+            questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
+
 
             //check which body part is being used in this question
             QuestionBodyPart = Request.QueryString["QuestionBodyPart"];
 
             //decide which body part organ xml file should be loaded
-            if (QuestionBodyPart=="Knee")
-                completeBodyPartOrgansXMLPath = CsDynamicConstants.completeKneeOrgansXMLPath;
+            if (QuestionBodyPart == "Knee")
+            {
+
+               
+                if (File.Exists(CsDynamicConstants.absoluteKneeXMLFolder + questionXMLPath))
+                {
+                    //if the xml of this question has already existed,
+                    //use it as the template
+                    completeBodyPartOrgansXMLPath = CsDynamicConstants.relativeKneeXMLFolder + questionXMLPath;
+                }
+
+                else
+                {   //use the original knee xml template
+                    completeBodyPartOrgansXMLPath = CsDynamicConstants.completeKneeOrgansXMLPath;
+                }
+                
+
+               
+
+
+            }
            
 
 
@@ -113,7 +138,7 @@ public partial class IPC: System.Web.UI.Page
         FinishBtn_Click(this, null);
         
         //wait for the 3DBuilder to respond
-        System.Threading.Thread.Sleep(10);
+        System.Threading.Thread.Sleep(100);
     }
 
     public void btn_cutBodyPartIn3DBuilder_Onclick(object sender, EventArgs e)
@@ -141,12 +166,12 @@ public partial class IPC: System.Web.UI.Page
         System.Threading.Thread.Sleep(10);
 
         //originating from Item.aspx
-        string ThreeDBuilderXMLFolder = CsDynamicConstants.ThreeDBuilderXMLFolder;
+        string absoluteKneeXMLFolder = CsDynamicConstants.absoluteKneeXMLFolder;
         //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
         questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
 
       
-        wr.WriteLine("3 " + ThreeDBuilderXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
+        wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
     }
 
 
@@ -253,34 +278,54 @@ public partial class IPC: System.Web.UI.Page
         //read in the XML files that contains all organs of a certain body part. e.g., Knee 
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(completeBodyPartOrgansXMLPath));
 
+      
         
         //if the selected AITypeQuestionMode is the "SurgeryMode", we append AITypeQuestionMode tag to "SurgeryMode".
         if (Request.Form["radioBtn_AITypeQuestionMode"] != null)
         {
             string selectedAITypeQuestionMode = Request.Form["radioBtn_AITypeQuestionMode"].ToString();
-            
-            //append AITypeQuestionMode tag to "SurgeryMode".
+
+            //set the Mode according to which AITypeQuestion mode is selected by the teacher
             if (selectedAITypeQuestionMode == "Surgery Mode")
             {
-                xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");
+                
+                xmlHandler.setValueOfSpecificTag("AITypeQuestionMode", "Surgery Mode");
+
+                //append AITypeQuestionMode tag to "SurgeryMode".
+                //xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");
             }
+
+            if (selectedAITypeQuestionMode == "Anatomy Mode")
+            {
+
+                xmlHandler.setValueOfSpecificTag("AITypeQuestionMode", "Anatomy Mode");
+
+                //append AITypeQuestionMode tag to "SurgeryMode".
+                //xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");
+            }
+          
           
 
         }
         
+        //Only if this is new question do we append <Question> to each organ in the xml file
+        if (Request.QueryString["viewContent"] != "Yes")
+        {
+            //append Question tag to each Organ with init value = No.
+            xmlHandler.appendTag2EachOrgan("Question", "No", "NestedStructure", "Organ");
+        }
+        else
+        {
+            //reset the <Question> of each organ
+            xmlHandler.setValueOfSpecificTagsWithSpecificValue("Question", "Yes", "No");
+        }
         
-
-        //append Question tag to each Organ with init value = No.
-        xmlHandler.appendTag2EachOrgan("Question","No","NestedStructure","Organ");
-
-
+        
         //set the Visibility of all the organs to visible by setting its Visible tag to "1" except for skin 
         //first para is the tag name of the target tag,the second is the Specific Value,and the third is the new value that user wants to set as the tags new value.
         xmlHandler.setValueOfSpecificTagsWithSpecificValue("Visible", "0", "1");
 
-        //convert  XmlDocument object to XElement object to use "where" phrase to locate a specific tag;
-        xmlHandler.convertXmlDoc2XElement();
-
+       
         //record which organ is stored as a question, and which organ is set to be visible. 
         recordQuestionOrgan_InvisibleOrgan(xmlHandler);
         
@@ -297,13 +342,12 @@ public partial class IPC: System.Web.UI.Page
        //handle the mode of the AITypeQuestion e.g.,Suergery Mode 
         handleAITypeQuestionMode(xmlHandler);
         
-
         
 
 
+       
 
-        //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
-        questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
+       
 
         //retrieve the cQID from the hidden field   
         cQID = hidden_AITypeQuestionTitle.Value;

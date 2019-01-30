@@ -609,7 +609,7 @@
         questionTRBgColor = "rgb(145, 201, 27)";
 
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
-        XMLFolder = "<%=  CsDynamicConstants.AITypeQuestionXMLFolder %>";//"IPC_Questions/1161-1450/";
+        XMLFolder = "<%=  CsDynamicConstants.relativeKneeXMLFolder %>";//"IPC_Questions/1161-1450/";
         questionXMLPath = "SceneFile_Q1.xml";
         
 
