@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 public class XMLHandler
 {
-    XmlDocument xmlDoc;
+    
     XElement xDoc;
 
     //11/9 add correct answer list member  variable
@@ -20,7 +20,7 @@ public class XMLHandler
 
     public XMLHandler(string XMLSrcPath)
     {
-        xmlDoc = new XmlDocument();
+        XmlDocument xmlDoc = new XmlDocument();
         
         //load all the organ of the corresponding part of body.
         xmlDoc.Load(XMLSrcPath);
@@ -77,8 +77,7 @@ public class XMLHandler
 
 
         var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Name").Value == organName).Single();
-        var test = target.Element(targetTagName).Value;
-
+        
 
         target.Element(targetTagName).Value = newValue;
 
@@ -150,7 +149,7 @@ public class XMLHandler
 
 
    //set a given value to a specific tag
-    public void setValueOfSpecificTag(string SpecificTagName, string value)
+    public void setValueOfSpecificNonNestedTag(string SpecificTagName, string value)
     {
 
         //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Question").Value == "Yes").Single();
@@ -159,6 +158,9 @@ public class XMLHandler
         foreach (var node in targets)
         {
             node.Value = value;
+
+
+          
         }
 
 
@@ -174,46 +176,40 @@ public class XMLHandler
      appendOneEle_InNestedStructure: append the new tag as an One element to the XML file or append it to a nested structure.
      parentTag: to indicate under which tag you want to append the new tag to
     */
-    public void appendTag2EachOrgan(string tagName,string initValue,string appendOneEle_InNestedStructure="OneElememt", string parentTag="")
+    public void appendTag2EachOrgan(string tagName,string initValue, string parentTag="")
     {
         
 
-        if (appendOneEle_InNestedStructure == "NestedStructure")
-        {
-                XmlNodeList elemList = xmlDoc.GetElementsByTagName(parentTag);
-                for (int i = 0; i < elemList.Count; i++)
-                {
-                    //Create a new node.
-                    XmlElement elem = xmlDoc.CreateElement(tagName);
-                    elem.InnerText = initValue;
+        
+            var targets = xDoc.Element("Organs").Elements(parentTag);
+
+            foreach (var node in targets)
+            {
+                var elem = new XElement(tagName);
+                elem.Value = initValue;
+                node.Add(elem);
 
 
-                    elemList[i].AppendChild(elem);
-                }
+            }
+             
 
-            
-        }
+           
+        
 
-
-        else 
-        {
-
-            //Create a new node.
-            XmlElement elem = xmlDoc.CreateElement(tagName);
-            elem.InnerText = initValue;
-            xmlDoc.DocumentElement.AppendChild(elem);
-
-
-        }
+       
     }
 
-    //return the content of xmlDoc
-    public XmlDocument getXmlDoc()
+    //append a tag directly under the root tag in a XML
+    public void appendTagUnderRoot(string tagName,string initValue)
     {
-
-        return xmlDoc;
+        var elem = new XElement(tagName);
+        elem.Value = initValue;
+        xDoc.Add(elem);
+            
     }
 
+
+    
 
     //save the content of XML data in XElement object.
     public void saveXML(string xmlStorePath)

@@ -50,14 +50,16 @@ public partial class IPC: System.Web.UI.Page
         
 
         Page.MaintainScrollPositionOnPostBack = true;
+
+
+        
+
         if (!IsPostBack)
         {
 
           
 
-            //decide which body part organ xml file should be loaded according to which body part is being used in this question
-            decide_QuestionBodyPartOrganXML();
-
+            
            
 
             gvScore.AllowPaging = false;
@@ -67,6 +69,10 @@ public partial class IPC: System.Web.UI.Page
             gvScore.PageIndex = 0;
 
             DataSet ds = new DataSet();
+
+            //decide which body part organ xml file should be loaded according to which body part is being used in this question
+            decide_QuestionBodyPartOrganXML();
+
             ds.ReadXml(Server.MapPath(completeBodyPartOrgansXMLPath)); //must synchronized with the XML file in Items.aspx.cs:  wr.WriteLine("3 D:\\Mirac3DBuilder\\HintsAccounts\\Student\\Mirac\\1161-1450\\SceneFile13.xml");//send protocol,Data to 3DBuilder.
             //in Items.aspx.cs
 
@@ -131,9 +137,7 @@ public partial class IPC: System.Web.UI.Page
     //Store the content that the teacher has edited currently to the xml file when the teacher clicks the button to activate 3DBuilder.
     public void saveCurrentEditionOnWebPage()
     {
-        //to know which body part is using for the question now
-        decide_QuestionBodyPartOrganXML();
-
+       
         //save the currently edited content on the AITypeQuestion editor page to xml file 
         FinishBtn_Click(this, null);
         
@@ -274,6 +278,8 @@ public partial class IPC: System.Web.UI.Page
         //add the <Question> tag to XML to indicate that the organ is picked to be a question or not.
         //string readIn_xml_str = GetXml("./IPC_Question_Origin/SceneFile_ex.xml");
 
+        //decide which body part organ xml file should be loaded according to which body part is being used in this question
+        decide_QuestionBodyPartOrganXML();
 
         //read in the XML files that contains all organs of a certain body part. e.g., Knee 
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(completeBodyPartOrgansXMLPath));
@@ -289,7 +295,7 @@ public partial class IPC: System.Web.UI.Page
             if (selectedAITypeQuestionMode == "Surgery Mode")
             {
                 
-                xmlHandler.setValueOfSpecificTag("AITypeQuestionMode", "Surgery Mode");
+                xmlHandler.setValueOfSpecificNonNestedTag("AITypeQuestionMode", "Surgery Mode");
 
                 //append AITypeQuestionMode tag to "SurgeryMode".
                 //xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");
@@ -298,7 +304,7 @@ public partial class IPC: System.Web.UI.Page
             if (selectedAITypeQuestionMode == "Anatomy Mode")
             {
 
-                xmlHandler.setValueOfSpecificTag("AITypeQuestionMode", "Anatomy Mode");
+                xmlHandler.setValueOfSpecificNonNestedTag("AITypeQuestionMode", "Anatomy Mode");
 
                 //append AITypeQuestionMode tag to "SurgeryMode".
                 //xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");
@@ -312,7 +318,7 @@ public partial class IPC: System.Web.UI.Page
         if (Request.QueryString["viewContent"] != "Yes")
         {
             //append Question tag to each Organ with init value = No.
-            xmlHandler.appendTag2EachOrgan("Question", "No", "NestedStructure", "Organ");
+            xmlHandler.appendTag2EachOrgan("Question", "No", "Organ");
         }
         else
         {
