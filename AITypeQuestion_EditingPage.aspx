@@ -285,7 +285,10 @@
 
                 //set the icon of the visibility column if the organ is set to be invisibleIcon 
                 gvDrv.rows[questionOrganRow].cells[2].getElementsByTagName("input")[0].src = invisibleImg
-                
+
+                //store the name of the selected organ that should be hidden in 3DBuilder in the hidden field,hidden_markHideShowOrgan.
+                //we also use the value of the hidden field ,hidden_markHideShowOrgan, to indicate if the corresponding organ is to be stored as visible or hidden to the xml file when we store the content of the AITypeQuestion. 
+                gvDrv.rows[questionOrganRow].cells[2].getElementsByTagName("input")[1].value = invisibleOrganArray[j];
             }
 
         }
@@ -319,7 +322,7 @@
                     var questionOrganArray = []
 
                     //store the organs that are set to be invisible
-                    var inivisbleOrganArray = []
+                    var invisibleOrganArray = []
 
 
                     $(xml).find('Organ').each(function () {
@@ -339,14 +342,14 @@
 
 
 
-                        //keep the organs that are set to be invisible in the inivisbleOrganArray
+                        //keep the organs that are set to be invisible in the invisibleOrganArray
                         var isInvisible = $(this).find("Visible").text();
 
                         if (isInvisible == "0") {
                             $invisibleOrganName = $(this).find("Name");
 
                             //push to questionOrganArray
-                            inivisbleOrganArray.push($invisibleOrganName.text());
+                            invisibleOrganArray.push($invisibleOrganName.text());
 
 
                         }
@@ -367,7 +370,7 @@
                     
                     //check the radio buttons of the organs that are set to be the question
                     //and switch the icon of the visibility column if the organ is set to be invisible
-                    checkPickedOrgans_InvisibleOrgans(questionOrganArray, inivisbleOrganArray);
+                    checkPickedOrgans_InvisibleOrgans(questionOrganArray, invisibleOrganArray);
 
 
                   
@@ -502,6 +505,7 @@
 
                          <asp:TemplateField ItemStyle-Width="30px" ItemStyle-CssClass="template-checkbox" HeaderText="Visibility">
                             <ItemTemplate>
+                                <%--use onclick() to call the JS function and return false to avoid activating postback automatically--%>
                                 <input type="image" class="img-thumbnail hideShowOrganBtn"  id="btnHideShowOrgan" onclick="if (!hideShowSelectedOrgan(this)) return false;" src="Image/visible.png">
                                  
                                 <%-- <input type="hidden" id="hidden_markHideShowOrgan" runat="server" value="-1"> It doesn't work in Gridview--%>
@@ -609,7 +613,8 @@
                
                 row.cells[2].getElementsByTagName("input")[0].src = invisibleImg;
 
-                //store the name of the selected organ in hidden field
+                //store the name of the selected organ that should be hidden in 3DBuilder in the hidden field,hidden_markHideShowOrgan.
+                //we also use the value of the hidden field ,hidden_markHideShowOrgan, to indicate if the corresponding organ is to be stored as visible or hidden to the xml file when we store the content of the AITypeQuestion. 
                 row.cells[2].getElementsByTagName("input")[1].value = row.cells[1].getElementsByTagName("span")[0].innerHTML;
 
                 //console.log(row.cells[2].getElementsByTagName("input")[1].value);
@@ -619,7 +624,7 @@
                 //switch the icon of the btn of the selected organ to be visibleBtn
                 row.cells[2].getElementsByTagName("input")[0].src = visibleImg;
 
-                //restore hidden field from invisible organ to visible organ
+                //restore the corresponding hidden field,hidden_markHideShowOrgan, from invisible organ to visible organ to indicate that the organ is set to be visible now.
                 row.cells[2].getElementsByTagName("input")[1].value = "-1";
 
                

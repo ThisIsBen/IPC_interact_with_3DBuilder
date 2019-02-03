@@ -101,7 +101,8 @@ public partial class IPC: System.Web.UI.Page
     private void decide_QuestionBodyPartOrganXML()
     {
             //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
-            questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
+        //questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml"; The hidden field value will be "" at the first page load because we set the value of the hidden field,hidden_AITypeQuestionTitle, in document.ready in front end, which is run after the page_load function on backend.
+            questionXMLPath = Request.QueryString["strQID"] + ".xml";
 
 
             //check which body part is being used in this question
