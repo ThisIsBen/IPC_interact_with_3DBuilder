@@ -373,10 +373,10 @@ public partial class IPC: System.Web.UI.Page
         xmlHandler.saveXML(Server.MapPath(xmlpath));
 
         //Ben temp comment  for demo and experiment
-        /*
+        
         //store the AITypeQuestion to DB
-        store2DB(CA, CAO, QBP); //可能有問題
-        */
+        store2DB(CA, QBP, CAO); //可能有問題
+        
         //Ben temp comment for demo and experiment
 
         // only when the teacher actually click the "Save the Question" button can the system redirect back to the previous page

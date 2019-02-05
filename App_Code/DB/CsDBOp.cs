@@ -171,7 +171,11 @@ using System.Text.RegularExpressions;
         string sql = string.Format("Select * From AITypeQuestionCorrectAnswer ");
         return GetDataTable(sql);
     }
-    //set
+
+
+   
+
+    //Insert the correct Answer of the AITypeQuestion to AITypeQuestionCorrectAnswer datatable in NewVersionHintsDB
     public static int InsertIPCExamHWCorrectAns(string cQID, string _correctAnswer, string _QuestionBodyPart, string _QuesOrdering)
     {
         //first add
