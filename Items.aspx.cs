@@ -18,18 +18,49 @@ public partial class Items : CsSessionManager
     string absoluteKneeXMLFolder = CsDynamicConstants.absoluteKneeXMLFolder;
 
     //Ben temp hard-code variables:
-    //string questionXMLPath = "SceneFile_Q1.xml";
+    //string questionXMLPath = "SceneFile_Q1";
     //string questionXMLPath = "tea1_Q_20181225162522";//AITypeQuestion in Anatomy mode xml file name
     string questionXMLPath = "tea1_Q_20181225165447";//AITypeQuestion in Surgery mode xml file name
+    //string questionXMLPath = "tea1_Q_20190205145709";
 
     //string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
     string studentUserID="stu2";
     //end Ben temp hard-code variables
 
 
+
+    //These 2 variables will set by URL parameter or data retrieve from DB in the near future.
+    ///////////////////////////////////////////////////////////////////////////////
+    bool ExamMode = true;//ExamMode的中控
+    string ID_Num = "234";//The last 3 digits of student's ID will be retrieved from DB in the near future. 
+    //int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor will be retrieved from DB in the near future. 
+
+
+    //////////////////////////////////////////////////////////////////////////
+
+
     protected void Page_Load(object sender, EventArgs e)
     {
-        
+
+        //set the variable questionXMLPath with the parameter strQID in URL if it is provided.
+        if (Request.QueryString["strQID"] != null && Request.QueryString["strQID"] != "")
+        {
+            questionXMLPath = Request.QueryString["strQID"];
+        }
+
+        //set the variable studentUserID with the parameter cUserID in URL if it is provided.
+        if (Request.QueryString["cUserID"] != null && Request.QueryString["cUserID"] != "")
+        {
+            studentUserID = Request.QueryString["cUserID"];
+        }
+
+
+        //set the variable ExamMode with the parameter ExamMode in URL if it is provided.
+        if (Request.QueryString["ExamMode"] != null && Request.QueryString["ExamMode"] != "")
+        {
+            ExamMode =Convert.ToBoolean( Request.QueryString["ExamMode"] );
+        }
+
     }
 
     public void  intArray2AString(int[] randomQuestionNo,ref string strRandomQuestionNo)
@@ -67,14 +98,7 @@ public partial class Items : CsSessionManager
     protected void btnKnee_Click(object sender, EventArgs e)
     {
 
-        //These 2 variables will set by URL parameter or data retrieve from DB in the near future.
-        ///////////////////////////////////////////////////////////////////////////////
-        bool ExamMode = true;//ExamMode的中控
-        string ID_Num = "234";//The last 3 digits of student's ID will be retrieved from DB in the near future. 
-        //int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor will be retrieved from DB in the near future. 
         
-       
-        //////////////////////////////////////////////////////////////////////////
 
         //Get The Question Number of organs  picked by instructor ( from Question XML file)
         int[] pickedQuestions = getPickedQuestionNumber();

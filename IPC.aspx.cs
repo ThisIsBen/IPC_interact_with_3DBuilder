@@ -414,11 +414,12 @@ public partial class IPC : CsSessionManager
         //wr.WriteLine("3 0");
 
     }
+    /*
     public void InsertStuIPCAns2DB(string cUserID, string cQID, string _QuesOrdering, string _StudentAnswer, int Num_Of_Question_Submision_Session)
     {
         CsDBOp.InsertStuIPCAns(cUserID, cQID, _QuesOrdering, _StudentAnswer, Num_Of_Question_Submision_Session);
     }
-
+    */
 
     public void FinishBtn_Click(object sender, EventArgs e)
     {
@@ -523,7 +524,10 @@ public partial class IPC : CsSessionManager
 
             //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
             //}
-            InsertStuIPCAns2DB(cUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+
+            CsDBOp.InsertStuIPCAns(cUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+
+            //InsertStuIPCAns2DB(cUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
             ///////////////////////////////////////
             //DataTable dt = CsDBOp.GetStuIPCAns();
             //StuAnsM Stu_correct_papers = new StuAnsM();
