@@ -214,7 +214,7 @@ public partial class IPC: System.Web.UI.Page
         string hintID = "5555";//this hintID is hard-coded by 昇宏學長
 
         os.StartInfo.WorkingDirectory = Request.MapPath("~/");
-        os.StartInfo.FileName = Request.MapPath("CSNamedPipe.exe");
+        os.StartInfo.FileName = Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe");
         os.StartInfo.UseShellExecute = false;
         os.StartInfo.RedirectStandardInput = true;
         os.StartInfo.Arguments = hintID;

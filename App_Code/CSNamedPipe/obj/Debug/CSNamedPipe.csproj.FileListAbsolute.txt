@@ -5,3 +5,8 @@ C:\Users\TonyTsai\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.exe
 C:\Users\TonyTsai\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.pdb
 C:\Users\HAHI\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.exe
 C:\Users\HAHI\Desktop\CSNamedPipe\CSNamedPipe\obj\Debug\CSNamedPipe.pdb
+D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\obj\Debug\CSNamedPipe.exe
+D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\obj\Debug\CSNamedPipe.pdb
+D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\bin\Debug\CSNamedPipe.exe
+D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\bin\Debug\CSNamedPipe.pdb
+D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\obj\Debug\CSNamedPipe.csprojResolveAssemblyReference.cache

@@ -19,11 +19,11 @@ public partial class Items : CsSessionManager
 
     //Ben temp hard-code variables:
     //string questionXMLPath = "SceneFile_Q1";
-    string questionXMLPath = "tea1_Q_20181225162522";//AITypeQuestion in Anatomy mode xml file name
+    //string questionXMLPath = "tea1_Q_20181225162522";//AITypeQuestion in Anatomy mode xml file name
     //string questionXMLPath = "tea1_Q_20181225165447";//AITypeQuestion in Surgery mode xml file name with 3 question organs
     //string questionXMLPath = "tea1_Q_20190205145709";//AITypeQuestion in Surgery mode xml file name with 4 question organs
 
-    //string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
+    string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
     string studentUserID="stu2";
     //end Ben temp hard-code variables
 
@@ -31,8 +31,10 @@ public partial class Items : CsSessionManager
 
     //These 2 variables will set by URL parameter or data retrieve from DB in the near future.
     ///////////////////////////////////////////////////////////////////////////////
-    bool ExamMode = true;//ExamMode的中控
-    string ID_Num = "234";//The last 3 digits of student's ID will be retrieved from DB in the near future. 
+    bool ExamMode = true;//ExamMode的中控, we set its default value to true
+
+    //the seed of randomizing the organ numbers that are picked as questions, which are stored in pickedQuestions array.
+    string randomizeSeed = "";
     //int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor will be retrieved from DB in the near future. 
 
 
@@ -41,7 +43,14 @@ public partial class Items : CsSessionManager
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        
+           
+        
+    }
 
+    //get the parameters in URL and store there value in global var.
+    private void retrieveURLParameters()
+    {
         //set the variable questionXMLPath with the parameter strQID in URL if it is provided.
         if (Request.QueryString["strQID"] != null && Request.QueryString["strQID"] != "")
         {
@@ -58,10 +67,13 @@ public partial class Items : CsSessionManager
         //set the variable ExamMode with the parameter ExamMode in URL if it is provided.
         if (Request.QueryString["ExamMode"] != null && Request.QueryString["ExamMode"] != "")
         {
-            ExamMode =Convert.ToBoolean( Request.QueryString["ExamMode"] );
+            ExamMode = Convert.ToBoolean(Request.QueryString["ExamMode"]);
         }
 
+        //set randomize seed as the ascii code of the first char + the ascii code of the last char of the studentUserID
+        randomizeSeed = (Convert.ToInt32(studentUserID[0]) + Convert.ToInt32(studentUserID[studentUserID.Length - 1])).ToString();
     }
+
 
     public void  intArray2AString(int[] randomQuestionNo,ref string strRandomQuestionNo)
     {
@@ -97,8 +109,8 @@ public partial class Items : CsSessionManager
 
     protected void btnKnee_Click(object sender, EventArgs e)
     {
-
-        
+        //get the parameters in URL and store there value in global var.
+        retrieveURLParameters();
 
         //Get The Question Number of organs  picked by instructor ( from Question XML file)
         int[] pickedQuestions = getPickedQuestionNumber();
@@ -117,7 +129,7 @@ public partial class Items : CsSessionManager
         if (ExamMode)
         {
             //randomize the  Question Numbers picked by instructor using student's ID as seed.
-            int[] randomQuestionNo = RandomQuestionNo.rand(ID_Num, pickedQuestions);
+            int[] randomQuestionNo = RandomQuestionNo.rand(randomizeSeed, pickedQuestions);
 
 
             //send randomized  Question Numbers picked by instructor to IPC.aspx through Session
@@ -129,19 +141,19 @@ public partial class Items : CsSessionManager
             string strRandomQuestionNo = "";
             intArray2AString(randomQuestionNo,ref strRandomQuestionNo);
 
-            /*
+            
             //use JS alert() in C#
-            ScriptManager.RegisterStartupScript(this,
-             typeof(Page),
-             "Alert",
-             "<script>alert('" + "3 " + XMLFolder + questionXMLPath+ ".xml" +" "+ strRandomQuestionNo + "');</script>",
-             false);
-            */
+            //ScriptManager.RegisterStartupScript(this,
+            // typeof(Page),
+             //"Alert",
+             //"<script>alert('" + "3 " + XMLFolder + questionXMLPath+ ".xml" +" "+ strRandomQuestionNo + "');</script>",
+             //false);
+           
 
 
             
             StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine( "3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml"+" "+ strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+            wr.WriteLine( "3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml"+"_"+ strRandomQuestionNo);//send protocol,Data to 3DBuilder.
             
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 
@@ -169,6 +181,7 @@ public partial class Items : CsSessionManager
             ////head to IPC.aspx in exam mode
             Response.Redirect("IPC.aspx&strQID=" + questionXMLPath + "&cUserID="+studentUserID);
         }
+
 
        
     }
