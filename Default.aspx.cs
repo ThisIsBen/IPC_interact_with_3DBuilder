@@ -45,9 +45,9 @@ public partial class _Default : System.Web.UI.Page
 
             //Process[] processes = Process.GetProcessById
             //File.Copy(Server.MapPath("~") + @"\CSNamedPipe.exe", Server.MapPath("~") + @"\" + TBX_Input.Value + ".exe");
-            
+            os.StartInfo.Verb = "runas";
             os.StartInfo.WorkingDirectory = Request.MapPath("~/");
-            os.StartInfo.FileName = Request.MapPath("CSNamedPipe.exe");
+            os.StartInfo.FileName = Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe");
             os.StartInfo.UseShellExecute = false;
             os.StartInfo.RedirectStandardInput = true;
             os.StartInfo.Arguments = hintID.Value;
