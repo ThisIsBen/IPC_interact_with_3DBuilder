@@ -176,7 +176,11 @@ public partial class IPC: System.Web.UI.Page
         questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
 
       
-        wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
+      
+
+        //get the AITypeQuestionMode and send it to 3DBuilder along with the xml file path for display 
+        string selectedAITypeQuestionMode = Request.Form["radioBtn_AITypeQuestionMode"].ToString();
+        wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath + "_" + selectedAITypeQuestionMode);//send protocol,Data to 3DBuilder.
     }
 
 
@@ -375,7 +379,7 @@ public partial class IPC: System.Web.UI.Page
         //Ben temp comment  for demo and experiment
         
         //store the AITypeQuestion to DB
-        store2DB(CA, QBP, CAO); //可能有問題
+        store2DB(CA, QBP, CAO); 
         
         //Ben temp comment for demo and experiment
 

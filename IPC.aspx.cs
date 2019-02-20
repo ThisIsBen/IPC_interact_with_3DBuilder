@@ -264,7 +264,7 @@ public partial class IPC : CsSessionManager
 
 
             StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine("3 " + absoluteKneeXMLFolder + QuestionFileName + " " + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+            wr.WriteLine("3 " + absoluteKneeXMLFolder + QuestionFileName + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
 
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 

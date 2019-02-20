@@ -19,9 +19,9 @@ public partial class Items : CsSessionManager
 
     //Ben temp hard-code variables:
     //string questionXMLPath = "SceneFile_Q1";
-    //string questionXMLPath = "tea1_Q_20181225162522";//AITypeQuestion in Anatomy mode xml file name
-    string questionXMLPath = "tea1_Q_20181225165447";//AITypeQuestion in Surgery mode xml file name
-    //string questionXMLPath = "tea1_Q_20190205145709";
+    string questionXMLPath = "tea1_Q_20181225162522";//AITypeQuestion in Anatomy mode xml file name
+    //string questionXMLPath = "tea1_Q_20181225165447";//AITypeQuestion in Surgery mode xml file name with 3 question organs
+    //string questionXMLPath = "tea1_Q_20190205145709";//AITypeQuestion in Surgery mode xml file name with 4 question organs
 
     //string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
     string studentUserID="stu2";
