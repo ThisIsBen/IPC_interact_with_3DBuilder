@@ -35,11 +35,13 @@ public partial class _Default : System.Web.UI.Page
         bool processStarted = process.Start();
         */
 
+        Response.Redirect("ALHomePage.aspx");
+
     }
 
     protected void ALButton_Click(object sender, EventArgs e)
     {
-        ///*Ben test
+        /*Ben test
         if (!string.IsNullOrEmpty(hintID.Value))
         {
 
@@ -65,7 +67,7 @@ public partial class _Default : System.Web.UI.Page
             Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('請輸入帳號於欄位內');</script>");
 
         }
-        // * */
+         * */
 
         /*Ben test get the existing running CSNamedPipe
             // Get all instances of Notepad running on the local computer.
@@ -84,5 +86,10 @@ public partial class _Default : System.Web.UI.Page
             Response.Redirect("ALHomePage.aspx");
          */
 
+
+       
     }
+
+
+  
 }

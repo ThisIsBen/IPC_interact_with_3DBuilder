@@ -23,22 +23,18 @@ public partial class Items : CsSessionManager
     //string questionXMLPath = "tea1_Q_20181225165447";//AITypeQuestion in Surgery mode xml file name with 3 question organs
     //string questionXMLPath = "tea1_Q_20190205145709";//AITypeQuestion in Surgery mode xml file name with 4 question organs
 
+
+    //set the default value of each parameters that are retrieved from URL.
     string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
     string studentUserID="stu2";
-    //end Ben temp hard-code variables
+    string  examMode = "Yes";//examMode的中控, we set its default value to Yes
 
-
-
-    //These 2 variables will set by URL parameter or data retrieve from DB in the near future.
-    ///////////////////////////////////////////////////////////////////////////////
-    bool ExamMode = true;//ExamMode的中控, we set its default value to true
-
+    
+    
     //the seed of randomizing the organ numbers that are picked as questions, which are stored in pickedQuestions array.
     string randomizeSeed = "";
     //int[] pickedQuestions = { 1, 3, 5 }; //The Question Number of organs  picked by instructor will be retrieved from DB in the near future. 
 
-
-    //////////////////////////////////////////////////////////////////////////
 
 
     protected void Page_Load(object sender, EventArgs e)
@@ -64,10 +60,10 @@ public partial class Items : CsSessionManager
         }
 
 
-        //set the variable ExamMode with the parameter ExamMode in URL if it is provided.
-        if (Request.QueryString["ExamMode"] != null && Request.QueryString["ExamMode"] != "")
+        //set the variable examMode with the parameter examMode in URL if it is provided.
+        if (Request.QueryString["examMode"] != null && Request.QueryString["examMode"] != "")
         {
-            ExamMode = Convert.ToBoolean(Request.QueryString["ExamMode"]);
+            examMode = Request.QueryString["examMode"];
         }
 
         //set randomize seed as the ascii code of the first char + the ascii code of the last char of the studentUserID
@@ -126,7 +122,7 @@ public partial class Items : CsSessionManager
 
 
         //if it's in exam mode.
-        if (ExamMode)
+        if (examMode=="Yes")
         {
             //randomize the  Question Numbers picked by instructor using student's ID as seed.
             int[] randomQuestionNo = RandomQuestionNo.rand(randomizeSeed, pickedQuestions);

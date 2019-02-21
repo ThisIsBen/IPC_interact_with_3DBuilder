@@ -93,7 +93,8 @@ public partial class IPC : CsSessionManager
            
             //2019/1/28 Ben comment it because we can't bring 3DBuilder to run in foreground
             
-            //randomize the Question Organ Number
+             //originating from Item.aspx btnKnee_Click()
+            //randomize the Question Organ Number 
             randomizeQuestionOrganNo();
             
              */
@@ -103,12 +104,22 @@ public partial class IPC : CsSessionManager
 
         }
 
+        //set the remaining time to the timer and check whether time is already up.
+        setUp_and_CheckCountdownTimer();
+
+       
 
 
+
+    }
+
+    //set the remaining time to the timer and check whether time is already up.
+    private void setUp_and_CheckCountdownTimer()
+    {
         /*This block should be implemented in the Hints set timer for the exam page
-         * */
+        * */
         //get the exam timespan from the UI , and convert it to Second format.
-        int hardCodeExamTimespanSec = 120000; //now I just hard code it to 15 sec
+        int hardCodeExamTimespanSec = 12000; //now I just hard code it to 15 sec
         Double examTimespan = hardCodeExamTimespanSec * 1.0;
         DateTime deadlineDateTime = DateTime.Now.AddSeconds(examTimespan); // return Datetime format
         /*psedo code:
@@ -123,10 +134,7 @@ public partial class IPC : CsSessionManager
          * retrieve deadlineDateTime from DB,which is stored in the datetime format
          * */
         //check count down timer to decide whether time is already up.
-        CheckCountDownTimer(deadlineDateTime);
-
-
-
+        CheckCountdownTimer(deadlineDateTime);
 
     }
 
@@ -326,7 +334,7 @@ public partial class IPC : CsSessionManager
 
     }
 
-    private void CheckCountDownTimer(DateTime deadlineDateTime)
+    private void CheckCountdownTimer(DateTime deadlineDateTime)
     {
 
         int serverSideRemainingTimeSec = Convert.ToInt32((deadlineDateTime - DateTime.Now).TotalSeconds);
