@@ -379,7 +379,7 @@ public partial class IPC: System.Web.UI.Page
         //Ben temp comment  for demo and experiment
         
         //store the AITypeQuestion to DB
-        store2DB(CA, QBP, CAO); 
+        //store2DB(CA, QBP, CAO); 
         
         //Ben temp comment for demo and experiment
 

@@ -26,6 +26,9 @@ public partial class ALHomePage : System.Web.UI.Page
         //os.StartInfo.RedirectStandardInput = true;
         //os.StartInfo.UseShellExecute = false;
 
+        //check if the ASP Application Variable works
+        Response.Write("The num of users online=" + Application["visitors"].ToString()); 
+
         if (!IsPostBack)
         {
             //temporarily we only activate CSNamedPipe.exe, and manually activate 3DBuilder before clicking the button btnCheck
