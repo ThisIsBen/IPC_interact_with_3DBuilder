@@ -14,11 +14,15 @@ using System.Web;
         */
 
         //connect to NewVersionHintsDB
-        private static string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["NewVersionHintsDBConnectionString"].ToString();
-        private static SqlConnection batchConn = new SqlConnection(connectionString);
+        private static string connectionHintsDBString = System.Configuration.ConfigurationManager.ConnectionStrings["NewVersionHintsDBConnectionString"].ToString();
+        
+        //connect to MLASDB
+        private static string connectionMLASDBString = System.Configuration.ConfigurationManager.ConnectionStrings["MLASDBConnectionString"].ToString();
+
+        private static SqlConnection batchConn = new SqlConnection(connectionHintsDBString);
         private static Dictionary<string, SqlTransaction> batchTransation = new Dictionary<string, SqlTransaction>();
 
-        public static int ExecuteNonQuery(SqlCommand cmd)
+        public static int ExecuteNonQuery(SqlCommand cmd, string targetDB)
         {
             
             try
@@ -31,8 +35,15 @@ using System.Web;
                 conn.Close();
                 conn.Dispose();
                  * */
+                //we set the default target DB as NewVersionHintsDB
+                cmd.Connection = new SqlConnection(connectionHintsDBString);
 
-                cmd.Connection = new SqlConnection(connectionString);
+                //if the target DB is MLASDB, we connect to MLASDB
+                if (targetDB == "MLASDB")
+                {
+                    cmd.Connection = new SqlConnection(connectionMLASDBString);
+                }
+
                 cmd.Connection.Open();
                 int connInt = cmd.ExecuteNonQuery();
                 cmd.Connection.Close();
@@ -73,9 +84,19 @@ using System.Web;
         /// </summary>
         /// <param name="strSQL"></param>
         /// <returns></returns>
-        public static DataSet GetDataSet(string strSQL)
+        public static DataSet GetDataSet(string strSQL,string targetDB)
         {
-            System.Data.SqlClient.SqlDataAdapter sda = new SqlDataAdapter(strSQL, connectionString);
+            //we set the default target DB as NewVersionHintsDB
+            System.Data.SqlClient.SqlDataAdapter sda = new SqlDataAdapter(strSQL, connectionHintsDBString);
+
+
+            //if the target DB is MLASDB, we connect to MLASDB
+            if(targetDB=="MLASDB")
+            {
+               sda = new SqlDataAdapter(strSQL, connectionMLASDBString);
+            }
+           
+            
             DataSet dsResult = new DataSet();
             try
             {

@@ -12,9 +12,9 @@ using System.Text.RegularExpressions;
     {
        
         #region Common
-        private static DataTable GetDataTable(string sql)
+        private static DataTable GetDataTable(string sql, string targetDB)
         {
-            return CsDBConnection.GetDataSet(sql).Tables[0];
+            return CsDBConnection.GetDataSet(sql, targetDB).Tables[0];
         }
 
         /// <summary>
@@ -23,44 +23,44 @@ using System.Text.RegularExpressions;
         /// </summary>
         /// <param name="sql"></param>
         /// <returns></returns>
-        private static int InsertData(string sql)
+        private static int InsertData(string sql,string targetDB)
         {
             SqlCommand cmd = new SqlCommand(sql);
-            return CsDBConnection.ExecuteNonQuery(cmd);
+            return CsDBConnection.ExecuteNonQuery(cmd, targetDB);
             
             //return CsDBConnection.ExecuteNonQuery(sql);
         }
 
-        private static int InsertUserEnteredData(string sql, object[] sqlParameterList)
+        private static int InsertUserEnteredData(string sql, object[] sqlParameterList, string targetDB)
         {
 
             SqlCommand cmd = new SqlCommand(sql);
             fillSqlParameters(cmd, sqlParameterList);
-            return CsDBConnection.ExecuteNonQuery(cmd);
+            return CsDBConnection.ExecuteNonQuery(cmd, targetDB);
         }
 
 
-        private static int UpdateData(string sql)
+        private static int UpdateData(string sql, string targetDB)
         {
 
             SqlCommand cmd = new SqlCommand(sql);
-            return CsDBConnection.ExecuteNonQuery(cmd);
+            return CsDBConnection.ExecuteNonQuery(cmd, targetDB);
             
             //return CsDBConnection.ExecuteNonQuery(sql);
         }
 
-        private static int UpdateUserEnteredData(string sql, object[] sqlParameterList)
+        private static int UpdateUserEnteredData(string sql, object[] sqlParameterList, string targetDB)
         {
 
             SqlCommand cmd = new SqlCommand(sql);
             fillSqlParameters(cmd, sqlParameterList);
-            return CsDBConnection.ExecuteNonQuery(cmd);
+            return CsDBConnection.ExecuteNonQuery(cmd, targetDB);
         }
 
-        private static int DeleteData(string sql)
+        private static int DeleteData(string sql, string targetDB)
         {
             SqlCommand cmd = new SqlCommand(sql);
-            return CsDBConnection.ExecuteNonQuery(cmd);
+            return CsDBConnection.ExecuteNonQuery(cmd, targetDB);
 
 
             //return CsDBConnection.ExecuteNonQuery(sql);
@@ -91,19 +91,27 @@ using System.Text.RegularExpressions;
 
 
         string sql = string.Format("Select * From AITypeQuestionStudentAnswer ");
-        return GetDataTable(sql);
+        return GetDataTable(sql,"NewVersionHintsDB");
     }
     //set
     public static int InsertStuIPCAns(string cUserID, string cQID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session)
     {
         if (Num_Of_Question_Submision_Session==1)
         {
+
+            
+           
+
+
             //string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cActivityID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cActivityID, _StudentAnswer, _QuesOrdering);
 
             string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}' )", cUserID, cQID, _QuesOrdering);
             
             object[] sqlParametersList = { _StudentAnswer }; 
-            return InsertUserEnteredData(sql,sqlParametersList);
+            return InsertUserEnteredData(sql,sqlParametersList,"NewVersionHintsDB");
+
+            
+           
         }
 
         else {
@@ -112,7 +120,7 @@ using System.Text.RegularExpressions;
 
             string sql = string.Format("UPDATE AITypeQuestionStudentAnswer  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( @StudentAnswer as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{0}' as nvarchar(max)) where cUserID =  '{1}' and cQID =  '{2}'", _QuesOrdering, cUserID, cQID);
             object[] sqlParametersList = { _StudentAnswer };
-            return UpdateUserEnteredData(sql, sqlParametersList);
+            return UpdateUserEnteredData(sql, sqlParametersList, "NewVersionHintsDB");
         }
     }
 
@@ -163,13 +171,18 @@ using System.Text.RegularExpressions;
 
     #endregion
 
+
+
+
+
+
     #region Access IPCExamHWCorrectAnswer DB Data
     public static DataTable GetIPCExamHWCorrectAns()
     {
         //string sql = string.Format("Select * From IPCExamHWCorrectAnswer ");
 
         string sql = string.Format("Select * From AITypeQuestionCorrectAnswer ");
-        return GetDataTable(sql);
+        return GetDataTable(sql,"NewVersionHintsDB");
     }
 
 
@@ -186,7 +199,7 @@ using System.Text.RegularExpressions;
         DataRowCollection DRC = GetDataTable(string.Format("Select * from IPCExamHWCorrectAnswer where cActivityID = {0:d}", _cActivityID)).Rows;
         */
 
-        DataRowCollection DRC = GetDataTable(string.Format("Select * from AITypeQuestionCorrectAnswer where cQID = '{0}'", cQID)).Rows;
+        DataRowCollection DRC = GetDataTable(string.Format("Select * from AITypeQuestionCorrectAnswer where cQID = '{0}'", cQID), "NewVersionHintsDB").Rows;
         
 
         if (DRC.Count == 0)
@@ -197,7 +210,7 @@ using System.Text.RegularExpressions;
              */
             string sql = string.Format("Insert into AITypeQuestionCorrectAnswer (cQID,correctAnswer ,QuestionBodyPart,correctAnswerOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", cQID, _correctAnswer, _QuestionBodyPart, _QuesOrdering);
             
-           return InsertData(sql);
+           return InsertData(sql,"NewVersionHintsDB");
 
         }
         //update
@@ -221,7 +234,7 @@ using System.Text.RegularExpressions;
                 */
                 sql = string.Format("UPDATE AITypeQuestionCorrectAnswer SET correctAnswer = REPLACE(correctAnswer,'{0}','{1}')  where cQID =  '{2}' ",
                     DRC[0][1].ToString().Split(':')[index], _correctAnswer, cQID);
-                UpdateData(sql);
+                UpdateData(sql,"NewVersionHintsDB");
 
                 /*
                 sql = string.Format("UPDATE[SCOREDB].[dbo].[IPCExamHWCorrectAnswer] SET correctAnswerOrdering = REPLACE(correctAnswerOrdering,'{0}','{1}') where cActivityID =  '{2}' ",
@@ -230,7 +243,7 @@ using System.Text.RegularExpressions;
                  */
                 sql = string.Format("UPDATE AITypeQuestionCorrectAnswer SET correctAnswerOrdering = REPLACE(correctAnswerOrdering,'{0}','{1}') where cQID =  '{2}' ",
                     DRC[0][3].ToString().Split(':')[index], _QuesOrdering, cQID);
-                return UpdateData(sql); 
+                return UpdateData(sql, "NewVersionHintsDB"); 
 
             }
                 
@@ -242,7 +255,7 @@ using System.Text.RegularExpressions;
                 sql = string.Format("UPDATE AITypeQuestionCorrectAnswer  set correctAnswer =  cast(correctAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuestionBodyPart = cast(QuestionBodyPart as nvarchar(max)) + cast( ',{1}' as nvarchar(max)) ,correctAnswerOrdering = cast(correctAnswerOrdering as nvarchar(max)) + cast( '{2}' as nvarchar(max)) where cQID =  '{3}'"
                 , _correctAnswer, _QuestionBodyPart, _QuesOrdering, cQID);
 
-                return UpdateData(sql);
+                return UpdateData(sql, "NewVersionHintsDB");
             }
             
         }
@@ -252,7 +265,29 @@ using System.Text.RegularExpressions;
 
 
 
-        #region set up AI type question in Hints DB
+    #region get data needed on student answer sheet for AITypeQuestion
+    //get the question description of an existing  AITypeQuestion when the instructor wants to edit it.
+    public static int getExamRemainingTime(string cActivityID)
+    {
+        //You can modify the following to get the remaining exam time
+        /*
+        string strSQL = "SELECT * FROM QuestionIndex WHERE cQID = '" + strQID + "' ";
+        DataRowCollection DRC = GetDataTable(string.Format(strSQL), "MLASDB").Rows;
+
+        //return empty string if there is no AITypeQuestion_QuestionDescription
+        if (DRC.Count == 0)
+            return "";
+        
+        //return the value of 'cQuestion' field of the retrieved record
+        return int.Parse(DRC[0]["cQuestion"]);
+        */
+        return 20;
+    }
+
+
+    #endregion
+
+    #region set up AI type question in Hints DB
 
     //使用SQLParameter to make the value of the variable to be a parameter to prevent SQL Injection Attack.
     //Parameter 可以 (1)檢查參數的型別 (2)檢查資料長度 (3)確保參數為非可執行的SQL命令 
@@ -278,7 +313,7 @@ using System.Text.RegularExpressions;
     {
        
         string strSQL = "SELECT * FROM QuestionIndex WHERE cQID = '" + strQID + "' ";
-        DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;
+        DataRowCollection DRC = GetDataTable(string.Format(strSQL),"NewVersionHintsDB").Rows;
 
         //return empty string if there is no AITypeQuestion_QuestionDescription
         if (DRC.Count == 0)
@@ -304,7 +339,7 @@ using System.Text.RegularExpressions;
             //make the content entered by users be SQL Parameters when we execute the SQL Command to prevent SQL Injection Attack.
             object[] sqlParametersList = { strQuestion, strAnswer };
 
-            return UpdateUserEnteredData(strSQL, sqlParametersList);
+            return UpdateUserEnteredData(strSQL, sqlParametersList, "NewVersionHintsDB");
         
 
 
@@ -321,7 +356,7 @@ using System.Text.RegularExpressions;
     {
         string strSQL = "";
         strSQL = "SELECT * FROM QuestionIndex WHERE cQID = '" + strQID + "' ";
-        DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;
+        DataRowCollection DRC = GetDataTable(string.Format(strSQL), "NewVersionHintsDB").Rows;
         
         if (DRC.Count == 0)
         {
@@ -332,7 +367,7 @@ using System.Text.RegularExpressions;
             //make the content entered by users be SQL Parameters when we execute the SQL Command to prevent SQL Injection Attack.
             object[] sqlParametersList = { strQuestion, strAnswer };
 
-            return InsertUserEnteredData(strSQL, sqlParametersList);
+            return InsertUserEnteredData(strSQL, sqlParametersList, "NewVersionHintsDB");
         }
 
         else 
@@ -344,7 +379,7 @@ using System.Text.RegularExpressions;
             //make the content entered by users be SQL Parameters when we execute the SQL Command to prevent SQL Injection Attack.
             object[] sqlParametersList = { strQuestion, strAnswer };
 
-            return UpdateUserEnteredData(strSQL, sqlParametersList); 
+            return UpdateUserEnteredData(strSQL, sqlParametersList, "NewVersionHintsDB"); 
         }
         
         
@@ -383,7 +418,7 @@ using System.Text.RegularExpressions;
 
             strSQL = " SELECT similarID ,cQuestionGroupID,cQuestionGroupName FROM QuestionMode" +
                             " WHERE cQID = '" + templateQuestionQID + "' and cQuestionType= '" + strQuestionType + "' and similarID IS NOT NULL";
-            DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;           
+            DataRowCollection DRC = GetDataTable(string.Format(strSQL), "NewVersionHintsDB").Rows;           
     
             //If the question that is used as a template already has similarID in QuestionMode table.
             if (DRC.Count > 0)
@@ -421,7 +456,7 @@ using System.Text.RegularExpressions;
                 strSQL = " UPDATE QuestionMode SET similarID = '" + similarID + "'  WHERE cQID = '" + templateQuestionQID + "' and cQuestionType='" + strQuestionType + "'";
 
 
-                UpdateData(strSQL); 
+                UpdateData(strSQL, "NewVersionHintsDB"); 
 
 
 
@@ -434,7 +469,7 @@ using System.Text.RegularExpressions;
                               " WHERE cQID = '" + templateQuestionQID + "' and cQuestionType= '" + strQuestionType + "' and similarID IS NOT NULL";
 
 
-                    DataRowCollection DRCsimilarID = GetDataTable(string.Format(strSQL)).Rows;    
+                    DataRowCollection DRCsimilarID = GetDataTable(string.Format(strSQL), "NewVersionHintsDB").Rows;    
 
                     //If the question that is used as a template already has similarID in QuestionMode table.
                     if (DRCsimilarID.Count > 0)
@@ -467,7 +502,7 @@ using System.Text.RegularExpressions;
             strSQL = " SELECT * FROM QuestionMode" +
                             " WHERE cQID = '" + strQID + "' ";
 
-            DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
+            DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL), "NewVersionHintsDB").Rows;
 
 
            
@@ -496,7 +531,7 @@ using System.Text.RegularExpressions;
 
             }
 
-            InsertData(strSQL);
+            InsertData(strSQL, "NewVersionHintsDB");
 
 
         }
@@ -509,7 +544,7 @@ using System.Text.RegularExpressions;
             strSQL = " SELECT * FROM QuestionMode" +
                             " WHERE cQID = '" + strQID + "' ";
 
-            DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
+            DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL), "NewVersionHintsDB").Rows;
 
 
 
@@ -536,7 +571,7 @@ using System.Text.RegularExpressions;
             }
            
             //insert record to table QuestionMode 
-            InsertData(strSQL);
+            InsertData(strSQL, "NewVersionHintsDB");
         }
 
     }
@@ -552,7 +587,7 @@ using System.Text.RegularExpressions;
         int intReturn = 0;
 
         string strSQL = "SELECT MAX(sSeq) AS 'sSeq' FROM Paper_Content WHERE cPaperID = '" + strPaperID + "' ";
-        DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
+        DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL), "NewVersionHintsDB").Rows;
         if (DRCcQID.Count > 0)
         {
             try
@@ -574,14 +609,14 @@ using System.Text.RegularExpressions;
         string strSeq = Convert.ToString(CsDBOp.getPaperContentMaxSeq(strPaperID) + 1);
 
         string strSQL = "SELECT * FROM Paper_Content WHERE cPaperID = '" + strPaperID + "' AND cQID = '" + strQID + "' ";
-        DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL)).Rows;
+        DataRowCollection DRCcQID = GetDataTable(string.Format(strSQL), "NewVersionHintsDB").Rows;
         if (DRCcQID.Count > 0)
         {
             //Update
             strSQL = " UPDATE Paper_Content SET  sStandardScore = '" + strStandardScore + "' , cQuestionType = '" + strQuestionType + "' , cQuestionMode = '" + strQuestionMode + 
                 " WHERE cPaperID = '" + strPaperID + "' AND cQID = '" + strQID + "' ";
 
-            UpdateData(strSQL);
+            UpdateData(strSQL, "NewVersionHintsDB");
 
         }
         else
@@ -590,7 +625,7 @@ using System.Text.RegularExpressions;
             strSQL = " INSERT INTO Paper_Content (cPaperID , cQID , sStandardScore , cQuestionType , cQuestionMode , sSeq) " +
                 " VALUES ('" + strPaperID + "' , '" + strQID + "'  ,'" + strStandardScore + "'  ,'" + strQuestionType + "'  ,'" + strQuestionMode + "'  ,'" + strSeq + "')";
 
-            InsertData(strSQL);
+            InsertData(strSQL, "NewVersionHintsDB");
         }
        
         
@@ -606,7 +641,7 @@ using System.Text.RegularExpressions;
         string strReturn = "";
 
         string strSQL = "SELECT cNodeName FROM QuestionGroupTree WHERE cNodeID = '" + strQuestionGroupID + "' ";
-        DataRowCollection DRC = GetDataTable(string.Format(strSQL)).Rows;
+        DataRowCollection DRC = GetDataTable(string.Format(strSQL), "NewVersionHintsDB").Rows;
 
 
 
