@@ -217,7 +217,12 @@ public partial class IPC: System.Web.UI.Page
         os.StartInfo.FileName = Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe");
         os.StartInfo.UseShellExecute = false;
         os.StartInfo.RedirectStandardInput = true;
+        /*
         os.StartInfo.Arguments = hintID;
+        */
+        //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
+        os.StartInfo.Arguments = Request.QueryString["strUserID"];
+
         os.Start();
         StreamWriter wr = os.StandardInput;
         //os.StandardInput.Close();

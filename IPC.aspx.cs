@@ -517,22 +517,19 @@ public partial class IPC : CsSessionManager
             }
             StudentAnswer._QuesOrdering += ":";
             StudentAnswer._StudentAnswer += ":";
-            //測試將學生答案寫入資料庫用
-            if (Num_Of_Question_Submision_Session > 0)
-            {
-                //reset session variable Num_Of_Question_Submision_Session to 1
-                //because currently we only allow one AITypeQuestion to contains only one body part
-                 Num_Of_Question_Submision_Session = 1;
-             }
-             else
-             {
-            Num_Of_Question_Submision_Session++;
-             }
 
-            //increase the Num_Of_Question_Submision_Session to indicate that we should update, not insert the student answer to the datatable because the student's record has already existed.
-            /* //因要測試將學生答案寫入資料庫，因此暫時註解
+             /*測試將學生答案寫入資料庫用*/
+             //reset session variable Num_Of_Question_Submision_Session to 1
+             //because currently we only allow one AITypeQuestion to contains only one body part
+            /* 因要測試將學生答案寫入資料庫，因此暫時使用此行來reset session var Num_Of_Question_Submision_Session*/
+            Num_Of_Question_Submision_Session =0;
+            /*測試將學生答案寫入資料庫用*/
+
+            //increase the Num_Of_Question_Submision_Session to indicate that we should update, not insert the student answer to the datatable because the student's record has already existed.            
             Num_Of_Question_Submision_Session++;
-            */
+             
+
+             
             //foreach (StuAnsM c in StudentAnswerList) //顯示list裡的資料
             //{
 
