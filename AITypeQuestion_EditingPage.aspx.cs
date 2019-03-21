@@ -384,13 +384,17 @@ public partial class IPC: System.Web.UI.Page
         //Ben temp comment  for demo and experiment
         
         //store the AITypeQuestion to DB
-        //store2DB(CA, QBP, CAO); 
+        store2DB(CA, QBP, CAO); 
         
         //Ben temp comment for demo and experiment
 
         // only when the teacher actually click the "Save the Question" button can the system redirect back to the previous page
         if (e != null)
         {
+            //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
+            killCorrespondingCSNamedPipe();
+           
+
             //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
             redirectBack2HintsPaper_MainPage();
         }
@@ -400,6 +404,20 @@ public partial class IPC: System.Web.UI.Page
 
 
     }
+
+    //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
+    private  void killCorrespondingCSNamedPipe()
+    {
+        //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
+        Process os = (Process)Session["Process"];
+
+        //kill the corresponding running CsNamedPipe.exe process if it exists.
+        if (os != null)
+        {
+            os.Kill();
+        }
+    }
+
 
     private void recordQuestionOrgan_InvisibleOrgan(XMLHandler xmlHandler)
     {

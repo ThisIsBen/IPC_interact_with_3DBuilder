@@ -13,7 +13,10 @@ public partial class ALHomePage : System.Web.UI.Page
     public static Process os = new Process();
 
     //set the default value of each parameters that are retrieved from URL.
-    string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
+
+     
+    //string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name //it's included in exam paper cPaperID=tea120181122231914 and cPaperID=tea120181126201801
+    string questionXMLPath = "tea1_Q_20181225144451";
     string studentUserID = "stu2";
     string examMode = "Yes";//ExamMode的中控, we set its default value to Yes
 
@@ -53,7 +56,7 @@ public partial class ALHomePage : System.Web.UI.Page
         wr.WriteLine("1 2");
         //wr.WriteLine("1 2");
 
-        Response.Redirect("Items.aspx?examMode=" + examMode + "&strQID=" + questionXMLPath + "&cUserID=" + studentUserID);
+        Response.Redirect("Items.aspx?examMode=" + examMode + "&strQID=" + questionXMLPath + "&strUserID=" + studentUserID);
     }
 
     //get the parameters in URL and store there value in global var.
@@ -65,10 +68,10 @@ public partial class ALHomePage : System.Web.UI.Page
             questionXMLPath = Request.QueryString["strQID"];
         }
 
-        //set the variable studentUserID with the parameter cUserID in URL if it is provided.
-        if (Request.QueryString["cUserID"] != null && Request.QueryString["cUserID"] != "")
+        //set the variable studentUserID with the parameter strUserID in URL if it is provided.
+        if (Request.QueryString["strUserID"] != null && Request.QueryString["strUserID"] != "")
         {
-            studentUserID = Request.QueryString["cUserID"];
+            studentUserID = Request.QueryString["strUserID"];
         }
 
 

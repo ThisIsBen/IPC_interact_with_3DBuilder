@@ -36,7 +36,7 @@ public partial class IPC : CsSessionManager
     string _StuCouHWDe_ID = "1381";//We just temporarily hard code it.This ID should be retrieved from a session variable or URL variable.
     string cActivityID = "009";
     */
-    string cUserID = "";
+    string strUserID = "";
     string cQID = "";
 
     protected void Page_Load(object sender, EventArgs e)
@@ -423,17 +423,33 @@ public partial class IPC : CsSessionManager
 
     }
     /*
-    public void InsertStuIPCAns2DB(string cUserID, string cQID, string _QuesOrdering, string _StudentAnswer, int Num_Of_Question_Submision_Session)
+    public void InsertStuIPCAns2DB(string strUserID, string cQID, string _QuesOrdering, string _StudentAnswer, int Num_Of_Question_Submision_Session)
     {
-        CsDBOp.InsertStuIPCAns(cUserID, cQID, _QuesOrdering, _StudentAnswer, Num_Of_Question_Submision_Session);
+        CsDBOp.InsertStuIPCAns(strUserID, cQID, _QuesOrdering, _StudentAnswer, Num_Of_Question_Submision_Session);
     }
     */
 
     public void FinishBtn_Click(object sender, EventArgs e)
     {
-
+        //do what should be done when the user clicks submit button
         FinishBtn_ClickEventHandler();
 
+        //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
+        killCorrespondingCSNamedPipe();
+           
+
+    }
+
+    private void killCorrespondingCSNamedPipe()
+    {
+        //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
+        Process os = (Process)Session["Process"];
+
+        //kill the corresponding running CsNamedPipe.exe process if it exists.
+        if (os != null)
+        {
+            os.Kill();
+        }
     }
 
     private void FinishBtn_ClickEventHandler()
@@ -446,8 +462,8 @@ public partial class IPC : CsSessionManager
         os.Kill();
         */
 
-        //get the cUserID and strQID from the URL parameters
-        cUserID = Request["cUserID"];
+        //get the strUserID and strQID from the URL parameters
+        strUserID = Request["strUserID"];
         cQID = Request["strQID"];
 
 
@@ -536,9 +552,9 @@ public partial class IPC : CsSessionManager
             //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
             //}
 
-            CsDBOp.InsertStuIPCAns(cUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+            CsDBOp.InsertStuIPCAns(strUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
 
-            //InsertStuIPCAns2DB(cUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+            //InsertStuIPCAns2DB(strUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
             ///////////////////////////////////////
             //DataTable dt = CsDBOp.GetStuIPCAns();
             //StuAnsM Stu_correct_papers = new StuAnsM();

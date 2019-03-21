@@ -53,10 +53,10 @@ public partial class Items : CsSessionManager
             questionXMLPath = Request.QueryString["strQID"];
         }
 
-        //set the variable studentUserID with the parameter cUserID in URL if it is provided.
-        if (Request.QueryString["cUserID"] != null && Request.QueryString["cUserID"] != "")
+        //set the variable studentUserID with the parameter strUserID in URL if it is provided.
+        if (Request.QueryString["strUserID"] != null && Request.QueryString["strUserID"] != "")
         {
-            studentUserID = Request.QueryString["cUserID"];
+            studentUserID = Request.QueryString["strUserID"];
         }
 
 
@@ -157,7 +157,7 @@ public partial class Items : CsSessionManager
             //Response.Redirect("IPC.aspx");
 
             ////head to IPC.aspx in exam mode
-            Response.Redirect("IPC.aspx?examMode=Yes&strQID=" + questionXMLPath + "&cUserID="+studentUserID);
+            Response.Redirect("IPC.aspx?examMode=Yes&strQID=" + questionXMLPath + "&strUserID=" + studentUserID);
              
 
         }
@@ -175,7 +175,7 @@ public partial class Items : CsSessionManager
             //Response.Redirect("IPC.aspx");
 
             ////head to IPC.aspx in exam mode
-            Response.Redirect("IPC.aspx&strQID=" + questionXMLPath + "&cUserID="+studentUserID);
+            Response.Redirect("IPC.aspx&strQID=" + questionXMLPath + "&strUserID=" + studentUserID);
         }
 
 
