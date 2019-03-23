@@ -50,6 +50,9 @@ public partial class IPC : CsSessionManager
         Page.MaintainScrollPositionOnPostBack = true;
         if (!IsPostBack)
         {
+            
+
+
             gvScore.AllowPaging = false;
             gvScore.AllowSorting = true;
             gvScore.AutoGenerateColumns = false;
@@ -99,7 +102,13 @@ public partial class IPC : CsSessionManager
             
              */
 
+            //wait for the 3DBuilder to respond before show 3D Labels in 3DBuilder
+            //Because it takes longer for the 3DBuilder to load all the organs when 
+            //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
+            System.Threading.Thread.Sleep(10);
 
+            //Show 3D Labels in 3DBuilder
+            ShowOrHide3DLabels_Click();
 
 
         }
@@ -630,7 +639,14 @@ public partial class IPC : CsSessionManager
             {
                 foreach (GridViewRow row in gvScore.Rows)
                 {
-                    (row.FindControl(HFID) as HiddenField).Value = "true";//switch to visible
+                    //When the student clicks the “ShowAll” button, 
+                    //the organs hidden by the teacher should not be shown.
+                    if ((row.FindControl(HFID) as HiddenField).Value != "false_HideByTeacher")
+                    {
+                        //only show the organs that are hidden by the student.
+                        (row.FindControl(HFID) as HiddenField).Value = "true";//switch to visible
+
+                    }
                 }
                 HideOrShow = "showAll";
             }
@@ -679,6 +695,51 @@ public partial class IPC : CsSessionManager
 
 
     }
+
+
+    //protected void ShowOrHideAll_Click(object sender, EventArgs e)
+    protected void ShowOrHide3DLabels_Click()
+    {
+
+
+
+        //switch visibility icon All rows .
+        //String hideOrShow3DLabels = switchVisible_Invisible(null, "InOrVisible", gvScore);
+        string contact = "8 " + "Show_3D_Labels"; //send "6 Hide realOrganName" to 3DBuilder  
+
+        //Hide_3D_Labels
+
+        /*
+         string a = "abcdd";
+        
+         //use JS alert() in C#
+         ScriptManager.RegisterStartupScript(
+          this,
+          typeof(Page),
+          "Alert",
+          "<script>alert('" + a + "');</script>",
+          false);
+         /////
+        */
+
+        //send hide 3D organ msg to 3DBuilder
+        //string contact = "7 " + HideOrShow;//send "7 Hide realOrganName" to 3DBuilder
+        //string contact = "6 " + HideOrShow ;
+
+
+
+        //string contact = "6 hide Left Popliteal Vein";
+
+        sendMsg23DBuilder(contact);
+
+        // Thread.Sleep(1000); //Delay 1秒
+
+
+
+
+    }
+
+
     //submit current edition to 3DBuilder
     protected void gvScore_RowCommand(Object sender, GridViewCommandEventArgs e)
     {

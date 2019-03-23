@@ -30,10 +30,18 @@ public partial class ALHomePage : System.Web.UI.Page
         //os.StartInfo.UseShellExecute = false;
 
         //check if the ASP Application Variable works
-        Response.Write("The num of users online=" + Application["visitors"].ToString()); 
+        Response.Write("The num of users online=" + Application["visitors"].ToString());
+
+
+        //get the parameters in URL and store there value in global var.
+        retrieveURLParameters();
+
+
 
         if (!IsPostBack)
         {
+           
+
             //temporarily we only activate CSNamedPipe.exe, and manually activate 3DBuilder before clicking the button btnCheck
             //run CSNamedPipe.exe
             runCSNamedPipe();
@@ -44,19 +52,23 @@ public partial class ALHomePage : System.Web.UI.Page
     {
 
 
-        //get the parameters in URL and store there value in global var.
-        retrieveURLParameters();
+       
 
+        //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
+        setModeIn3DBuilderForInit();
 
+        Response.Redirect("Items.aspx?examMode=" + examMode + "&strQID=" + questionXMLPath + "&strUserID=" + studentUserID);
+    }
 
+    //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
+    private void setModeIn3DBuilderForInit()
+    {
+        //originating from ALHomePage.aspx
         StreamWriter wr = (StreamWriter)Session["Writer"];
         //Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('" + os.StartInfo.RedirectStandardInput + os.Id + "');</script>"); 
         //StreamWriter wr = os.StandardInput;
-      
-        wr.WriteLine("1 2");
-        //wr.WriteLine("1 2");
 
-        Response.Redirect("Items.aspx?examMode=" + examMode + "&strQID=" + questionXMLPath + "&strUserID=" + studentUserID);
+        wr.WriteLine("1 2");
     }
 
     //get the parameters in URL and store there value in global var.

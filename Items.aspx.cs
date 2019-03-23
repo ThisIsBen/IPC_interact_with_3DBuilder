@@ -144,13 +144,12 @@ public partial class Items : CsSessionManager
              //"Alert",
              //"<script>alert('" + "3 " + XMLFolder + questionXMLPath+ ".xml" +" "+ strRandomQuestionNo + "');</script>",
              //false);
+
+            //make 3DBuilder load the target Organ XML file and display it
+            //and send the random question number to the organs displayed in 3DBuilder 
+            loadOrganXMLIn3DBuilder(strRandomQuestionNo);
+            
            
-
-
-            
-            StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine( "3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml"+"_"+ strRandomQuestionNo);//send protocol,Data to 3DBuilder.
-            
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 
             //head to IPC.aspx
@@ -180,5 +179,15 @@ public partial class Items : CsSessionManager
 
 
        
+    }
+
+
+    //make 3DBuilder load the target Organ XML file and display it
+    //and send the random question number to the organs displayed in 3DBuilder 
+    private void loadOrganXMLIn3DBuilder(string strRandomQuestionNo)
+    {
+        StreamWriter wr = (StreamWriter)Session["Writer"];
+        wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+             
     }
 }

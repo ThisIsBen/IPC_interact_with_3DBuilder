@@ -99,7 +99,7 @@
        
 
 
-        window.onload = onloadFun;
+        //window.onload = onloadFun;
 
         function onloadFun() {
 
@@ -636,24 +636,44 @@
                 dataType: "xml",
                 success: function (xml) {
 
+                    //resume mark icon in gridView
+                    var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+
                     //access each <Organ>
                     $(xml).find('Organ').each(function () {
                         //access each <Question> in the <Organ>
-                        $title = $(this).find("Question");
+                        $isQuestion = $(this).find("Question");
 
                         //access the value of each <Question> in the <Organ>
-                        var val = $title.text();
+                        var isQuestionVal = $isQuestion.text();
 
-                        if (val == "Yes") {
-                            $no = $(this).find("Number");
+                        if (isQuestionVal == "Yes") {
+                            $questionNo = $(this).find("Number");
 
                             //push to questionArray
-                            questionArray.push($no.text());
+                            questionArray.push($questionNo.text());
                             //alert($no.text());
 
                         }
 
 
+                        //gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value == "true"
+                        //access each <Visible> in the <Organ>                       
+                        $isVisible = $(this).find("Visible");
+
+                        //access the value of each <Question> in the <Organ>
+                        var isVisibleVal = $isVisible.text();
+
+                        if (isVisibleVal == "0") {
+
+                            
+
+                            var i = $(this).find("Number").text();
+                            gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value = "false_HideByTeacher";
+                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisibleImg;
+                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].disabled = true;
+                            //gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].c
+                        }
 
 
                     });
@@ -770,9 +790,13 @@
                         examMode = false;
                         showTBOfQuestionOrgans(examMode);
                     }
+
+
+
+                    onloadFun();
                 }
 
-
+               
 
              });
 
@@ -798,7 +822,7 @@
             
 
             
-
+            //window.onload = onloadFun;
             
 
 

@@ -160,12 +160,11 @@ public partial class IPC: System.Web.UI.Page
     public void btn_connectTo3DBuilder_Onclick(object sender, EventArgs e)
     {
 
-        //originating from ALHomePage.aspx
-        StreamWriter wr = (StreamWriter)Session["Writer"];
-        //Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('" + os.StartInfo.RedirectStandardInput + os.Id + "');</script>"); 
-        //StreamWriter wr = os.StandardInput;
 
-        wr.WriteLine("1 2");
+
+        //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
+        setModeIn3DBuilderForInit();
+
 
         //wait for the 3DBuilder to respond
         System.Threading.Thread.Sleep(10);
@@ -180,9 +179,30 @@ public partial class IPC: System.Web.UI.Page
 
         //get the AITypeQuestionMode and send it to 3DBuilder along with the xml file path for display 
         string selectedAITypeQuestionMode = Request.Form["radioBtn_AITypeQuestionMode"].ToString();
-        wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath + "_" + selectedAITypeQuestionMode);//send protocol,Data to 3DBuilder.
+
+        //make 3DBuilder load the target Organ XML file and display it
+        loadOrganXMLIn3DBuilder(absoluteKneeXMLFolder, selectedAITypeQuestionMode);
+        
     }
 
+    //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
+    private void setModeIn3DBuilderForInit()
+    {
+        //originating from ALHomePage.aspx
+        StreamWriter wr = (StreamWriter)Session["Writer"];
+        //Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('" + os.StartInfo.RedirectStandardInput + os.Id + "');</script>"); 
+        //StreamWriter wr = os.StandardInput;
+
+        wr.WriteLine("1 2");
+    }
+
+    //make 3DBuilder load the target Organ XML file and display it
+    private void loadOrganXMLIn3DBuilder(string absoluteKneeXMLFolder, string selectedAITypeQuestionMode)
+    {
+        StreamWriter wr = (StreamWriter)Session["Writer"];
+        wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath + "_" + selectedAITypeQuestionMode);//send protocol,Data to 3DBuilder.
+
+    }
 
     private void activate3DBuilder()
     {
