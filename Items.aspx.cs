@@ -147,7 +147,7 @@ public partial class Items : CsSessionManager
 
             //make 3DBuilder load the target Organ XML file and display it
             //and send the random question number to the organs displayed in 3DBuilder 
-            loadOrganXMLIn3DBuilder(strRandomQuestionNo);
+            loadOrganXMLIn3DBuilderForExamMode(strRandomQuestionNo);
             
            
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
@@ -165,8 +165,9 @@ public partial class Items : CsSessionManager
         {
 
 
-            StreamWriter wr = (StreamWriter)Session["Writer"];
-            wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
+            //make 3DBuilder load the target Organ XML file and display it
+            //because it's not of Exam Mode, so we don't need to send the randomized organ question number to 3DBuilder.
+            loadOrganXMLIn3DBuilderFor_Non_ExamMode();
 
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 
@@ -183,11 +184,67 @@ public partial class Items : CsSessionManager
 
 
     //make 3DBuilder load the target Organ XML file and display it
-    //and send the random question number to the organs displayed in 3DBuilder 
-    private void loadOrganXMLIn3DBuilder(string strRandomQuestionNo)
+    //and send the randomized organ question number to the organs displayed in 3DBuilder 
+    private void loadOrganXMLIn3DBuilderForExamMode(string strRandomQuestionNo)
     {
-        StreamWriter wr = (StreamWriter)Session["Writer"];
-        wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
-             
+
+        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+         
     }
+
+
+    //make 3DBuilder load the target Organ XML file and display it
+    //because it's not of Exam Mode, so we don't need to send the randomized organ question number to 3DBuilder.
+    private void loadOrganXMLIn3DBuilderFor_Non_ExamMode()
+    {
+        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
+
+        
+    }
+
+    //send message through CSNamedPipe.exe to the corresponding 3DBuilder.
+    public void sendMsg23DBuilder(string contact)
+    {
+        /*
+
+        //send cmd1
+        try
+        {
+            using (StreamWriter wr = (StreamWriter)Session["Writer"])
+            {
+                //send cmd2
+                wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+            }// the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+           
+            //wr.Flush();
+        }
+        catch(Exception e)
+        {
+
+        }
+      */
+
+
+        //send cmd1
+        try
+        {
+
+            StreamWriter wr = (StreamWriter)Session["Writer"];
+            //StreamWriter wr = new StreamWriter((StreamWriter)Session["Writer"]);
+            //StreamWriter wr = new StreamWriter((Stream )Session["Writer"], Encoding.UTF8, 4096, true);
+            //send cmd2
+            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+
+            // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+
+            //wr.Flush();
+        }
+        catch (Exception e)
+        {
+
+        }
+
+    }
+
+
 }

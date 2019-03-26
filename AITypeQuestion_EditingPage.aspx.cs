@@ -93,9 +93,58 @@ public partial class IPC: System.Web.UI.Page
 
             }
             //add an invisible row which contains a btn to activate ShowAll 
-            
+
+
+
+
+           
         }
     }
+
+
+    //protected void ShowOrHideAll_Click(object sender, EventArgs e)
+    protected void ShowOrHide3DLabels_Click()
+    {
+
+
+
+        //switch visibility icon All rows .
+        //String hideOrShow3DLabels = switchVisible_Invisible(null, "InOrVisible", gvScore);
+        string contact = "8 " + "Show_3D_Labels"; //send "6 Hide realOrganName" to 3DBuilder  
+
+        //Hide_3D_Labels
+
+        /*
+         string a = "abcdd";
+        
+         //use JS alert() in C#
+         ScriptManager.RegisterStartupScript(
+          this,
+          typeof(Page),
+          "Alert",
+          "<script>alert('" + a + "');</script>",
+          false);
+         /////
+        */
+
+        //send hide 3D organ msg to 3DBuilder
+        //string contact = "7 " + HideOrShow;//send "7 Hide realOrganName" to 3DBuilder
+        //string contact = "6 " + HideOrShow ;
+
+
+
+        //string contact = "6 hide Left Popliteal Vein";
+
+        sendMsg23DBuilder(contact);
+
+        // Thread.Sleep(1000); //Delay 1秒
+
+
+
+
+    }
+
+
 
     //decide which body part organ xml file should be loaded according to which body part is being used in this question
     private void decide_QuestionBodyPartOrganXML()
@@ -182,6 +231,18 @@ public partial class IPC: System.Web.UI.Page
 
         //make 3DBuilder load the target Organ XML file and display it
         loadOrganXMLIn3DBuilder(absoluteKneeXMLFolder, selectedAITypeQuestionMode);
+
+
+
+
+        //wait for the 3DBuilder to respond before show 3D Labels in 3DBuilder
+        //Because it takes longer for the 3DBuilder to load all the organs when 
+        //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
+        System.Threading.Thread.Sleep(100);
+
+        //Show 3D Labels in 3DBuilder
+        ShowOrHide3DLabels_Click();
+
         
     }
 
@@ -189,20 +250,61 @@ public partial class IPC: System.Web.UI.Page
     private void setModeIn3DBuilderForInit()
     {
         //originating from ALHomePage.aspx
-        StreamWriter wr = (StreamWriter)Session["Writer"];
-        //Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('" + os.StartInfo.RedirectStandardInput + os.Id + "');</script>"); 
-        //StreamWriter wr = os.StandardInput;
+        sendMsg23DBuilder("1 2");
 
-        wr.WriteLine("1 2");
     }
 
     //make 3DBuilder load the target Organ XML file and display it
     private void loadOrganXMLIn3DBuilder(string absoluteKneeXMLFolder, string selectedAITypeQuestionMode)
     {
-        StreamWriter wr = (StreamWriter)Session["Writer"];
-        wr.WriteLine("3 " + absoluteKneeXMLFolder + questionXMLPath + "_" + selectedAITypeQuestionMode);//send protocol,Data to 3DBuilder.
+        //send protocol,Data to 3DBuilder.
+        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + "_" + selectedAITypeQuestionMode);
+    }
+
+    //send message through CSNamedPipe.exe to the corresponding 3DBuilder.
+    public void sendMsg23DBuilder(string contact)
+    {
+        /*
+
+        //send cmd1
+        try
+        {
+            using (StreamWriter wr = (StreamWriter)Session["Writer"])
+            {
+                //send cmd2
+                wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+            }// the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+           
+            //wr.Flush();
+        }
+        catch(Exception e)
+        {
+
+        }
+      */
+
+
+        //send cmd1
+        try
+        {
+
+            StreamWriter wr = (StreamWriter)Session["Writer"];
+            //StreamWriter wr = new StreamWriter((StreamWriter)Session["Writer"]);
+            //StreamWriter wr = new StreamWriter((Stream )Session["Writer"], Encoding.UTF8, 4096, true);
+            //send cmd2
+            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+
+            // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+
+            //wr.Flush();
+        }
+        catch (Exception e)
+        {
+
+        }
 
     }
+
 
     private void activate3DBuilder()
     {

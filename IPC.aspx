@@ -175,15 +175,34 @@
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = visibleImg;
                 }
 
-                    //if the currently traversed organ was invisible,then keep it invisible
-                else {
+
+                //set all the disableByTeacher icon to be invisibleImg and disabled.
+                else if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value == "disableByTeacher") {
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisibleImg;
+                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].disabled = true;
+
+
                 }
 
+                //if the currently traversed organ was inivisible,then keep it inivisible
+                else {
 
-
-
+                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisibleImg;
+                }
+                   
+               
             }
+
+
+            //if the AITypeQuestion is of Surgery Mode, we set the hide/show icon of the skin to be visible and disabled.
+            if (sessionStorage.getItem("AITypeQuestionMode")=="Surgery Mode") {
+
+                skinOrganNumber = sessionStorage.getItem("skinOrganNumber");
+                gvDrv.rows[skinOrganNumber].cells[3].getElementsByTagName("input")[0].src = visibleImg;
+                gvDrv.rows[skinOrganNumber].cells[3].getElementsByTagName("input")[0].disabled = true;
+            }
+
+
            
             //recover the click status of the OrganSubmitBtn
             //we mark the OrganSubmitBtn in the GridView to let the student know he has submitted the answer of the organ. 
@@ -638,6 +657,9 @@
 
                     //resume mark icon in gridView
                     var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+                    //record the organ number of the Skin in this AITypeQuestion.
+                    var skinOrganNumberVal = 0;
+
 
                     //access each <Organ>
                     $(xml).find('Organ').each(function () {
@@ -664,19 +686,67 @@
                         //access the value of each <Question> in the <Organ>
                         var isVisibleVal = $isVisible.text();
 
+                        //we set the icon of the organs that are hidden by the teacher to inivisible
+                        //and disable the icon of these organs to prevent the student from trying to show the organs hidden by the teacher.
                         if (isVisibleVal == "0") {
 
                             
 
                             var i = $(this).find("Number").text();
-                            gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value = "false_HideByTeacher";
+                            gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value = "disableByTeacher";
                             gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisibleImg;
                             gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].disabled = true;
-                            //gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].c
+                            
                         }
 
 
+                        //record the question number of the 'Skin' in this AITypeQuestion
+                        $organName = $(this).find("Name");
+
+                        //access the value of each <Question> in the <Organ>
+                        var organNameVal = $organName.text();
+
+                        if (organNameVal == "Skin") {
+                            $skinOrganNumber = $(this).find("Number");
+
+                            skinOrganNumberVal = $skinOrganNumber.text();
+                        }
+                        
+
                     });
+
+                    //access the value of  <AITypeQuestionMode> of this AITypeQuestion in the xml file.
+                    $AITypeQuestionMode = $(xml).find('AITypeQuestionMode')
+              
+                    //access the value of each <Question> in the <Organ>
+                    var AITypeQuestionModeVal = $AITypeQuestionMode.text();
+                    if (AITypeQuestionModeVal == "Surgery Mode") {
+
+                        //disable the hide/show button of the Skin 
+                        //when the AITypeQuestion is of Surgery Mode, 
+                        //which the Skin should not be hidden by the student.
+                       
+                        //目前有近來
+                        alert(skinOrganNumberVal)
+
+                        gvDrv.rows[skinOrganNumberVal].cells[1].getElementsByTagName("input")[1].value = "disableByTeacher";
+                        gvDrv.rows[skinOrganNumberVal].cells[3].getElementsByTagName("input")[0].src = giveUpImg;
+                        gvDrv.rows[skinOrganNumberVal].cells[3].getElementsByTagName("input")[0].disabled = true;
+
+
+                        //store the mode of the AITypeQuestion in a session storage
+                        sessionStorage.setItem("AITypeQuestionMode", "Surgery Mode");
+
+                        //record the organ number of the Skin in this AITypeQuestion.
+                        sessionStorage.setItem("skinOrganNumber",skinOrganNumberVal);
+                    }
+
+                    else if (AITypeQuestionModeVal == "Anatomy Mode") {
+                        //store the mode of the AITypeQuestion in a session storage
+                        sessionStorage.setItem("AITypeQuestionMode", "Anatomy Mode");
+                    }
+
+
 
                     //activate exam mode
 
@@ -831,9 +901,7 @@
 
         
        
-        
-       
-        
+     
 
        
         function activateCountDownTimer() {

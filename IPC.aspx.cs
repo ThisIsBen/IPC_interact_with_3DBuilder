@@ -102,14 +102,15 @@ public partial class IPC : CsSessionManager
             
              */
 
+            
             //wait for the 3DBuilder to respond before show 3D Labels in 3DBuilder
             //Because it takes longer for the 3DBuilder to load all the organs when 
             //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
-            System.Threading.Thread.Sleep(10);
+            System.Threading.Thread.Sleep(100);
 
             //Show 3D Labels in 3DBuilder
             ShowOrHide3DLabels_Click();
-
+            
 
         }
 
@@ -365,7 +366,7 @@ public partial class IPC : CsSessionManager
     }
 
 
-
+    //send message through CSNamedPipe.exe to the corresponding 3DBuilder.
     public void sendMsg23DBuilder(string contact)
     {
         /*
@@ -641,7 +642,7 @@ public partial class IPC : CsSessionManager
                 {
                     //When the student clicks the “ShowAll” button, 
                     //the organs hidden by the teacher should not be shown.
-                    if ((row.FindControl(HFID) as HiddenField).Value != "false_HideByTeacher")
+                    if ((row.FindControl(HFID) as HiddenField).Value != "disableByTeacher")
                     {
                         //only show the organs that are hidden by the student.
                         (row.FindControl(HFID) as HiddenField).Value = "true";//switch to visible
