@@ -724,11 +724,7 @@
 
                         //disable the hide/show button of the Skin 
                         //when the AITypeQuestion is of Surgery Mode, 
-                        //which the Skin should not be hidden by the student.
-                       
-                        //目前有近來
-                        alert(skinOrganNumberVal)
-
+                        //which the Skin should not be hidden by the student.                                            
                         gvDrv.rows[skinOrganNumberVal].cells[1].getElementsByTagName("input")[1].value = "disableByTeacher";
                         gvDrv.rows[skinOrganNumberVal].cells[3].getElementsByTagName("input")[0].src = giveUpImg;
                         gvDrv.rows[skinOrganNumberVal].cells[3].getElementsByTagName("input")[0].disabled = true;
