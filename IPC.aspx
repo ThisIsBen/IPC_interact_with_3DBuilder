@@ -63,6 +63,8 @@
         //img source gallery 
         visibleImg = "Image/visible.png";
         invisibleImg = "Image/invisible.png";
+        visible_disabledByTeacher = "image/visible_disabledByTeacher.png";
+        invisible_disabledByTeacher = "image/invisible_disabledByTeacher.png";
         notSureImg = "image/notSure.png";
         giveUpImg = "image/giveUp.png";
         notSureClickImg = "image/notSureClick.png";
@@ -178,7 +180,7 @@
 
                 //set all the disableByTeacher icon to be invisibleImg and disabled.
                 else if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value == "disableByTeacher") {
-                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisibleImg;
+                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisible_disabledByTeacher;
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].disabled = true;
 
 
@@ -198,7 +200,7 @@
             if (sessionStorage.getItem("AITypeQuestionMode")=="Surgery Mode") {
 
                 skinOrganNumber = sessionStorage.getItem("skinOrganNumber");
-                gvDrv.rows[skinOrganNumber].cells[3].getElementsByTagName("input")[0].src = visibleImg;
+                gvDrv.rows[skinOrganNumber].cells[3].getElementsByTagName("input")[0].src = visible_disabledByTeacher;
                 gvDrv.rows[skinOrganNumber].cells[3].getElementsByTagName("input")[0].disabled = true;
             }
 
@@ -694,7 +696,7 @@
 
                             var i = $(this).find("Number").text();
                             gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value = "disableByTeacher";
-                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisibleImg;
+                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisible_disabledByTeacher;
                             gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].disabled = true;
                             
                         }

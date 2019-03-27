@@ -13,13 +13,11 @@ public partial class ALHomePage : System.Web.UI.Page
     public static Process os = new Process();
 
     //set the default value of each parameters that are retrieved from URL.
-
-     
     //string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name //it's included in exam paper cPaperID=tea120181122231914 and cPaperID=tea120181126201801
     string questionXMLPath = "tea1_Q_20181225144451";
     string studentUserID = "stu2";
     string examMode = "Yes";//ExamMode的中控, we set its default value to Yes
-
+    string cActivityID = "1014";
 
 
     protected void Page_Load(object sender, EventArgs e)
@@ -57,7 +55,7 @@ public partial class ALHomePage : System.Web.UI.Page
         //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
         setModeIn3DBuilderForInit();
 
-        Response.Redirect("Items.aspx?examMode=" + examMode + "&strQID=" + questionXMLPath + "&strUserID=" + studentUserID);
+        Response.Redirect("Items.aspx?examMode=" + examMode + "&strQID=" + questionXMLPath + "&strUserID=" + studentUserID + "&cActivityID=" + cActivityID);
     }
 
     //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
@@ -93,6 +91,11 @@ public partial class ALHomePage : System.Web.UI.Page
             examMode = Request.QueryString["ExamMode"];
         }
 
+        //set the variable cActivityID with the parameter cActivityID in URL if it is provided.
+        if (Request.QueryString["cActivityID"] != null && Request.QueryString["cActivityID"] != "")
+        {
+            cActivityID = Request.QueryString["cActivityID"];
+        }
         
     }
 

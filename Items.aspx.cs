@@ -28,7 +28,7 @@ public partial class Items : CsSessionManager
     string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
     string studentUserID="stu2";
     string  examMode = "Yes";//examMode的中控, we set its default value to Yes
-
+    string cActivityID = "1014";
     
     
     //the seed of randomizing the organ numbers that are picked as questions, which are stored in pickedQuestions array.
@@ -65,6 +65,13 @@ public partial class Items : CsSessionManager
         {
             examMode = Request.QueryString["examMode"];
         }
+
+        //set the variable cActivityID with the parameter cActivityID in URL if it is provided.
+        if (Request.QueryString["cActivityID"] != null && Request.QueryString["cActivityID"] != "")
+        {
+            cActivityID = Request.QueryString["cActivityID"];
+        }
+
 
         //set randomize seed as the ascii code of the first char + the ascii code of the last char of the studentUserID
         randomizeSeed = (Convert.ToInt32(studentUserID[0]) + Convert.ToInt32(studentUserID[studentUserID.Length - 1])).ToString();
@@ -156,7 +163,7 @@ public partial class Items : CsSessionManager
             //Response.Redirect("IPC.aspx");
 
             ////head to IPC.aspx in exam mode
-            Response.Redirect("IPC.aspx?examMode=Yes&strQID=" + questionXMLPath + "&strUserID=" + studentUserID);
+            Response.Redirect("IPC.aspx?examMode="+examMode+"&strQID=" + questionXMLPath + "&strUserID=" + studentUserID + "&cActivityID=" + cActivityID);
              
 
         }
