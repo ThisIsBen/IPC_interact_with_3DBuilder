@@ -269,6 +269,39 @@ using System.Text.RegularExpressions;
     //get the question description of an existing  AITypeQuestion when the instructor wants to edit it.
     public static int getExamRemainingTime(string cActivityID)
     {
+        string strSQL = "SELECT cDeadline FROM MLAS_ActivityExaminationSetting WHERE cActivityID = '" + cActivityID + "' ";
+        DataRowCollection DRC = GetDataTable(string.Format(strSQL), "MLASDB").Rows;
+
+        if (DRC.Count == 0)
+        {
+            return -1;
+        }
+
+        else
+        {
+            string s = DRC[0]["cDeadline"].ToString();
+
+            IFormatProvider culture = new System.Globalization.CultureInfo("zh-TW", true);
+            DateTime deadline = DateTime.ParseExact(s, "yyyyMMddHHmm", culture);
+
+            DateTime currenttime = DateTime.Now;
+
+            TimeSpan span = (TimeSpan)(deadline - currenttime);
+
+            int remainginTime = (int)span.TotalSeconds;
+
+            //防止剛好時間相減後也等於沒有找到期限資料的回傳值-1
+            if (remainginTime == -1)
+            {
+                remainginTime--;
+            }
+
+            return remainginTime;
+        }
+
+
+
+
         //You can modify the following to get the remaining exam time
         /*
         string strSQL = "SELECT * FROM QuestionIndex WHERE cQID = '" + strQID + "' ";
@@ -277,11 +310,11 @@ using System.Text.RegularExpressions;
         //return empty string if there is no AITypeQuestion_QuestionDescription
         if (DRC.Count == 0)
             return "";
-        
+
         //return the value of 'cQuestion' field of the retrieved record
         return int.Parse(DRC[0]["cQuestion"]);
         */
-        return 20;
+
     }
 
 

@@ -38,7 +38,7 @@ public partial class IPC : CsSessionManager
     */
     string strUserID = "";
     string cQID = "";
-
+    string cActivityID = "";
     protected void Page_Load(object sender, EventArgs e)
     {
 
@@ -126,11 +126,27 @@ public partial class IPC : CsSessionManager
     //set the remaining time to the timer and check whether time is already up.
     private void setUp_and_CheckCountdownTimer()
     {
-        /*This block should be implemented in the Hints set timer for the exam page
-        * */
-        //get the exam timespan from the UI , and convert it to Second format.
-        int hardCodeExamTimespanSec = 12000; //now I just hard code it to 15 sec
-        Double examTimespan = hardCodeExamTimespanSec * 1.0;
+        strUserID = Request["strUserID"];
+        cQID = Request["strQID"];
+        cActivityID = Request["cActivityID"];
+        int remainingTimeSec = CsDBOp.getExamRemainingTime(cActivityID); //now I just hard code it to 15 sec
+
+
+        if (remainingTimeSec < 0 && remainingTimeSec != -1)
+        {
+            //Response.Write("<script>alert('考試時間已結束')</script>");
+            Response.Write("<script>alert('考試時間已結束');location.href='ALHomePage.aspx?strQID=" + cQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
+
+        }
+
+        else if (remainingTimeSec == -1)
+        {
+            Response.Write("<script>alert('找不到資料');location.href='ALHomePage.aspx?strQID=" + cQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "' </script>");
+        }
+        else
+        { 
+            
+        Double examTimespan = remainingTimeSec * 1.0;
         DateTime deadlineDateTime = DateTime.Now.AddSeconds(examTimespan); // return Datetime format
         /*psedo code:
          * store deadlineDateTime to DB
@@ -145,8 +161,8 @@ public partial class IPC : CsSessionManager
          * */
         //check count down timer to decide whether time is already up.
         CheckCountdownTimer(deadlineDateTime);
-
     }
+}
 
     private void activate3DBuilder()
     {
