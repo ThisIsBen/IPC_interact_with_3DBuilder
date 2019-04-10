@@ -28,7 +28,7 @@ public partial class Items : CsSessionManager
     string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
     string studentUserID="stu2";
     string  examMode = "Yes";//examMode的中控, we set its default value to Yes
-    string cActivityID = "1014";
+    string cActivityID = "1023";
     
     
     //the seed of randomizing the organ numbers that are picked as questions, which are stored in pickedQuestions array.

@@ -749,6 +749,122 @@ using System.Text.RegularExpressions;
 
         #endregion
 
+
+
+
+    //the followings are the name of the databases. 
+    //Other functions should denote that which database will the sql cmd execute on.
+    private static string IPCTypeQuestionDB = "SCOREDB";
+    private static string ProgramTypeQuestionDB = "CorrectStuHWDB";
+    private static string AITypeQuestionDB = "NewVersionHintsDB";
+    private static string DB_Slector = AITypeQuestionDB; //ProgramTypeQuestionDB;//IPCTypeQuestionDB;
+
+
+    /*
+    #region Common
+    private static DataTable GetDataTable(string sql, string DBName)
+    {
+        return CsDBConnection.GetDataSet(sql, DBName).Tables[0];
+    }
+
+    /// <summary>
+    /// Get a first DataTable for the query string.
+    /// (ex: "SELECT * FROM table1 WHERE ...")
+    /// </summary>
+    /// <param name="sql"></param>
+    /// <returns></returns>
+    private static int InsertData(string sql, string DBName)
+    {
+        return CsDBConnection.ExecuteNonQuery(sql, DBName);
+    }
+
+    private static int UpdateData(string sql, string DBName)
+    {
+        return CsDBConnection.ExecuteNonQuery(sql, DBName);
+    }
+
+    private static int DeleteData(string sql, string DBName)
+    {
+        return CsDBConnection.ExecuteNonQuery(sql, DBName);
+    }
+
+
+
+
+
+
+
+    #endregion
+     * 
+     */ 
+
+
+    #region GetDB_Data
+    /// <summary>
+    /// Get user's information by token.
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public static DataTable GetAllTBData(string DB_Child)
+    {
+        string sql = string.Format("Select * " + DB_Child);
+        return GetDataTable(sql, DB_Slector);//execute the sql cmd in DB_Slector database
+    }
+
+    //a input to select all data if CPaperID is cPaperID
+    //get a student's recored according to his cUserID and cQID in datatable 'AITypeQuestionStudentAnswer'
+    public static DataTable GetAllTBData(string DB_Child, string cQID,string cUserID="")
+    {
+        /*
+        //In  博宇's implementation
+        string sql = string.Format("Select * From " + DB_Child + " Where cActivityID In('" + cActivityID + "')");
+         * */
+        string sql = "";
+
+        //it means cUserID is not provided with we call the function.
+        if (cUserID == "")
+        {
+            sql = string.Format("Select * From " + DB_Child + " Where cQID In('" + cQID + "')");
+        }
+        else//if cUserID is  provided with we call the function.
+        {
+            sql = string.Format("Select * From " + DB_Child + " Where cQID In('" + cQID + "') and cUserID='" + cUserID + "'");
+
+        }
+        return GetDataTable(sql, DB_Slector);//execute the sql cmd in DB_Slector database
+    }
+
+
+    public static int InsertScore(string DB_Child, string cUserID, string grade)
+    {
+        string sql = string.Format("Insert into " + DB_Child + " VALUES( '{0}', '{1}' )", cUserID, grade);
+        return InsertData(sql, DB_Slector);//execute the sql cmd in DB_Slector database
+    }
+
+    public static int UpdateScore(string DB_Child, string cUserID, string NewGrade, string cQID)
+    {
+        //In  博宇's implementation
+        /*
+        string sql = string.Format("Update " + DB_Child + " set Grade = '{1}' where StuCouHWDe_ID = '{0}'  ", ID, NewGrade);
+         * */
+        string sql = string.Format("Update " + DB_Child + " set Grade = '{1}' where cUserID = '{0}' and cQID = '{2}' ", cUserID, NewGrade, cQID);
+        return UpdateData(sql, DB_Slector);//execute the sql cmd in DB_Slector database
+    }
+
+    public static int DeleteScore(string DB_Child, string cUserID, string cQID)
+    {
+        //In  博宇's implementation
+        /*
+        string sql = string.Format("Delete from " + DB_Child + " where StuCouHWDe_ID = '{0}' ", ID);
+         * */
+        string sql = string.Format("Delete from " + DB_Child + " where cUserID = '{0}' and cQID = '{1}' ", cUserID, cQID);
+        return UpdateData(sql, DB_Slector);//execute the sql cmd in DB_Slector database
+    }
+
+
+
+    #endregion
+
         /*
         public static DataTable GetMOEManagerInfo(int uId)
         {

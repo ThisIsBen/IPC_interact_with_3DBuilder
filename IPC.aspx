@@ -631,7 +631,7 @@
 
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
         XMLFolder = "<%=  CsDynamicConstants.relativeKneeXMLFolder %>";//"IPC_Questions/1161-1450/";
-        questionXMLPath = "SceneFile_Q1.xml";
+       
         
 
         //to extract para in URL
@@ -639,11 +639,27 @@
         //"../Mirac3DBuilder/HintsAccounts/Student/Mirac/1161-1450/SceneFile_Q1.xml";
 
         $(document).ready(function () {
-            
+
+            //set the default value of each parameters that are retrieved from URL.
+            questionXMLPath = "tea1_Q_20181210231100";
+            examMode = "Yes";
             
 
+
             //get the QID from URL parameter as the target file name if the instructor wants to check the contnet of the existing AI Type question.
-            questionXMLPath = url.searchParams.get("strQID") + ".xml";
+            if (url.searchParams.get("strQID") != "" && url.searchParams.get("strQID") != null) {
+                questionXMLPath = url.searchParams.get("strQID") + ".xml";
+
+            }
+            else {
+                questionXMLPath = questionXMLPath + ".xml";
+            }
+
+            //get the examMode from URL parameter if it exists.
+            if (url.searchParams.get("examMode") != "" && url.searchParams.get("examMode") != null) {
+                examMode = url.searchParams.get("examMode");
+            }
+
 
             //clear the ajax cache to read the latest content from the organ xml file
             //if we don't clear the cache, ajax will return an old version of the organ xml file cached in the memory.
@@ -748,7 +764,9 @@
 
                     //activate exam mode
 
-                    if (url.searchParams.get("examMode") == "Yes") {
+                    //2019/4/9 Ben commented for using default URL value if no paras provided.
+                    //if (url.searchParams.get("examMode") == "Yes") {
+                    if (examMode == "Yes") {
 
                         //generate the exam question number according to pickedRandQNo,and swap the corresponding row in the table at the same time.
 
@@ -842,8 +860,8 @@
 
 
                         //show the TextBox of the question Organs.
-                        examMode = true;
-                        showTBOfQuestionOrgans(examMode);
+                        inExamMode = true;
+                        showTBOfQuestionOrgans(inExamMode);
 
 
                        
@@ -851,12 +869,13 @@
 
 
 
-
-                    if (url.searchParams.get("examMode") == 0) {
+                    //2019/4/9 Ben commented for using default URL value if no paras provided.
+                    //if (url.searchParams.get("examMode") == 0) {
+                    if (examMode != "Yes") {
 
                         //show the TextBox of the question Organs.
-                        examMode = false;
-                        showTBOfQuestionOrgans(examMode);
+                        inExamMode = false;
+                        showTBOfQuestionOrgans(inExamMode);
                     }
 
 
@@ -1017,7 +1036,9 @@
            
                     //activate exam mode
 
-            if (url.searchParams.get("examMode") == "Yes") {
+            //2019/4/9 Ben commented for using default URL value if no paras provided.
+            //if (url.searchParams.get("examMode") == "Yes") {
+            if (examMode == "Yes") {
 
                         
 
@@ -1110,8 +1131,8 @@
                         rearrangeQNo();
 
                         //show the TextBox of the question Organs.
-                        examMode = true;
-                        showTBOfQuestionOrgans(examMode);
+                        inExamMode = true;
+                        showTBOfQuestionOrgans(inExamMode);
 
 
                         //recover the hide or show status of the non question TRs
@@ -1120,12 +1141,12 @@
 
 
 
-
-                    if (url.searchParams.get("examMode") == 0) {
+                    
+                    if (examMode != "Yes") {
 
                         //show the TextBox of the question Organs.
-                        examMode = false;
-                        showTBOfQuestionOrgans(examMode);
+                        inExamMode = false;
+                        showTBOfQuestionOrgans(inExamMode);
                     }
                 
 

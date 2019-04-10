@@ -17,7 +17,7 @@ public partial class ALHomePage : System.Web.UI.Page
     string questionXMLPath = "tea1_Q_20181225144451";
     string studentUserID = "stu2";
     string examMode = "Yes";//ExamMode的中控, we set its default value to Yes
-    string cActivityID = "1014";
+    string cActivityID = "1023";
 
 
     protected void Page_Load(object sender, EventArgs e)
@@ -117,10 +117,17 @@ public partial class ALHomePage : System.Web.UI.Page
         //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
         os.StartInfo.Arguments = studentUserID;
         os.Start();
+
+
+
+
         StreamWriter wr = os.StandardInput;
         //os.StandardInput.Close();
         Session["Writer"] = wr;
         Session["Process"] = os;
+
+        //get process ID
+        Session["ProcessID"]=os.Id.ToString();
         
 
 

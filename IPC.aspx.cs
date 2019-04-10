@@ -30,27 +30,42 @@ public partial class IPC : CsSessionManager
     string XMLFolder = CsDynamicConstants.relativeKneeXMLFolder;
     string absoluteKneeXMLFolder = CsDynamicConstants.absoluteKneeXMLFolder; //"D:\\IPC_interact_with_3DBuilder\\IPC_Questions\\1161-1450\\";//it's only used when we want the 3DBuilder to load the Organ XML
 
-    string questionXMLPath = "";
+   
     string QuestionFileName = "";//只有檔名，沒有資料夾名稱
     /*
     string _StuCouHWDe_ID = "1381";//We just temporarily hard code it.This ID should be retrieved from a session variable or URL variable.
     string cActivityID = "009";
     */
+
+    //2019/4/8 Ben set the default Value of each URL paras
+    /*
     string strUserID = "";
-    string cQID = "";
+    string questionXMLPath = "";
     string cActivityID = "";
+    */
+
+    //set the default value of each parameters that are retrieved from URL.
+    string questionXMLPath = ""; //surgery mode xml file name
+    string strQID = "tea1_Q_20181210231100";
+    string strUserID = "stu2";
+    string cActivityID = "1023";
+    string examMode = "Yes";
+
     protected void Page_Load(object sender, EventArgs e)
     {
+        //get the parameters in URL and store there value in global var.
+        retrieveURLParameters();
 
-        questionXMLPath = Request["strQID"] + ".xml";
-        QuestionFileName = questionXMLPath;
 
-        questionXMLPath = XMLFolder + questionXMLPath;
+        QuestionFileName = strQID + ".xml";
+
+        questionXMLPath = XMLFolder + QuestionFileName;
 
         Page.MaintainScrollPositionOnPostBack = true;
         if (!IsPostBack)
         {
             
+           
 
 
             gvScore.AllowPaging = false;
@@ -108,9 +123,11 @@ public partial class IPC : CsSessionManager
             //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
             System.Threading.Thread.Sleep(100);
 
+            //2019/4/10 Ben commented the function fo show 3D Labels in 3DBuilder when AITypeQuestion is loaded.
+            /*
             //Show 3D Labels in 3DBuilder
             ShowOrHide3DLabels_Click();
-            
+            */
 
         }
 
@@ -123,25 +140,66 @@ public partial class IPC : CsSessionManager
 
     }
 
+    //get the parameters in URL and store there value in global var.
+    private void retrieveURLParameters()
+    {
+        //set the variable questionXMLPath with the parameter strQID in URL if it is provided.
+        if (Request.QueryString["strQID"] != null && Request.QueryString["strQID"] != "")
+        {
+            strQID = Request.QueryString["strQID"] ;
+        }
+        
+
+        //set the variable studentUserID with the parameter strUserID in URL if it is provided.
+        if (Request.QueryString["strUserID"] != null && Request.QueryString["strUserID"] != "")
+        {
+            strUserID = Request.QueryString["strUserID"];
+        }
+
+
+        
+
+        //set the variable cActivityID with the parameter cActivityID in URL if it is provided.
+        if (Request.QueryString["cActivityID"] != null && Request.QueryString["cActivityID"] != "")
+        {
+            cActivityID = Request.QueryString["cActivityID"];
+        }
+
+        //set the variable examMode with the parameter examMode in URL if it is provided.
+        if (Request.QueryString["examMode"] != null && Request.QueryString["examMode"] != "")
+        {
+            examMode = Request.QueryString["examMode"];
+        }
+
+      
+    }
+
+
     //set the remaining time to the timer and check whether time is already up.
     private void setUp_and_CheckCountdownTimer()
     {
+        //2019/4/8 Ben commented for using default URL value if no paras provided.
+        /*
         strUserID = Request["strUserID"];
-        cQID = Request["strQID"];
+        string questionXMLPath = Request["strQID"];
+         * 
+         
         cActivityID = Request["cActivityID"];
+         * 
+        */
         int remainingTimeSec = CsDBOp.getExamRemainingTime(cActivityID); //now I just hard code it to 15 sec
 
 
         if (remainingTimeSec < 0 && remainingTimeSec != -1)
         {
             //Response.Write("<script>alert('考試時間已結束')</script>");
-            Response.Write("<script>alert('考試時間已結束');location.href='ALHomePage.aspx?strQID=" + cQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
+            Response.Write("<script>alert('考試時間已結束');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
 
         }
 
         else if (remainingTimeSec == -1)
         {
-            Response.Write("<script>alert('找不到資料');location.href='ALHomePage.aspx?strQID=" + cQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "' </script>");
+            Response.Write("<script>alert('找不到資料');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "' </script>");
         }
         else
         { 
@@ -247,7 +305,10 @@ public partial class IPC : CsSessionManager
         ///////////////////////////////////////////////////////////////////////////////
 
         bool ExamMode = false;//ExamMode的中控
-        if (Request["examMode"] == "Yes")
+
+        //2019/4/9 Ben commented for using default URL value if no paras provided.
+        //if (Request["examMode"] == "Yes")
+        if (examMode == "Yes")
         {
             ExamMode = true;//ExamMode的中控
         }
@@ -449,9 +510,9 @@ public partial class IPC : CsSessionManager
 
     }
     /*
-    public void InsertStuIPCAns2DB(string strUserID, string cQID, string _QuesOrdering, string _StudentAnswer, int Num_Of_Question_Submision_Session)
+    public void InsertStuIPCAns2DB(string strUserID, string questionXMLPath, string _QuesOrdering, string _StudentAnswer, int Num_Of_Question_Submision_Session)
     {
-        CsDBOp.InsertStuIPCAns(strUserID, cQID, _QuesOrdering, _StudentAnswer, Num_Of_Question_Submision_Session);
+        CsDBOp.InsertStuIPCAns(strUserID, questionXMLPath, _QuesOrdering, _StudentAnswer, Num_Of_Question_Submision_Session);
     }
     */
 
@@ -468,6 +529,7 @@ public partial class IPC : CsSessionManager
 
     private void killCorrespondingCSNamedPipe()
     {
+        /*
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
         Process os = (Process)Session["Process"];
 
@@ -475,6 +537,20 @@ public partial class IPC : CsSessionManager
         if (os != null)
         {
             os.Kill();
+        }
+         * */
+
+        //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
+        //kill process with processID
+        Process[] procList = Process.GetProcesses();
+
+        for (int i = 0; i < procList.Length; i++)
+        {
+            string pid = procList[i].Id.ToString();
+            if (string.Equals(pid, Session["ProcessID"]))
+            {
+                procList[i].Kill();
+            }
         }
     }
 
@@ -487,11 +563,12 @@ public partial class IPC : CsSessionManager
         Process os = (Process)Session["Process"];       
         os.Kill();
         */
-
+        //2019/4/8 Ben commented for using default URL value if no paras provided.
+        /*
         //get the strUserID and strQID from the URL parameters
         strUserID = Request["strUserID"];
-        cQID = Request["strQID"];
-
+        string questionXMLPath = Request["strQID"];
+        */
 
 
         //Begin: The followings are  for temporary use ,and should be removed before push to github
@@ -523,7 +600,7 @@ public partial class IPC : CsSessionManager
         Session["values"] = values;
         */
         //store student's answer to DB
-        if (Request["examMode"] == "Yes")
+        if (examMode == "Yes")
         {
 
 
@@ -578,9 +655,9 @@ public partial class IPC : CsSessionManager
             //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
             //}
 
-            CsDBOp.InsertStuIPCAns(strUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+            CsDBOp.InsertStuIPCAns(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
 
-            //InsertStuIPCAns2DB(strUserID, cQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+            //InsertStuIPCAns2DB(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
             ///////////////////////////////////////
             //DataTable dt = CsDBOp.GetStuIPCAns();
             //StuAnsM Stu_correct_papers = new StuAnsM();
@@ -784,7 +861,10 @@ public partial class IPC : CsSessionManager
             string QuestionNo;
 
             //if it's in the exam mode
-            if (Request["examMode"] == "Yes")
+
+            //2019/4/9 Ben commented for using default URL value if no paras provided.
+            //if (Request["examMode"] == "Yes")
+            if (examMode == "Yes")
             {
 
                 QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(num.Text)) + 1).ToString();
