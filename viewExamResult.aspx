@@ -166,13 +166,24 @@
                 //keep submit btn visible at all times
                 gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = organSubmitImg;
                 
+
                 
                 //keep Mark icons visible at all times
+
+                //2019/4/11 Ben moves Show/Hide column to the last column
+                /*
                 gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureImg;
                 gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpImg;
+                */
+
+                gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = notSureImg;
+                gvDrv.rows[i].cells[3].getElementsByTagName("input")[1].src = giveUpImg;
 
 
                 //if the currently traversed organ was visible,then keep it visible
+
+                //2019/4/11 Ben moves Show/Hide column to the last column
+                /*
                 if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value == "true") {
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = visibleImg;
                 }
@@ -191,8 +202,31 @@
 
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisibleImg;
                 }
-                   
-               
+                */
+                //check if the Show/HideCol is currently displayed or hidden
+                if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[4].value == "true") {
+
+
+                    if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value == "true") {
+                        gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = visibleImg;
+                    }
+
+
+                        //set all the disableByTeacher icon to be invisibleImg and disabled.
+                    else if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value == "disableByTeacher") {
+                        gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = invisible_disabledByTeacher;
+                        gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].disabled = true;
+
+
+                    }
+
+                        //if the currently traversed organ was inivisible,then keep it inivisible
+                    else {
+
+                        gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = invisibleImg;
+                    }
+
+                }
             }
 
 
@@ -200,8 +234,21 @@
             if (sessionStorage.getItem("AITypeQuestionMode")=="Surgery Mode") {
 
                 skinOrganNumber = sessionStorage.getItem("skinOrganNumber");
+
+                //2019/4/11 Ben moves Show/Hide column to the last column
+                /*
                 gvDrv.rows[skinOrganNumber].cells[3].getElementsByTagName("input")[0].src = visible_disabledByTeacher;
                 gvDrv.rows[skinOrganNumber].cells[3].getElementsByTagName("input")[0].disabled = true;
+                */
+
+
+                //check if the Show/HideCol is currently displayed or hidden
+                if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[4].value == "true") {
+
+                    gvDrv.rows[skinOrganNumber].cells[4].getElementsByTagName("input")[0].src = visible_disabledByTeacher;
+                    gvDrv.rows[skinOrganNumber].cells[4].getElementsByTagName("input")[0].disabled = true;
+
+                }
             }
 
 
@@ -263,6 +310,9 @@
                 if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[2] != null) {
                     switch (parseInt(gvDrv.rows[i].cells[1].getElementsByTagName("input")[2].value)) {
 
+
+                        //2019/4/11 Ben moves Show/Hide column to the last column
+                        /*
                         case 0:
                             gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = notSureImg;
                             gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpImg;
@@ -273,6 +323,19 @@
                         case 2:
                             gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpClickImg;
                             break;
+                        */
+
+                        case 0:
+                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = notSureImg;
+                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[1].src = giveUpImg;
+                            break;
+                        case 1:
+                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = notSureClickImg;
+                            break;
+                        case 2:
+                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[1].src = giveUpClickImg;
+                            break;
+
 
 
 
@@ -290,7 +353,11 @@
             var rowIndex = row.rowIndex;
            
 
+
             //change " " to "not sure"icon or change"not sure"icon and "give up"Icon to " "
+
+            //2019/4/11 Ben moves Show/Hide column to the last column
+            /*
             var img = row.cells[4].getElementsByTagName("input")[0].src;
             var imgBesideIt = row.cells[4].getElementsByTagName("input")[1].src;
             
@@ -323,8 +390,37 @@
               
             }
             
-           
-          
+           */
+            var img = row.cells[3].getElementsByTagName("input")[0].src;
+            var imgBesideIt = row.cells[3].getElementsByTagName("input")[1].src;
+
+
+
+            if (img.indexOf(notSureClickImg) != -1) {
+                row.cells[3].getElementsByTagName("input")[0].src = notSureImg;
+                //record the current mark icon in the hidden field,0 means empty
+                row.cells[1].getElementsByTagName("input")[2].value = 0;
+
+
+            }
+
+
+
+            else {
+
+                if (imgBesideIt.indexOf(giveUpClickImg) != -1) {
+                    row.cells[3].getElementsByTagName("input")[1].src = giveUpImg;
+                }
+
+                row.cells[3].getElementsByTagName("input")[0].src = notSureClickImg;
+
+                //record the current mark icon in the hidden field,1 means notSure.png
+                row.cells[1].getElementsByTagName("input")[2].value = 1;//bug
+
+
+
+
+            }
            
             //to prevent refreshing of page when button inside form clicked
             //return false;
@@ -338,6 +434,9 @@
 
            
                 //change to "give up" icon
+
+                //2019/4/11 Ben moves Show/Hide column to the last column
+                /*
                 var img = row.cells[4].getElementsByTagName("input")[1].src;
                 var imgBesideIt = row.cells[4].getElementsByTagName("input")[0].src;
                 if (img.indexOf(giveUpClickImg) != -1) {
@@ -353,6 +452,25 @@
                         row.cells[4].getElementsByTagName("input")[0].src = notSureImg;
                     }
                     row.cells[4].getElementsByTagName("input")[1].src = giveUpClickImg;
+
+                    //record the current mark icon in the hidden field,1 means notSure.png
+                    row.cells[1].getElementsByTagName("input")[2].value = 2;
+                }
+                */
+                var img = row.cells[3].getElementsByTagName("input")[1].src;
+                var imgBesideIt = row.cells[3].getElementsByTagName("input")[0].src;
+                if (img.indexOf(giveUpClickImg) != -1) {
+
+                    row.cells[3].getElementsByTagName("input")[1].src = giveUpImg;
+                    //record the current mark icon in the hidden field,0 means empty
+                    row.cells[1].getElementsByTagName("input")[2].value = 0;
+                }
+
+                else {
+                    if (imgBesideIt.indexOf(notSureClickImg) != -1) {
+                        row.cells[3].getElementsByTagName("input")[0].src = notSureImg;
+                    }
+                    row.cells[3].getElementsByTagName("input")[1].src = giveUpClickImg;
 
                     //record the current mark icon in the hidden field,1 means notSure.png
                     row.cells[1].getElementsByTagName("input")[2].value = 2;
@@ -412,13 +530,17 @@
                     //show the submit button of the organs that have been chosen as part of question.
                     gvDrv.rows[showTBItems].cells[2].getElementsByTagName("input")[0].style.visibility = 'visible';
 
-                    //hide the whole Show/Hide column
-                    //gvDrv.rows[showTBItems].cells[3].style.visibility = 'hidden';
-
-
+                  
                     //show the markicona of the organs that have been chosen as part of question.
+                    /*
                     gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[0].style.visibility = 'visible';
                     gvDrv.rows[showTBItems].cells[4].getElementsByTagName("input")[1].style.visibility = 'visible';
+                    */
+
+                    //2019/4/11 Ben moves Show/Hide column to the last column
+                    gvDrv.rows[showTBItems].cells[3].getElementsByTagName("input")[0].style.visibility = 'visible';
+                    gvDrv.rows[showTBItems].cells[3].getElementsByTagName("input")[1].style.visibility = 'visible';
+
                 }
 
                 //assign a class to the non question TRs
@@ -614,6 +736,9 @@
                                 <input type="hidden" id="markRecord" runat="server" value="0">
 
                                 <input type="hidden" id="clickedOrganSubmitBtn" runat="server" value="99">
+
+                                <%--to record Show/HideCol is currently displayed or hidden--%>
+                                <input type="hidden" id="hidden_DisplayShow_HideCol" runat="server" value=true>
                             </ItemTemplate>
 
                         </asp:TemplateField>
@@ -623,9 +748,7 @@
                         <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Point you got" >
                             <ControlStyle CssClass=" submit_img" />
                         </asp:ButtonField>
-                        <asp:ButtonField   ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px"  ControlStyle-Width="40px" HeaderText="Show /<br/>Hide">
-                            <ControlStyle CssClass=" menu_img"  />
-                        </asp:ButtonField>
+                       
 
                         <asp:TemplateField HeaderText="Correct<br/>Answer">
                             <ItemTemplate>
@@ -636,6 +759,10 @@
 
 
                         </asp:TemplateField>
+
+                         <asp:ButtonField  Visible="true" ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px"  ControlStyle-Width="40px" HeaderText="Show /<br/>Hide">
+                            <ControlStyle CssClass=" menu_img"  />
+                        </asp:ButtonField>
 
                     </Columns>
                 </asp:GridView>
@@ -735,8 +862,19 @@
 
                             var i = $(this).find("Number").text();
                             gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value = "disableByTeacher";
+
+                            //2019/4/11 Ben moves Show/Hide column to the last column
+                            /*
                             gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisible_disabledByTeacher;
                             gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].disabled = true;
+                            */
+
+                            //check if the Show/HideCol is currently displayed or hidden
+                            if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[4].value == "true") {
+
+                                gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].src = invisible_disabledByTeacher;
+                                gvDrv.rows[i].cells[4].getElementsByTagName("input")[0].disabled = true;
+                            }
                             
                         }
 
@@ -767,8 +905,18 @@
                         //when the AITypeQuestion is of Surgery Mode, 
                         //which the Skin should not be hidden by the student.                                            
                         gvDrv.rows[skinOrganNumberVal].cells[1].getElementsByTagName("input")[1].value = "disableByTeacher";
+
+                        //2019/4/11 Ben moves Show/Hide column to the last column
+                        /*
                         gvDrv.rows[skinOrganNumberVal].cells[3].getElementsByTagName("input")[0].src = giveUpImg;
                         gvDrv.rows[skinOrganNumberVal].cells[3].getElementsByTagName("input")[0].disabled = true;
+                        */
+                        //check if the Show/HideCol is currently displayed or hidden
+                        if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[4].value == "true") {
+
+                            gvDrv.rows[skinOrganNumberVal].cells[4].getElementsByTagName("input")[0].src = giveUpImg;
+                            gvDrv.rows[skinOrganNumberVal].cells[4].getElementsByTagName("input")[0].disabled = true;
+                        }
 
 
                         //store the mode of the AITypeQuestion in a session storage
