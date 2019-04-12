@@ -50,7 +50,7 @@ public partial class IPC : CsSessionManager
     
     string questionXMLPath = ""; //surgery mode xml file name
     string strQID = "tea1_Q_20190205145709";
-    string strUserID = "stu4";
+    string strUserID = "stu5";
     string cActivityID = "1023";
     string examMode = "Yes";
 
@@ -165,7 +165,7 @@ public partial class IPC : CsSessionManager
 
     /*Convert the following global variable to session variable*/
     //a correctAnswer/QuestionOrdering Hash table for marking student’s answer
-    private Hashtable[] correctAnswerHT;
+    public Hashtable[] correctAnswerHT;
 
     
 

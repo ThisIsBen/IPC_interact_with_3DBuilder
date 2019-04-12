@@ -21,7 +21,7 @@
         }
 
         .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-            background-color: #b6ff00;
+            background-color: #ffd800;
         }
 
 
@@ -158,7 +158,7 @@
                 //recover visbility icon of each row
 
                 //keep submit btn visible at all times
-                gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = organSubmitImg;
+                gvDrv.rows[i].cells[2].getElementsByTagName("span")[0].innerHTML = " ";
 
 
 
@@ -170,8 +170,8 @@
                 gvDrv.rows[i].cells[4].getElementsByTagName("input")[1].src = giveUpImg;
                 */
 
-                gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = notSureImg;
-                gvDrv.rows[i].cells[3].getElementsByTagName("input")[1].src = giveUpImg;
+                //gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = notSureImg;
+                //gvDrv.rows[i].cells[3].getElementsByTagName("input")[1].src = giveUpImg;
 
 
                 //if the currently traversed organ was visible,then keep it visible
@@ -247,13 +247,12 @@
 
 
 
-            //recover the click status of the OrganSubmitBtn
-            //we mark the OrganSubmitBtn in the GridView to let the student know he has submitted the answer of the organ. 
-            recoverOrganSumbitBtnStatus(gvDrv);
+            //Step2-2 Display the studen’ts score of each question organ 
+            displayStuScoreEachQuestionOrgan(gvDrv);
 
 
             //recover the click status of the NotSure/GiveUp icon after coming back from UpdatePanel AJAX
-            recoverNotSure_GiveUpIconStatus(gvDrv);
+            //recoverNotSure_GiveUpIconStatus(gvDrv);
 
 
 
@@ -264,8 +263,11 @@
 
 
         //mark the OrganSubmitBtn in the GridView to let the student know he has submitted the answer of the organ. 
-        function recoverOrganSumbitBtnStatus(gvDrv) {
+        function displayStuScoreEachQuestionOrgan(gvDrv) {
 
+
+
+            /*
             //retrieve the lately clicked OrganSubmitBtn Number from the sessionStorage
             //this OrganSubmitBtn Number is stored before the UpdatePanel updates the content via AJAX
             clickedOrganSubmitBtnNo = parseInt(sessionStorage.getItem('clickedOrganSubmitBtnNo'));
@@ -281,7 +283,7 @@
 
                     if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[3].value == "1") {
 
-                        gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = clickedOrganSubmitImg;
+                        gvDrv.rows[i].cells[2].getElementsByTagName("span")[0].innerHTML = "submitted";
 
                     }
 
@@ -291,8 +293,80 @@
 
 
             }
+            */
+            var studentEachQuestionOrganScoreString = ('<%= convertCsArray2JSONFormat( ScoreAnalysisList[0].Grade[0]) %>')
+
+            //parse the JSON string received from backend to a Javascript object
+            //here, it will be converted from "["ab","cd"]" to ab,cd 
+            studentEachQuestionOrganScoreString = JSON.parse(studentEachQuestionOrganScoreString);
+
+            //iteration starts from index=1 to avoid getting the filePath of the AITypeQuestion
+            //e.g., YYY.xml,organ1,organ2->organ1,organ2
+
+
+            //The 配分 of each question organ
+            scoreOfEachQuestionOrgan=studentEachQuestionOrganScoreString[0]/(studentEachQuestionOrganScoreString.length-1);
+
+            for (i = 1; i < studentEachQuestionOrganScoreString.length; i++) {
+
+
+               
+                gvDrv.rows[i].cells[2].getElementsByTagName("span")[0].innerHTML = studentEachQuestionOrganScoreString[i] + "/" + scoreOfEachQuestionOrgan;
+
+                
+
+                //if the student's answer is not correct, we set the background of the row to red
+                if (studentEachQuestionOrganScoreString[i] != scoreOfEachQuestionOrgan) {
+                    incorrectAnswerTRBgColor = "rgb(255, 10, 10)";
+                    gvDrv.rows[i].style.backgroundColor = incorrectAnswerTRBgColor;
+
+                    //Step 2-3 Display the correct answer of the question organ if the student didn’t answer it correctly.
+                    displayCorrectQuestionOrganAnswer(i, gvDrv);
+                    
+                    
+                   
+
+                }
+
+
+            }
 
         }
+
+
+        //Step 2-3 Display the correct answer of the question organ if the student didn’t answer it correctly.
+        function displayCorrectQuestionOrganAnswer(rowIndex, gvDrv)
+        {
+
+            var correctAnswerOfTheAITypeQuestionJSArray = [];
+                        <% 
+        
+                            
+            var correctAnswerOfTheAITypeQuestion = RandomQuestionNoSession;
+
+            //if RandomQuestionNoSession is not null
+
+            for (int i = 0; i < correctAnswerHT[0].Count; i++)
+                {
+                                
+                         
+                            %>
+
+                correctAnswerOfTheAITypeQuestionJSArray.push('<%= correctAnswerHT[0][ScoreAnalysisList[0].questionOrderingString[i+1]] %>');
+
+                <% 
+                        }
+                %>
+
+            
+
+                    
+            gvDrv.rows[rowIndex].cells[3].getElementsByTagName("span")[0].innerHTML = correctAnswerOfTheAITypeQuestionJSArray[rowIndex-1];
+
+        }
+
+
+
 
 
         function recoverNotSure_GiveUpIconStatus(gvDrv) {
@@ -520,7 +594,7 @@
                     //show the textbox of the organs that have been chosen as part of question.
                     gvDrv.rows[showTBItems].cells[1].getElementsByTagName("input")[0].style.visibility = 'visible';
                     //show the submit button of the organs that have been chosen as part of question.
-                    gvDrv.rows[showTBItems].cells[2].getElementsByTagName("input")[0].style.visibility = 'visible';
+                    gvDrv.rows[showTBItems].cells[2].getElementsByTagName("span")[0].style.visibility = 'visible';
 
 
                     //show the markicona of the organs that have been chosen as part of question.
@@ -530,8 +604,8 @@
                     */
 
                     //2019/4/11 Ben moves Show/Hide column to the last column
-                    gvDrv.rows[showTBItems].cells[3].getElementsByTagName("input")[0].style.visibility = 'visible';
-                    gvDrv.rows[showTBItems].cells[3].getElementsByTagName("input")[1].style.visibility = 'visible';
+                    gvDrv.rows[showTBItems].cells[3].getElementsByTagName("span")[0].style.visibility = 'visible';
+                    //gvDrv.rows[showTBItems].cells[3].getElementsByTagName("input")[1].style.visibility = 'visible';
 
                 }
 
@@ -709,12 +783,14 @@
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
 
                     <Columns>
-
+                         <%--cells[0]--%>
                         <asp:TemplateField ItemStyle-Width="40px" HeaderText="Question Number">
                             <ItemTemplate>
                                 <asp:Label ID="TextBox_Number" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
+
+                         <%--cells[1]--%>
                         <asp:TemplateField ControlStyle-Width="100%" ControlStyle-Height="40px" HeaderText="Your Answer">
                             <ItemTemplate>
                                 <asp:TextBox ID="TextBox_Text" ItemStyle-Width="130%" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
@@ -736,27 +812,32 @@
                         </asp:TemplateField>
 
 
-
+                        <%--- 
                         <asp:ButtonField ButtonType="Image" CommandName="Submit" ImageUrl="" ControlStyle-Height="40px" HeaderText="Point you got">
                             <ControlStyle CssClass=" submit_img" />
                         </asp:ButtonField>
+                       ---%>
+                         <%--cells[2]--%>
+                        <asp:TemplateField ItemStyle-Width="40px" HeaderText="Point you got">
+                            <ItemTemplate>
+                                <asp:Label ID="TextBox_StudentScorePerQuestion" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server"  />
+                            </ItemTemplate>
+                        </asp:TemplateField>
 
-
+                        <%--cells[3]--%>
                         <asp:TemplateField HeaderText="Correct<br/>Answer">
                             <ItemTemplate>
-                                <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion" ImageUrl="" OnClientClick="if (!toNotSureIcon(this)) return false;  " ControlStyle-Height="40px" />
-                                <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion" ImageUrl="" OnClientClick=" if (!toGiveUpIcon(this)) return false; " ControlStyle-Height="40px" />
-
+                                <asp:Label ID="TextBox_CorrectOrganAnswer" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server"  />
                             </ItemTemplate>
 
-
+                       
                         </asp:TemplateField>
                         
-                           
-                                <%--<asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide" Visible='<%# ShowHideIconCol_displayStatus() %>'>--%>
-                                <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide" Visible=true>
-                                    <controlstyle cssclass=" menu_img" />
-                                </asp:ButtonField>
+                        <%--cells[4]--%>
+                        <%--<asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide" Visible='<%# ShowHideIconCol_displayStatus() %>'>--%>
+                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide" Visible=true>
+                            <controlstyle cssclass=" menu_img" />
+                        </asp:ButtonField>
                             
                        
                     </Columns>
@@ -954,9 +1035,9 @@
 
                         pickedRandQNo.push('<%= arrayData[i] %>');
 
-                        <% 
-                                }
-                        %>
+            <% 
+                    }
+            %>
                         //alert(pickedRandQNo);
 
 

@@ -571,12 +571,14 @@
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
                   
                     <Columns>
-
+                         <%--cells[0]--%>
                         <asp:TemplateField ItemStyle-Width="40px"  HeaderText="Question Number">
                             <ItemTemplate>
                                 <asp:Label ID="TextBox_Number" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
+
+                         <%--cells[1]--%>
                         <asp:TemplateField ControlStyle-Width="100%"   ControlStyle-Height="40px" HeaderText="Organ Name">
                             <ItemTemplate >
                                 <asp:TextBox ID="TextBox_Text" ItemStyle-Width="130%" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
@@ -596,23 +598,26 @@
                         </asp:TemplateField>
 
 
-
+                         <%--cells[2]--%>
                         <asp:ButtonField ButtonType="Image" CommandName="Submit"  ImageUrl="" ControlStyle-Height="40px" HeaderText="Submit" >
                             <ControlStyle CssClass=" submit_img" />
                         </asp:ButtonField>
+
+                         <%--cells[3]--%>
                         <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px"  ControlStyle-Width="40px" HeaderText="Show /<br/>Hide">
                             <ControlStyle CssClass=" menu_img" />
                         </asp:ButtonField>
 
+
+                         <%--cells[4]--%>
                         <asp:TemplateField HeaderText="Mark /<br/>Not sure">
                             <ItemTemplate>
                                 <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="if (!toNotSureIcon(this)) return false;  " ControlStyle-Height="40px" />
                                 <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick=" if (!toGiveUpIcon(this)) return false; " ControlStyle-Height="40px" />
 
                             </ItemTemplate>
-
-
                         </asp:TemplateField>
+
 
                     </Columns>
                 </asp:GridView>
