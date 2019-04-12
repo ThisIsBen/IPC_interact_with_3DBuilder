@@ -69,7 +69,7 @@ public partial class IPC : CsSessionManager
         {
             
            
-
+           
 
             gvScore.AllowPaging = false;
             gvScore.AllowSorting = true;
@@ -126,10 +126,16 @@ public partial class IPC : CsSessionManager
             //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
             System.Threading.Thread.Sleep(100);
 
+            //2019/4/10 Ben commented the function to show 3D Labels in 3DBuilder when AITypeQuestion is loaded.          
+            /*
             //Show 3D Labels in 3DBuilder
             ShowOrHide3DLabels_Click();
-            
+            */
 
+
+            //turn off the display of the "Show/Hide" icon column
+            //which is used to allow the student to hide or show the 3D organs displayed in the 3DBuilder.
+            switchOfDisplayShowHideIconCol("off");
         }
 
         //set the remaining time to the timer and check whether time is already up.
@@ -393,6 +399,55 @@ public partial class IPC : CsSessionManager
 
 
 
+  
+    //Step 4-2 If the student clicks the “View the correct answer in 3D” button, 
+    //we will show the “Show/Hide” icon for each organ on the webpage to allow the student to hide or show the 3D organs displayed in the 3DBuilder.
+    public void displayShowHideIconCol_BtnClick(object sender, EventArgs e)
+    {
+
+        switchOfDisplayShowHideIconCol("on");
+
+    }
+
+
+    //hide or show Show/Hide icon
+    public void switchOfDisplayShowHideIconCol(string onOrOff)
+    {
+        if (onOrOff == "on")
+        {
+            hidden_DisplayShow_HideCol.Value = "Yes";
+
+            /*this part still doesn't work, we can't display the hidden Show/Hide icon column*/
+            //display all the “Show/Hide” icon for each organ on the webpage to allow the student to hide or show the 3D organs displayed in the 3DBuilder.
+            gvScore.HeaderRow.Cells[4].Visible = true;
+
+
+            for (int i = 0; i < gvScore.Rows.Count; i++)
+            {
+                gvScore.Rows[i].Cells[4].Visible = true;
+            }
+
+        }
+
+
+
+        if (onOrOff == "off")
+        {
+            hidden_DisplayShow_HideCol.Value = "No";
+
+            /*this part still doesn't work, we can't display the hidden Show/Hide icon column*/
+            //display all the “Show/Hide” icon for each organ on the webpage to allow the student to hide or show the 3D organs displayed in the 3DBuilder.
+            gvScore.HeaderRow.Cells[4].Visible = false;
+
+
+            for (int i = 0; i < gvScore.Rows.Count; i++)
+            {
+                gvScore.Rows[i].Cells[4].Visible = false;
+            }
+        }
+      
+
+    }
     //get the parameters in URL and store there value in global var.
     private void retrieveURLParameters()
     {

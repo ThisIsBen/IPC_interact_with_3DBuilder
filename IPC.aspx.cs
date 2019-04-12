@@ -123,7 +123,7 @@ public partial class IPC : CsSessionManager
             //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
             System.Threading.Thread.Sleep(100);
 
-            //2019/4/10 Ben commented the function fo show 3D Labels in 3DBuilder when AITypeQuestion is loaded.
+            //2019/4/10 Ben commented the function to show 3D Labels in 3DBuilder when AITypeQuestion is loaded.
             /*
             //Show 3D Labels in 3DBuilder
             ShowOrHide3DLabels_Click();
