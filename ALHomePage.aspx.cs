@@ -13,9 +13,9 @@ public partial class ALHomePage : System.Web.UI.Page
     public static Process os = new Process();
 
     //set the default value of each parameters that are retrieved from URL.
-    //string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name //it's included in exam paper cPaperID=tea120181122231914 and cPaperID=tea120181126201801
+    //string questionXMLPath = "tea1_Q_20181210231100"; ////Surgery Mode xml file name //it's included in exam paper cPaperID=tea120181122231914 and cPaperID=tea120181126201801
     string questionXMLPath = "tea1_Q_20181225144451";
-    string studentUserID = "stu2";
+    string strUserID = "stu2";
     string examMode = "Yes";//ExamMode的中控, we set its default value to Yes
     string cActivityID = "1023";
 
@@ -55,7 +55,7 @@ public partial class ALHomePage : System.Web.UI.Page
         //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
         setModeIn3DBuilderForInit();
 
-        Response.Redirect("Items.aspx?examMode=" + examMode + "&strQID=" + questionXMLPath + "&strUserID=" + studentUserID + "&cActivityID=" + cActivityID);
+        Response.Redirect("Items.aspx?examMode=" + examMode + "&strQID=" + questionXMLPath + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID);
     }
 
     //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
@@ -78,10 +78,10 @@ public partial class ALHomePage : System.Web.UI.Page
             questionXMLPath = Request.QueryString["strQID"];
         }
 
-        //set the variable studentUserID with the parameter strUserID in URL if it is provided.
+        //set the variable strUserID with the parameter strUserID in URL if it is provided.
         if (Request.QueryString["strUserID"] != null && Request.QueryString["strUserID"] != "")
         {
-            studentUserID = Request.QueryString["strUserID"];
+            strUserID = Request.QueryString["strUserID"];
         }
 
 
@@ -115,7 +115,7 @@ public partial class ALHomePage : System.Web.UI.Page
         os.StartInfo.Arguments = hintID;
         */
         //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
-        os.StartInfo.Arguments = studentUserID;
+        os.StartInfo.Arguments = strUserID;
         os.Start();
 
 
@@ -126,7 +126,7 @@ public partial class ALHomePage : System.Web.UI.Page
         Session["Writer"] = wr;
         Session["Process"] = os;
 
-        //get process ID
+        //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
         Session["ProcessID"]=os.Id.ToString();
         
 

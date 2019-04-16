@@ -17,11 +17,11 @@
         th {
             font-size: 20px;
             text-align: center;
-            background-color: #4fBBDB;
+            background-color: rgb(215, 111, 241)
         }
 
         .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-            background-color: #ffd800;
+            background-color: rgb(79, 187, 219);
         }
 
 
@@ -67,9 +67,11 @@
         clickedOrganSubmitImg = "Image/checkmark2_marked.png";
 
 
+        //incorrect answer <tr> background Color
+        incorrectAnswerTRBgColor = "rgb(255, 127, 127)";
 
-
-
+        //to decide the background color of the question TR.
+        questionTRBgColor = "rgb(145, 201, 27)";
 
         //Close CSNamePipe.exe before close the webpage.
         //$(window).unload(function () {
@@ -317,7 +319,7 @@
 
                 //if the student's answer is not correct, we set the background of the row to red
                 if (studentEachQuestionOrganScoreString[i] != scoreOfEachQuestionOrgan) {
-                    incorrectAnswerTRBgColor = "rgb(255, 10, 10)";
+                    
                     gvDrv.rows[i].style.backgroundColor = incorrectAnswerTRBgColor;
 
                     //Step 2-3 Display the correct answer of the question organ if the student didn’t answer it correctly.
@@ -699,14 +701,16 @@
                 
                    
                 </div>
-                <div class="container" style="position: fixed; background-color: lightblue;">
+                <div id="headerFunctionBar" class="container" style="position: fixed; background-color: lightblue;">
                     <div class="row">
-                        <div class="col-sm-8">
+                        <div class="col-md-8">
                             
                         </div>
-                        <div class="col-sm-4">
-
-                            <%--<div id="clockdiv">
+                        <div class="col-md-4">
+                            
+                            
+                           
+                                <%--<div id="clockdiv">
   
                           <div>
                             <span class="hours"></span>
@@ -741,12 +745,12 @@
                         <div class="container" style="position: fixed;">
                             <div class="row">
                                 <div class="col-sm-5 ">
-                                    <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg ' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
+                                    <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg ' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="<< Back" runat="server" />
                                     &nbsp&nbsp&nbsp&nbsp
                         <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR" value="Hide/Show Non Answer Rows" onclick="hideNonQuestionTR()" />
 
-                        <input id="Button1" type="button" class='btn-info btn-lg ' value="View organs in 3D" runat="server" onserverclick="displayShowHideIconCol_BtnClick">
-
+                        <%--<input id="Button1" type="button" class='btn-info btn-lg ' value="View organs in 3D" runat="server" onserverclick="displayShowHideIconCol_BtnClick">--%>
+                       
                                 </div>
                                 <div class="col-sm-3">
                                     <div>
@@ -756,9 +760,16 @@
                                     <input type="image" id="ShowOrHideAll" class="img-thumbnail" src="" style="max-height: 100px; max-width: 100px;" onserverclick="ShowOrHideAll_Click" runat="server" />
                                     <br />
 
+                                   <%-- <div>
+                                        <label style="font-size: 20px;">Your total score:</label>
+
+                                    </div>--%>
 
                                 </div>
 
+                                 <div class="col-sm-4">
+                                      <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_setUpCSNamedPipe" runat="server" value="Step1 Create IPC Pipe"  onserverclick="btn_setUpCSNamedPipe_Onclick">&nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_connectTo3DBuilder" runat="server" value="Step2 Connect to 3DBuilder"  onserverclick="btn_connectTo3DBuilder_Onclick">
+                                 </div>
 
                             </div>
                             <%--<input type="text" id="TBX_Input" runat="server" />--%>
@@ -852,8 +863,7 @@
         //to keep all the organ numbers that are assigned as questions 
         var questionArray = []
 
-        //to decide the background color of the question TR.
-        questionTRBgColor = "rgb(145, 201, 27)";
+        
 
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
         XMLFolder = "<%=  CsDynamicConstants.relativeKneeXMLFolder %>";//"IPC_Questions/1161-1450/";
@@ -867,7 +877,8 @@
         $(document).ready(function () {
 
             //set the default value of each parameters that are retrieved from URL.
-            questionXMLPath = "tea1_Q_20190205145709";
+            questionXMLPath="tea1_Q_20190205145709";//anatomy 
+            //questionXMLPath = "tea1_Q_20181210231100";//surgery
             examMode = "Yes";
 
 

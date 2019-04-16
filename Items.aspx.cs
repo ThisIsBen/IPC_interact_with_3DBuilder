@@ -25,8 +25,8 @@ public partial class Items : CsSessionManager
 
 
     //set the default value of each parameters that are retrieved from URL.
-    string questionXMLPath = "tea1_Q_20181210231100"; //surgery mode xml file name
-    string studentUserID="stu2";
+    string questionXMLPath = "tea1_Q_20181210231100"; ////Surgery Mode xml file name
+    string strUserID="stu2";
     string  examMode = "Yes";//examMode的中控, we set its default value to Yes
     string cActivityID = "1023";
     
@@ -53,10 +53,10 @@ public partial class Items : CsSessionManager
             questionXMLPath = Request.QueryString["strQID"];
         }
 
-        //set the variable studentUserID with the parameter strUserID in URL if it is provided.
+        //set the variable strUserID with the parameter strUserID in URL if it is provided.
         if (Request.QueryString["strUserID"] != null && Request.QueryString["strUserID"] != "")
         {
-            studentUserID = Request.QueryString["strUserID"];
+            strUserID = Request.QueryString["strUserID"];
         }
 
 
@@ -73,8 +73,8 @@ public partial class Items : CsSessionManager
         }
 
 
-        //set randomize seed as the ascii code of the first char + the ascii code of the last char of the studentUserID
-        randomizeSeed = (Convert.ToInt32(studentUserID[0]) + Convert.ToInt32(studentUserID[studentUserID.Length - 1])).ToString();
+        //set randomize seed as the ascii code of the first char + the ascii code of the last char of the strUserID
+        randomizeSeed = (Convert.ToInt32(strUserID[0]) + Convert.ToInt32(strUserID[strUserID.Length - 1])).ToString();
     }
 
 
@@ -163,7 +163,7 @@ public partial class Items : CsSessionManager
             //Response.Redirect("IPC.aspx");
 
             ////head to IPC.aspx in exam mode
-            Response.Redirect("IPC.aspx?examMode="+examMode+"&strQID=" + questionXMLPath + "&strUserID=" + studentUserID + "&cActivityID=" + cActivityID);
+            Response.Redirect("IPC.aspx?examMode="+examMode+"&strQID=" + questionXMLPath + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID);
              
 
         }
@@ -182,7 +182,7 @@ public partial class Items : CsSessionManager
             //Response.Redirect("IPC.aspx");
 
             ////head to IPC.aspx in exam mode
-            Response.Redirect("IPC.aspx&strQID=" + questionXMLPath + "&strUserID=" + studentUserID);
+            Response.Redirect("IPC.aspx&strQID=" + questionXMLPath + "&strUserID=" + strUserID);
         }
 
 
@@ -204,7 +204,7 @@ public partial class Items : CsSessionManager
     //because it's not of Exam Mode, so we don't need to send the randomized organ question number to 3DBuilder.
     private void loadOrganXMLIn3DBuilderFor_Non_ExamMode()
     {
-        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath);//send protocol,Data to 3DBuilder.
+        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml");//send protocol,Data to 3DBuilder.
 
         
     }

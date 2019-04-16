@@ -46,7 +46,7 @@ public partial class IPC : CsSessionManager
 
     //set the default value of each parameters that are retrieved from URL.
     string questionXMLPath = ""; //surgery mode xml file name
-    string strQID = "tea1_Q_20181210231100";
+    string strQID = "tea1_Q_20181210231100";//Surgery Mode
     string strUserID = "stu2";
     string cActivityID = "1023";
     string examMode = "Yes";
@@ -251,10 +251,15 @@ public partial class IPC : CsSessionManager
         string hintID = "5555";//this hintID is hard-coded by 昇宏學長
 
         os.StartInfo.WorkingDirectory = Request.MapPath("~/");
-        os.StartInfo.FileName = Request.MapPath("CSNamedPipe.exe");
+        os.StartInfo.FileName = Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe");
         os.StartInfo.UseShellExecute = false;
         os.StartInfo.RedirectStandardInput = true;
+        /*
         os.StartInfo.Arguments = hintID;
+        */
+        //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
+        os.StartInfo.Arguments = strUserID;
+
         os.Start();
         StreamWriter wr = os.StandardInput;
         //os.StandardInput.Close();
@@ -262,6 +267,9 @@ public partial class IPC : CsSessionManager
         Session["Process"] = os;
 
 
+        //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
+        Session["ProcessID"] = os.Id.ToString();
+        
 
 
 

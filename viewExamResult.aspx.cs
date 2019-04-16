@@ -49,7 +49,8 @@ public partial class IPC : CsSessionManager
     //set the default value of each parameters that are retrieved from URL.
     
     string questionXMLPath = ""; //surgery mode xml file name
-    string strQID = "tea1_Q_20190205145709";
+    string strQID = "tea1_Q_20190205145709";//Anatomy Mode xml file name
+    //string strQID = "tea1_Q_20181210231100";//Surgery Mode xml file name
     string strUserID = "stu5";
     string cActivityID = "1023";
     string examMode = "Yes";
@@ -402,7 +403,7 @@ public partial class IPC : CsSessionManager
   
     //Step 4-2 If the student clicks the “View the correct answer in 3D” button, 
     //we will show the “Show/Hide” icon for each organ on the webpage to allow the student to hide or show the 3D organs displayed in the 3DBuilder.
-    public void displayShowHideIconCol_BtnClick(object sender, EventArgs e)
+    public void displayShowHideIconCol_BtnClick()
     {
 
         switchOfDisplayShowHideIconCol("on");
@@ -559,15 +560,25 @@ public partial class IPC : CsSessionManager
         string hintID = "5555";//this hintID is hard-coded by 昇宏學長
 
         os.StartInfo.WorkingDirectory = Request.MapPath("~/");
-        os.StartInfo.FileName = Request.MapPath("CSNamedPipe.exe");
+        os.StartInfo.FileName = Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe");
         os.StartInfo.UseShellExecute = false;
         os.StartInfo.RedirectStandardInput = true;
+        /*
         os.StartInfo.Arguments = hintID;
+        */
+        //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
+        os.StartInfo.Arguments = strUserID;
+
         os.Start();
         StreamWriter wr = os.StandardInput;
         //os.StandardInput.Close();
         Session["Writer"] = wr;
         Session["Process"] = os;
+
+        //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
+        Session["ProcessID"] = os.Id.ToString();
+        
+
 
 
 
@@ -727,6 +738,74 @@ public partial class IPC : CsSessionManager
 
     }
 
+    //activate CSNamedPipe.exe automatically, and wait for the user to activate the 3DBuilder.
+    public void btn_setUpCSNamedPipe_Onclick(object sender, EventArgs e)
+    {
+        //temporarily we only activate CSNamedPipe.exe, and manually activate 3DBuilder
+        //run CSNamedPipe.exe
+        runCSNamedPipe();
+
+       
+
+    }
+
+
+    //Step 5 Display the correct  organ name of the organs in 3DBuilder  
+    //that the student didn’t answer correctly.
+
+    public void btn_connectTo3DBuilder_Onclick(object sender, EventArgs e)
+    {
+
+
+
+        //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
+        setModeIn3DBuilderForInit();
+
+
+        //wait for the 3DBuilder to respond
+        System.Threading.Thread.Sleep(10);
+
+
+       
+        //compose a string that contains student's question ordering of the organs 
+        string strStuQuestionOrdering="";
+
+        //convert the student's question ordering of the organs from an array of string to a string
+        for (int x = 0; x < ScoreAnalysisList[0].questionOrderingString.Length-1; x++)
+        {
+
+            strStuQuestionOrdering += ScoreAnalysisList[0].questionOrderingString[x + 1]+" ";
+
+        }
+
+        //Step 5-2 Send the organ XML file of the AITypeQuestion to the 3DBuilder.
+        //Step 5-4 Send students question ordering of the organs to the 3DBuilder to display the organs in the corresponding order.
+        loadOrganXMLIn3DBuilderForExamMode(strStuQuestionOrdering);
+
+        displayShowHideIconCol_BtnClick();
+    }
+
+
+    // Step 5-1 Send initiation command to the 3DBuilder.
+    //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
+    private void setModeIn3DBuilderForInit()
+    {
+        //originating from ALHomePage.aspx
+        sendMsg23DBuilder("1 2");
+
+    }
+
+    //Step 5-2 Send the organ XML file of the AITypeQuestion to the 3DBuilder.
+    //Step 5-4 Send students ordering of the organs to the 3DBuilder to display the organs in the corresponding order.
+    //make 3DBuilder load the target Organ XML file and display it
+    //and send the randomized organ question number to the organs displayed in 3DBuilder 
+    private void loadOrganXMLIn3DBuilderForExamMode(string strRandomQuestionNo)
+    {
+
+        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + QuestionFileName + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+
+    }
+
     private void CheckCountdownTimer(DateTime deadlineDateTime)
     {
 
@@ -824,24 +903,28 @@ public partial class IPC : CsSessionManager
 
     public void FinishBtn_Click(object sender, EventArgs e)
     {
-        //do what should be done when the user clicks submit button
-        FinishBtn_ClickEventHandler();
-
+       
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
         killCorrespondingCSNamedPipe();
-           
+         
+        //go  back to the previous page
+
 
     }
 
     private void killCorrespondingCSNamedPipe()
     {
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
-        Process os = (Process)Session["Process"];
+        //kill process with processID
+        Process[] procList = Process.GetProcesses();
 
-        //kill the corresponding running CsNamedPipe.exe process if it exists.
-        if (os != null)
+        for (int i = 0; i < procList.Length; i++)
         {
-            os.Kill();
+            string pid = procList[i].Id.ToString();
+            if (string.Equals(pid, Session["ProcessID"]))
+            {
+                procList[i].Kill();
+            }
         }
     }
 

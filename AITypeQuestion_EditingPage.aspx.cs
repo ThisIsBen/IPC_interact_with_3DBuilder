@@ -352,6 +352,9 @@ public partial class IPC: System.Web.UI.Page
         Session["Process"] = os;
 
 
+        //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
+        Session["ProcessID"] = os.Id.ToString();
+        
 
 
 
@@ -531,12 +534,16 @@ public partial class IPC: System.Web.UI.Page
     private  void killCorrespondingCSNamedPipe()
     {
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
-        Process os = (Process)Session["Process"];
+        //kill process with processID
+        Process[] procList = Process.GetProcesses();
 
-        //kill the corresponding running CsNamedPipe.exe process if it exists.
-        if (os != null)
+        for (int i = 0; i < procList.Length; i++)
         {
-            os.Kill();
+            string pid = procList[i].Id.ToString();
+            if (string.Equals(pid, Session["ProcessID"]))
+            {
+                procList[i].Kill();
+            }
         }
     }
 
