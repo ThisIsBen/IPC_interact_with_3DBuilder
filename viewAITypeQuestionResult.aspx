@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeFile="viewExamResult.aspx.cs" Inherits="IPC" MaintainScrollPositionOnPostback="true" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" MasterPageFile="~/Site.Master" CodeFile="viewAITypeQuestionResult.aspx.cs" Inherits="IPC" MaintainScrollPositionOnPostback="true" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -767,7 +767,14 @@
 
                                 </div>
 
-                                 <div class="col-sm-4">
+                                <div class="col-sm-1">
+
+                                    <%--the backend C# fun can not be called--%>
+                                    <asp:Label ID="LB_StudentScore" CliendIDMode="static"  Font-Names="TextBox3" Visible="true" runat="server"   Text='<%# getStudentScoreAndQuestionTotalScore() %>' />
+
+                                </div>
+
+                                 <div class="col-sm-3">
                                       <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_setUpCSNamedPipe" runat="server" value="Step1 Create IPC Pipe"  onserverclick="btn_setUpCSNamedPipe_Onclick">&nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_connectTo3DBuilder" runat="server" value="Step2 Connect to 3DBuilder"  onserverclick="btn_connectTo3DBuilder_Onclick">
                                  </div>
 

@@ -1354,4 +1354,14 @@ public partial class IPC : CsSessionManager
         return randomCode;
     }
 
+
+
+    public string getStudentScoreAndQuestionTotalScore()
+    {
+
+        return ScoreAnalysisList[0].studentTotalScore.ToString()+"/"+ScoreAnalysisList[0].questionTotalScore;
+
+    
+    }
+
 }
