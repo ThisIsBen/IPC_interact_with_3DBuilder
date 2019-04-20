@@ -74,7 +74,7 @@ using System.Text.RegularExpressions;
 
     #endregion
 
-    #region Access StudentIPC_Score_related DB Data
+    #region Insert Student's answer of the AITypeQuestion related DB Data
     /// <summary>
     /// Get user's information by token.
     /// </summary>
@@ -94,7 +94,7 @@ using System.Text.RegularExpressions;
         return GetDataTable(sql,"NewVersionHintsDB");
     }
     //set
-    public static int InsertStuIPCAns(string cUserID, string cQID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session)
+    public static int InsertStuIPCAns(string cUserID, string cQID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session,string cActivityID)
     {
         if (Num_Of_Question_Submision_Session==1)
         {
@@ -105,7 +105,7 @@ using System.Text.RegularExpressions;
 
             //string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cActivityID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cActivityID, _StudentAnswer, _QuesOrdering);
 
-            string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}' )", cUserID, cQID, _QuesOrdering);
+            string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}','{3}' )", cUserID, cQID, _QuesOrdering,cActivityID);
             
             object[] sqlParametersList = { _StudentAnswer }; 
             return InsertUserEnteredData(sql,sqlParametersList,"NewVersionHintsDB");
@@ -118,7 +118,7 @@ using System.Text.RegularExpressions;
             
             //string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cActivityID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cActivityID);
 
-            string sql = string.Format("UPDATE AITypeQuestionStudentAnswer  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( @StudentAnswer as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{0}' as nvarchar(max)) where cUserID =  '{1}' and cQID =  '{2}'", _QuesOrdering, cUserID, cQID);
+            string sql = string.Format("UPDATE AITypeQuestionStudentAnswer  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( @StudentAnswer as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{0}' as nvarchar(max)) where cUserID =  '{1}' and cQID =  '{2}' and  cActivityID='{3}'", _QuesOrdering, cUserID, cQID, cActivityID);
             object[] sqlParametersList = { _StudentAnswer };
             return UpdateUserEnteredData(sql, sqlParametersList, "NewVersionHintsDB");
         }
@@ -176,7 +176,7 @@ using System.Text.RegularExpressions;
 
 
 
-    #region Access IPCExamHWCorrectAnswer DB Data
+    #region Access AITypeQuestionCorrectAnswer DB Data
     public static DataTable GetIPCExamHWCorrectAns()
     {
         //string sql = string.Format("Select * From IPCExamHWCorrectAnswer ");
@@ -265,7 +265,7 @@ using System.Text.RegularExpressions;
 
 
 
-    #region get data needed on student answer sheet for AITypeQuestion
+    #region get data needed on student answer sheet for AITypeQuestion e.g., Count Down timer
     //get the question description of an existing  AITypeQuestion when the instructor wants to edit it.
     public static int getExamRemainingTime(string cActivityID)
     {
@@ -320,7 +320,7 @@ using System.Text.RegularExpressions;
 
     #endregion
 
-    #region set up AI type question in Hints DB
+    #region set up AITypeQuestion in Hints DB
 
     //使用SQLParameter to make the value of the variable to be a parameter to prevent SQL Injection Attack.
     //Parameter 可以 (1)檢查參數的型別 (2)檢查資料長度 (3)確保參數為非可執行的SQL命令 
@@ -799,7 +799,7 @@ using System.Text.RegularExpressions;
      */ 
 
 
-    #region GetDB_Data
+    #region Get correct answer or student's answer of the AITypeQuestion
     /// <summary>
     /// Get user's information by token.
     /// </summary>
@@ -813,7 +813,7 @@ using System.Text.RegularExpressions;
 
     //a input to select all data if CPaperID is cPaperID
     //get a student's recored according to his cUserID and cQID in datatable 'AITypeQuestionStudentAnswer'
-    public static DataTable GetAllTBData(string DB_Child, string cQID,string cUserID="")
+    public static DataTable GetAllTBData(string DB_Child, string cQID,string cActivityID="",string cUserID="")
     {
         /*
         //In  博宇's implementation
@@ -821,47 +821,80 @@ using System.Text.RegularExpressions;
          * */
         string sql = "";
 
-        //it means cUserID is not provided with we call the function.
-        if (cUserID == "")
+        //we need to use cActivityID to get student's answer of the AITypeQuestion
+        if (DB_Child == "AITypeQuestionStudentAnswer")
         {
-            sql = string.Format("Select * From " + DB_Child + " Where cQID In('" + cQID + "')");
-        }
-        else//if cUserID is  provided with we call the function.
-        {
-            sql = string.Format("Select * From " + DB_Child + " Where cQID In('" + cQID + "') and cUserID='" + cUserID + "'");
+
+            //it means cUserID is not provided with we call the function.
+            if (cUserID == "")
+            {
+                sql = string.Format("Select * From " + DB_Child + " Where cQID In('" + cQID + "') and cActivityID='" + cActivityID + "'");
+            }
+            else//if cUserID is  provided with we call the function.
+            {
+                sql = string.Format("Select * From " + DB_Child + " Where cQID In('" + cQID + "') and cUserID='" + cUserID + "'" + "and cActivityID='" + cActivityID + "'");
+
+            }
 
         }
+
+        else if (DB_Child == "AITypeQuestionCorrectAnswer")
+        {
+
+            //it means cUserID is not provided with we call the function.
+            if (cUserID == "")
+            {
+                sql = string.Format("Select * From " + DB_Child + " Where cQID In('" + cQID + "')");
+            }
+            else//if cUserID is  provided with we call the function.
+            {
+                sql = string.Format("Select * From " + DB_Child + " Where cQID In('" + cQID + "') and cUserID='" + cUserID + "'");
+
+            }
+
+
+        }
+
+       
         return GetDataTable(sql, DB_Slector);//execute the sql cmd in DB_Slector database
     }
 
 
-    public static int InsertScore(string DB_Child, string cUserID, string grade)
+    public static int InsertScore(string DB_Child, string cUserID, string grade,string cActivityID)
     {
-        string sql = string.Format("Insert into " + DB_Child + " VALUES( '{0}', '{1}' )", cUserID, grade);
+        string sql = string.Format("Insert into " + DB_Child + " VALUES( '{0}', '{1}', '{2}' )", cUserID, grade, cActivityID);
         return InsertData(sql, DB_Slector);//execute the sql cmd in DB_Slector database
     }
 
-    public static int UpdateScore(string DB_Child, string cUserID, string NewGrade, string cQID)
+    public static int UpdateScore(string DB_Child, string cUserID, string NewGrade, string cQID, string cActivityID)
     {
         //In  博宇's implementation
         /*
         string sql = string.Format("Update " + DB_Child + " set Grade = '{1}' where StuCouHWDe_ID = '{0}'  ", ID, NewGrade);
          * */
-        string sql = string.Format("Update " + DB_Child + " set Grade = '{1}' where cUserID = '{0}' and cQID = '{2}' ", cUserID, NewGrade, cQID);
+        string sql = string.Format("Update " + DB_Child + " set Grade = '{1}' where cUserID = '{0}' and cQID = '{2}' and cActivityID= '{3}' ", cUserID, NewGrade, cQID, cActivityID);
         return UpdateData(sql, DB_Slector);//execute the sql cmd in DB_Slector database
     }
 
-    public static int DeleteScore(string DB_Child, string cUserID, string cQID)
+    public static int DeleteScore(string DB_Child, string cUserID, string cQID, string cActivityID)
     {
         //In  博宇's implementation
         /*
         string sql = string.Format("Delete from " + DB_Child + " where StuCouHWDe_ID = '{0}' ", ID);
          * */
-        string sql = string.Format("Delete from " + DB_Child + " where cUserID = '{0}' and cQID = '{1}' ", cUserID, cQID);
+        string sql = string.Format("Delete from " + DB_Child + " where cUserID = '{0}' and cQID = '{1}'  and cActivityID = '{2}' ", cUserID, cQID, cActivityID);
         return UpdateData(sql, DB_Slector);//execute the sql cmd in DB_Slector database
     }
 
-
+    public static DataTable GetAITypeQuestionScore(string DB, string cQID, string cPaperID, string cQuestionType)
+    {
+        /*
+        //In  博宇's implementation
+        string sql = string.Format("Select * From " + DB_Child + " Where cActivityID In('" + cActivityID + "')");
+         * */
+        string sql = string.Format("Select cQuestionScore From " + DB + " Where cQID ='{0}' and cQuestionType='{1}' and cPaperID='{2}'", cQID, cQuestionType, cPaperID);
+        return GetDataTable(sql, DB_Slector);//execute the sql cmd in DB_Slector database
+    }
 
     #endregion
 

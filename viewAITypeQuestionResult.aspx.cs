@@ -52,7 +52,8 @@ public partial class IPC : CsSessionManager
     string strQID = "tea1_Q_20190205145709";//Anatomy Mode xml file name
     //string strQID = "tea1_Q_20181210231100";//Surgery Mode xml file name
     string strUserID = "stu5";
-    string cActivityID = "1023";
+    string cActivityID = "1023";//1012
+    string cPaperID = "tea120181126201801";// it contains cQiD=tea1_Q_20190205145709,cQID=tea1_Q_20181210231100
     string examMode = "Yes";
 
     protected void Page_Load(object sender, EventArgs e)
@@ -180,8 +181,8 @@ public partial class IPC : CsSessionManager
     private void getAndMarkStudentAnswer()
     {
 
-        //Set the total score of this question, we can get it from exam paper in the near future.
-        int questionTotalScore = 100;
+        // we get the allotment total score of the AITypeQuestion from the exam paper.
+        int questionTotalScore = getAllotmentScoreOfAITypeQuestion();
 
         //In  博宇's implementation
         /*
@@ -202,7 +203,7 @@ public partial class IPC : CsSessionManager
         /*
         dt = CsDBOp.GetAllTBData("StuCouHWDe_IPC", cQID_Selector);
         */
-        DataTable dt = CsDBOp.GetAllTBData("AITypeQuestionStudentAnswer", cQID_Selector, strUserID);
+        DataTable dt = CsDBOp.GetAllTBData("AITypeQuestionStudentAnswer", cQID_Selector, strUserID,cActivityID);
         //Get the retrieved data from each row of the retrieved data table.
         
         //count the number of student
@@ -267,7 +268,12 @@ public partial class IPC : CsSessionManager
     }
 
 
-
+    private int getAllotmentScoreOfAITypeQuestion()
+    {
+        DataTable temp = CsDBOp.GetAITypeQuestionScore("Paper_Content", strQID, cPaperID, "9");
+        string StrquestionTotalScore = temp.Rows[0][0].ToString();
+        return int.Parse(StrquestionTotalScore);
+    }
 
 
 
@@ -325,7 +331,7 @@ public partial class IPC : CsSessionManager
             return;
 
         //若尚未批改過這次AI題考試或練習的話，執行批改AI題的function，並將批改後的成績顯示出來。
-        ScoreAnalysisM log = new ScoreAnalysisM(StudentIDTemp, AnsewerTemp, QuesOrdering, correctXML, correctAnswerHT, cQID_Selector, questionTotalScore);
+        ScoreAnalysisM log = new ScoreAnalysisM(StudentIDTemp, AnsewerTemp, QuesOrdering, correctXML, correctAnswerHT, cQID_Selector, questionTotalScore, cActivityID);
         ScoreAnalysisList.Add(log);
 
         //比對學生作答內容中的XML檔名
@@ -473,6 +479,15 @@ public partial class IPC : CsSessionManager
         {
             cActivityID = Request.QueryString["cActivityID"];
         }
+
+
+        //set the variable cPaperID with the parameter cPaperID in URL if it is provided.
+        if (Request.QueryString["cPaperID"] != null && Request.QueryString["cPaperID"] != "")
+        {
+            cPaperID = Request.QueryString["cPaperID"];
+        }
+
+
 
         //set the variable examMode with the parameter examMode in URL if it is provided.
         if (Request.QueryString["examMode"] != null && Request.QueryString["examMode"] != "")
@@ -1029,7 +1044,7 @@ public partial class IPC : CsSessionManager
             //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
             //}
 
-            CsDBOp.InsertStuIPCAns(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+            CsDBOp.InsertStuIPCAns(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session,cActivityID);//插入學生data至darabase
 
             //InsertStuIPCAns2DB(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
             ///////////////////////////////////////

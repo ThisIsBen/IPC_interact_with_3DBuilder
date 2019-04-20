@@ -663,7 +663,8 @@ public partial class IPC : CsSessionManager
             //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
             //}
 
-            CsDBOp.InsertStuIPCAns(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
+            //Insert the student's ID, student's answer, question order of this AITypeQuestion to the NewVestionDB/AITypeQuestionStudentAnswer datatable
+            CsDBOp.InsertStuIPCAns(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session,cActivityID);//插入學生data至darabase
 
             //InsertStuIPCAns2DB(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
             ///////////////////////////////////////
