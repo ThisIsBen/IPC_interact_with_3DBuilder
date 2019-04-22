@@ -105,7 +105,7 @@ using System.Text.RegularExpressions;
 
             //string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cActivityID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cActivityID, _StudentAnswer, _QuesOrdering);
 
-            string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}','{3}' )", cUserID, cQID, _QuesOrdering,cActivityID);
+            string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering,cActivityID ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}','{3}' )", cUserID, cQID, _QuesOrdering,cActivityID);
             
             object[] sqlParametersList = { _StudentAnswer }; 
             return InsertUserEnteredData(sql,sqlParametersList,"NewVersionHintsDB");
@@ -813,7 +813,7 @@ using System.Text.RegularExpressions;
 
     //a input to select all data if CPaperID is cPaperID
     //get a student's recored according to his cUserID and cQID in datatable 'AITypeQuestionStudentAnswer'
-    public static DataTable GetAllTBData(string DB_Child, string cQID,string cActivityID="",string cUserID="")
+    public static DataTable GetAllTBData(string DB_Child, string cQID, string cUserID = "", string cActivityID = "")
     {
         /*
         //In  博宇's implementation

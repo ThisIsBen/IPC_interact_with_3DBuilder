@@ -553,7 +553,7 @@
 
             document.getElementById("<%= hidden_pickedQuestions.ClientID %>").value = questionArray.join(',');  // convert the array into a string using , (comma) as a separator
 
-
+            window.history.back();
             }
 
 
