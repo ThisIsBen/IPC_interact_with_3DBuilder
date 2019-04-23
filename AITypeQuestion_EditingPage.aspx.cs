@@ -240,9 +240,12 @@ public partial class IPC: System.Web.UI.Page
         //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
         System.Threading.Thread.Sleep(100);
 
+
+        //2019/4/23 Ben commented because it will cause lag
+        /*
         //Show 3D Labels in 3DBuilder
         ShowOrHide3DLabels_Click();
-
+        */
         
     }
 
@@ -406,21 +409,14 @@ public partial class IPC: System.Web.UI.Page
         }
     }
 
-    
-   
-    public void FinishBtn_Click(object sender, EventArgs e)
+    private XMLHandler saveAITypeQuestion2XMLFile()
     {
-        //add the <Question> tag to XML to indicate that the organ is picked to be a question or not.
-        //string readIn_xml_str = GetXml("./IPC_Question_Origin/SceneFile_ex.xml");
-
-        //decide which body part organ xml file should be loaded according to which body part is being used in this question
-        decide_QuestionBodyPartOrganXML();
 
         //read in the XML files that contains all organs of a certain body part. e.g., Knee 
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(completeBodyPartOrgansXMLPath));
 
-      
-        
+
+
         //if the selected AITypeQuestionMode is the "SurgeryMode", we append AITypeQuestionMode tag to "SurgeryMode".
         if (Request.Form["radioBtn_AITypeQuestionMode"] != null)
         {
@@ -429,7 +425,7 @@ public partial class IPC: System.Web.UI.Page
             //set the Mode according to which AITypeQuestion mode is selected by the teacher
             if (selectedAITypeQuestionMode == "Surgery Mode")
             {
-                
+
                 xmlHandler.setValueOfSpecificNonNestedTag("AITypeQuestionMode", "Surgery Mode");
 
                 //append AITypeQuestionMode tag to "SurgeryMode".
@@ -444,11 +440,11 @@ public partial class IPC: System.Web.UI.Page
                 //append AITypeQuestionMode tag to "SurgeryMode".
                 //xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");
             }
-          
-          
+
+
 
         }
-        
+
         //Only if this is new question do we append <Question> to each organ in the xml file
         if (Request.QueryString["viewContent"] != "Yes")
         {
@@ -460,39 +456,62 @@ public partial class IPC: System.Web.UI.Page
             //reset the <Question> of each organ
             xmlHandler.setValueOfSpecificTagsWithSpecificValue("Question", "Yes", "No");
         }
-        
-        
+
+
         //set the Visibility of all the organs to visible by setting its Visible tag to "1" except for skin 
         //first para is the tag name of the target tag,the second is the Specific Value,and the third is the new value that user wants to set as the tags new value.
         xmlHandler.setValueOfSpecificTagsWithSpecificValue("Visible", "0", "1");
 
-       
+
         //record which organ is stored as a question, and which organ is set to be visible. 
         recordQuestionOrgan_InvisibleOrgan(xmlHandler);
-        
+
+        /*
         // we won't store the AITypeQuestion if there is no organ picked as a question.
         if (xmlHandler.correctAnswer.Length == 0)
             return;
+        */
 
 
-        
-        
-       
-        
 
-       //handle the mode of the AITypeQuestion e.g.,Suergery Mode 
+
+
+
+        //handle the mode of the AITypeQuestion e.g.,Suergery Mode 
         handleAITypeQuestionMode(xmlHandler);
-        
-        
 
 
-       
 
-       
+
+
+
+
 
         //retrieve the cQID from the hidden field   
         cQID = hidden_AITypeQuestionTitle.Value;
 
+        string xmlpath = XMLFolder + questionXMLPath;
+        
+        //store the content of the AITypeQuestion as XML
+        xmlHandler.saveXML(Server.MapPath(xmlpath));
+
+        return xmlHandler;
+
+    }
+    
+   
+    public void FinishBtn_Click(object sender, EventArgs e)
+    {
+        //add the <Question> tag to XML to indicate that the organ is picked to be a question or not.
+        //string readIn_xml_str = GetXml("./IPC_Question_Origin/SceneFile_ex.xml");
+
+        //decide which body part organ xml file should be loaded according to which body part is being used in this question
+        decide_QuestionBodyPartOrganXML();
+
+        //save the AITypeQuestion content to a XML file
+        XMLHandler xmlHandler = saveAITypeQuestion2XMLFile();
+
+        
         //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
         //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
         //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering        
@@ -503,19 +522,14 @@ public partial class IPC: System.Web.UI.Page
 
         
         
-        //store the content of the AITypeQuestion as XML
-        xmlHandler.saveXML(Server.MapPath(xmlpath));
-
-        //Ben temp comment  for demo and experiment
         
-        //store the AITypeQuestion to DB
-        store2DB(CA, QBP, CAO); 
-        
-        //Ben temp comment for demo and experiment
 
         // only when the teacher actually click the "Save the Question" button can the system redirect back to the previous page
         if (e != null)
         {
+            //store the AITypeQuestion to DB
+            storeAITypeQuestion2DB(CA, QBP, CAO); 
+
             //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
             killCorrespondingCSNamedPipe();
            
@@ -530,8 +544,19 @@ public partial class IPC: System.Web.UI.Page
 
     }
 
+    protected void btnBack_Click(object sender, EventArgs e)
+    {
+        //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
+        killCorrespondingCSNamedPipe();
+
+        //direct back the Hints exam editing page
+        //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
+        redirectBack2HintsPaper_MainPage();
+    }
+
+
     //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
-    private  void killCorrespondingCSNamedPipe()
+    private void killCorrespondingCSNamedPipe()
     {
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
         //kill process with processID
@@ -618,7 +643,7 @@ public partial class IPC: System.Web.UI.Page
 
 
 
-    private void store2DB(string CA, string QBP, string CAO)
+    private void storeAITypeQuestion2DB(string CA, string QBP, string CAO)
     {
         //create Or update required AITypeQuestion attributes in HintsDB 
         createOrUpdateAITypeQuestionInHintsDB();

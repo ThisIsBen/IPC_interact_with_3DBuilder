@@ -647,7 +647,7 @@ using System.Text.RegularExpressions;
         {
             //Update
             strSQL = " UPDATE Paper_Content SET  sStandardScore = '" + strStandardScore + "' , cQuestionType = '" + strQuestionType + "' , cQuestionMode = '" + strQuestionMode + 
-                " WHERE cPaperID = '" + strPaperID + "' AND cQID = '" + strQID + "' ";
+                "' WHERE cPaperID = '" + strPaperID + "' AND cQID = '" + strQID + "' ";
 
             UpdateData(strSQL, "NewVersionHintsDB");
 

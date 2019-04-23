@@ -703,10 +703,19 @@ public partial class IPC : CsSessionManager
         //C# GridView gvScore
         //gvScore.Rows
 
+        //redirect back to the exam paper
+        redirectBack2ExamPaper();
+       
+    }
+
+    private void redirectBack2ExamPaper()
+    {
+        //redirect back to the exam paper
+        ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "history.go(-3);", true);
+
 
 
     }
-
 
     public String switchVisible_Invisible(GridViewRow selectedRow, string HFID, GridView gvScore)
     {

@@ -367,11 +367,12 @@
                     //check the mode of the AITypeQuestion and check its radio buttn accordingly.
                     checkAITypeQuestionMode_RadioBtn(xml);
                     
+                    //2019/4/23 Ben temp commented
                     
                     //check the radio buttons of the organs that are set to be the question
                     //and switch the icon of the visibility column if the organ is set to be invisible
                     checkPickedOrgans_InvisibleOrgans(questionOrganArray, invisibleOrganArray);
-
+                    
 
                   
                 }
@@ -379,12 +380,7 @@
             });
         }
 
-        //direct back the Hints exam editing page
-        function goBack2PreviousPage()
-        {
-            window.history.back();
-
-        }
+       
 
         //check the mode of the AITypeQuestion and check its radio buttn accordingly.
         function checkAITypeQuestionMode_RadioBtn(xml)
@@ -408,12 +404,15 @@
     </script>
 
 
-   
+  
     <div align="center">
        
         <div class="jumbotron" >
             <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
+
+
+             
             <div class="container">
                 <div class="row">
                     <div  style="text-align: center;">
@@ -422,11 +421,14 @@
                         </div>
                            
                        <div class="col-sm-6">
-                        <input type="button" class='btn-danger btn-lg' value="<< Back" id="BackBtn"onclick="goBack2PreviousPage()">
+                        
+                       <input type="button"  class="btn-danger btn-lg"   id="btnBack" runat="server" value="<< Back"   onserverclick="btnBack_Click">
                        </div>
                     </div>
                    </div>
 
+                 <asp:UpdatePanel ID="UpdatePanel1"   UpdateMode="Conditional"  runat="server">
+                    <ContentTemplate>
                 <div class="row">
                     <div >
                      
@@ -445,12 +447,15 @@
                         <div class="roles" style="text-align: left; width:100%">
                             <h3 >Please choose the question mode here.</h3><h4>(Surgery/Anatomy Mode)</h4>
                             
-                            <label class="role" for="SurgeryModeRadioBtn"><input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" checked="checked" >&nbsp <b >Surgery Mode</b> &nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step1 Create IPC Pipe"   onclick="if (!checkIfAtLeastOneOrganIsPickedAsQuestion()) return false;" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_connectTo3DBuilder" runat="server" value="Step2 Connect to 3DBuilder"  onserverclick="btn_connectTo3DBuilder_Onclick"><br/><h4>(The skin of the body part will be displayed and can not be hidden.The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) </h4> </label>
+                            <label class="role" for="SurgeryModeRadioBtn"><input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" checked="checked" >&nbsp <b >Surgery Mode</b> &nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step1 Create IPC Pipe"   onclick=" sethidden_selectedAnatomyMode();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_connectTo3DBuilder" runat="server" value="Step2 Connect to 3DBuilder"  onclick="    sethidden_selectedAnatomyMode();" onserverclick="btn_connectTo3DBuilder_Onclick"><br/><h4>(The skin of the body part will be displayed and can not be hidden.The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) </h4> </label>
                        <br />
                            
                             <label class="role" for="AnatomyModeRadioBtn"> <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn" >&nbsp <b >Anatomy Mode</b> <h4>(The skin of the body part will be hidden.)</h4></label>
                         </div>
 
+                      
+                         <asp:HiddenField ID="hidden_selectedAnatomyMode" runat="server" Value="Surgery Mode"/>
+                                
 
                         <div class="roles" style="text-align: left; width:100%; display: none;">
                             <h3 >If you want to use the this AITypeQuestion in IRS system,<br />click the button edit the corresponding IRS selection question.</h3><h4>(Surgery/Anatomy Mode)</h4>
@@ -465,12 +470,14 @@
                 </div>
                 <%--<input type="text" id="TBX_Input" runat="server" />--%>
                 <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
-            </div>
+             </ContentTemplate>
+            </asp:UpdatePanel>
+                        </div>
         </div>
     </div>
         
 
-
+                 
         <div class="row">
             
             <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
@@ -537,9 +544,13 @@
                     </Columns>
                 </asp:GridView>
                   <input type="hidden" id="hidden_AITypeQuestionTitle"  runat="server" >
+               
+
             </asp:Panel>
         </div>
     </div>
+                         
+     
     <script type="text/javascript">
         /*Temporary hard-code variable*/
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
@@ -557,28 +568,12 @@
        
 
         $(document).ready(function () {
-            $(':checkbox').checkboxpicker();
 
-          
-            //load XML to check the organs that are picked to be part of question.
-            if (url.searchParams.get("viewContent") != null && url.searchParams.get("viewContent")  == "Yes")
-            {
-               
-                //load XML to check the organs that are picked to be part of question.              
-                readInExistingQuestion();
-                
-            }
-            
+            readyInitProcess();
 
-            if (url.searchParams.get("strQID")  != null)
-            {
-                //load XML to check the organs that are picked to be part of question.
-                var hidden_AITypeQuestionTitle = document.getElementById("<%= hidden_AITypeQuestionTitle.ClientID %>");
-                hidden_AITypeQuestionTitle.value = url.searchParams.get("strQID");
-
-            }
-
-          
+            //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
+            //This is the fix terms for using ASP UpdatePanel AJAX
+            loadAfterUpdatePanel()
 
         });
 
@@ -640,6 +635,130 @@
         function go2HintsSelectionQuestionEditingPage() {
 
             location.href = 'http://localhost/HINTS/AuthoringTool/CaseEditor/Paper/CommonQuestionEdit/Page/ShowQuestion.aspx?Opener=AITypeQuestion_EditingPage&GroupID=' + url.searchParams.get("strQuestionGroupID");
+        }
+
+        function readyInitProcess() {
+            $(':checkbox').checkboxpicker();
+
+
+            //load XML to check the organs that are picked to be part of question.
+            if (url.searchParams.get("viewContent") != null && url.searchParams.get("viewContent") == "Yes") {
+
+                //load XML to check the organs that are picked to be part of question.              
+                readInExistingQuestion();
+
+            }
+
+
+            if (url.searchParams.get("strQID") != null) {
+                //load XML to check the organs that are picked to be part of question.
+                var hidden_AITypeQuestionTitle = document.getElementById("<%= hidden_AITypeQuestionTitle.ClientID %>");
+                hidden_AITypeQuestionTitle.value = url.searchParams.get("strQID");
+
+            }
+
+
+            //keep the visibility icon after coming back from UpdatePanel AJAX
+            keepVisibilityIcon();
+
+            //keep the Anatomy Mode radio box after coming back from UpdatePanel AJAX
+            keepAnatomyModeRadioBox();
+
+
+           
+
+        }
+        //keep the Anatomy Mode radio box after coming back from UpdatePanel AJAX
+        function keepAnatomyModeRadioBox() {
+            //if the mode of the AITypeQuestion is "Surgery Mode"   
+            if (document.getElementById("<%= hidden_selectedAnatomyMode.ClientID %>").value == "Surgery Mode") {
+                //check the radio button of the Surgery Mode
+                document.getElementById("SurgeryModeRadioBtn").checked = true;
+
+
+            }
+
+                //if the mode of the AITypeQuestion is "Anatomy Mode"
+            else {
+                //check the radio button of the Anatomy Mode
+                document.getElementById("AnatomyModeRadioBtn").checked = true;
+
+
+            }
+
+        }
+
+        //set the selected Anatomy Mode in hidden_selectedAnatomyMode before PostBack
+        function sethidden_selectedAnatomyMode() {
+
+
+            if (document.getElementById("SurgeryModeRadioBtn").checked) {
+                //the radio button of the Surgery Mode is checked
+                document.getElementById("<%= hidden_selectedAnatomyMode.ClientID %>").value = "Surgery Mode";
+                       
+
+            }
+
+               
+            else {
+                //the radio button of the Anatomy Mode is checked
+                document.getElementById("<%= hidden_selectedAnatomyMode.ClientID %>").value = "Anatomy Mode";
+
+
+            }
+           
+        }
+
+
+
+
+        //keep the visibility icon after coming back from UpdatePanel AJAX
+        function keepVisibilityIcon() {
+
+            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+
+            for (i = 1; i < gvDrv.rows.length; i++) {
+
+
+
+                //recover visbility icon of each row
+
+                //keep submit btn visible at all times
+                
+
+                if (gvDrv.rows[i].cells[2].getElementsByTagName("input")[1].value == "-1") {
+                    gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = visibleImg;
+                }
+                else {
+                    gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = invisibleImg;
+                }
+                
+
+            }
+        }
+
+        //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
+        //This is the fix terms for using ASP UpdatePanel AJAX
+        function loadAfterUpdatePanel() {
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+        }
+
+        function EndRequestHandler() {
+
+
+            //do the init ready function again after coming back from UpdatePanel AJAX 
+            //partOf_documentReadyFun();
+
+            //do the window.onload function again because AJAX doesn't trigger window.onload event.
+            //onloadFun();
+            readyInitProcess();
+            alert("Back from updatePanel")
+
+
+
+
+
+
         }
      </script>
 
