@@ -696,15 +696,23 @@ public partial class IPC: CsSessionManager
     //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
     private void redirectBack2HintsPaper_MainPage()
     {
-        /*
-        //if the opener page is still opened, refresh it and close the current page.
-        ClientScript.RegisterClientScriptBlock(this.GetType(), "Refresh", "opener.document.getElementById('btnRefresh').click();window.close();", true);
-        
-        //if the opener page is already closed, direct back to the opener page.
-        ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "history.go(-2);", true);
-       */
+        //After modified an existing AITypeQuestion
+        if (Request.QueryString["viewContent"] != null && Request.QueryString["viewContent"] == "Yes")
+        {
+            ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "location.href='" + Previous_Page_URL_Session + "'", true);
+        }
 
-        ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "location.href='"+Previous_Page_URL_Session+"'", true);
+        else 
+        { 
+            //After created a new AITypeQuestion
+
+            //if the opener page is still opened, refresh it and close the current page.
+            ClientScript.RegisterClientScriptBlock(this.GetType(), "Refresh", "opener.document.getElementById('btnRefresh').click();window.close();", true);
+        
+            //if the opener page is already closed, direct back to the opener page.
+            ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "history.go(-2);", true);
+        }
+       
     }
 
 
