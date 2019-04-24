@@ -916,13 +916,13 @@ public partial class IPC : CsSessionManager
     }
     */
 
-    public void FinishBtn_Click(object sender, EventArgs e)
+    public void btnBack_Click(object sender, EventArgs e)
     {
        
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
         killCorrespondingCSNamedPipe();
          
-        //go  back to the previous page
+      
 
 
     }

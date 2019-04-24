@@ -75,7 +75,7 @@
 
         //Close CSNamePipe.exe before close the webpage.
         //$(window).unload(function () {
-        //   document.getElementById('<%= FinishBtn.ClientID %>').click();
+        //   document.getElementById('<%= btnBack.ClientID %>').click();
         //});
         /////////////////////////////////
 
@@ -84,10 +84,10 @@
         //detect user close webpage event,but it is also fired when you leave a site over a link or your browsers back button. 
         //Bind webpage default close cross button with "Finish" button to shot down CsNamedPipe.exe when user close IPC webpage.
         //window.addEventListener("beforeunload", function (e) {
-        //    document.getElementById('<%= FinishBtn.ClientID %>').click();
+        //    document.getElementById('<%= btnBack.ClientID %>').click();
         //});
         //window.onbeforeunload = function () {
-        //    document.getElementById('<%= FinishBtn.ClientID %>').click();
+        //    document.getElementById('<%= btnBack.ClientID %>').click();
         //};
 
         ///////////////////////////////////////////
@@ -553,6 +553,7 @@
 
             document.getElementById("<%= hidden_pickedQuestions.ClientID %>").value = questionArray.join(',');  // convert the array into a string using , (comma) as a separator
 
+            //go back to the previous page
             window.history.back();
             }
 
@@ -745,7 +746,7 @@
                         <div class="container" style="position: fixed;">
                             <div class="row">
                                 <div class="col-sm-5 ">
-                                    <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg ' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="<< Back" runat="server" />
+                                    <asp:Button ID="btnBack" CssClass='btn-danger btn-lg ' OnClick="btnBack_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="<< Back" runat="server" />
                                     &nbsp&nbsp&nbsp&nbsp
                         <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR" value="Hide/Show Non Answer Rows" onclick="hideNonQuestionTR()" />
 
@@ -1246,7 +1247,7 @@
                     //alert("time is up");
 
                     //force submit the AI type exam paper when time is up
-                    document.getElementById('<%= FinishBtn.ClientID %>').click();
+                    document.getElementById('<%= btnBack.ClientID %>').click();
 
 
                 }

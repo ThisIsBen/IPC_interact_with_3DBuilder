@@ -752,7 +752,7 @@
             //do the window.onload function again because AJAX doesn't trigger window.onload event.
             //onloadFun();
             readyInitProcess();
-            alert("Back from updatePanel")
+            //alert("Back from updatePanel")
 
 
 
