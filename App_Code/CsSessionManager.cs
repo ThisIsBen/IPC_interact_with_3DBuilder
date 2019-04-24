@@ -67,4 +67,25 @@ public class CsSessionManager : System.Web.UI.Page
             Session["Num_Of_Question_Submision_Session"] = value;
         }
     }
+
+
+
+    //store the URLof the previous page
+    protected string Previous_Page_URL_Session//Store correct answer of Organ name
+    {
+        get
+        {
+            if (Session["Previous_Page_URL_Session"] == null)
+            {
+                //出始值為""
+                Session["Previous_Page_URL_Session"] = "";
+            }
+            return (string)Session["Previous_Page_URL_Session"];
+
+        }
+        set
+        {
+            Session["Previous_Page_URL_Session"] = value;
+        }
+    }
 }

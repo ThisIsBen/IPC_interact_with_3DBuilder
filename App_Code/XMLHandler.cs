@@ -179,8 +179,10 @@ public class XMLHandler
     public void appendTag2EachOrgan(string tagName,string initValue, string parentTag="")
     {
         
-
-        
+        //check if a xml tag exists
+        if (!checkXMLElementExistence(parentTag, tagName))
+        {
+            //if the tag we want to append doesn't exist, we can append it.
             var targets = xDoc.Element("Organs").Elements(parentTag);
 
             foreach (var node in targets)
@@ -191,6 +193,7 @@ public class XMLHandler
 
 
             }
+        }
              
 
            
@@ -198,6 +201,25 @@ public class XMLHandler
 
        
     }
+
+    //check if a xml element exists
+    public bool checkXMLElementExistence(string parentTag, string tagName)
+    {
+        var targets = xDoc.Element("Organs").Elements(parentTag).Elements(tagName);
+
+        if (targets.Count() > 1)
+        {
+            return true;
+
+        }
+
+        else
+        {
+            return false;
+        }
+
+    }
+    
 
     //append a tag directly under the root tag in a XML
     public void appendTagUnderRoot(string tagName,string initValue)

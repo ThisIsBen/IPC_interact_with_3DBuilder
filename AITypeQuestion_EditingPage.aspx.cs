@@ -14,7 +14,7 @@ using System.Xml.Linq;
 using System.Text;
 
 
-public partial class IPC: System.Web.UI.Page
+public partial class IPC: CsSessionManager
 {
     
 
@@ -92,7 +92,11 @@ public partial class IPC: System.Web.UI.Page
                 AITypeQuestionDescription.InnerText = CsDBOp.getAITypeQuestion_QuestionDescription(Request.QueryString["strQID"]);
 
             }
-            //add an invisible row which contains a btn to activate ShowAll 
+
+
+
+            //get the URL of the previous page
+            storePreviousPageURL();
 
 
 
@@ -101,6 +105,12 @@ public partial class IPC: System.Web.UI.Page
         }
     }
 
+
+
+    private void storePreviousPageURL()
+    {
+        Previous_Page_URL_Session = Request.UrlReferrer.AbsoluteUri;
+    }
 
     //protected void ShowOrHideAll_Click(object sender, EventArgs e)
     protected void ShowOrHide3DLabels_Click()
@@ -686,12 +696,15 @@ public partial class IPC: System.Web.UI.Page
     //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
     private void redirectBack2HintsPaper_MainPage()
     {
+        /*
         //if the opener page is still opened, refresh it and close the current page.
         ClientScript.RegisterClientScriptBlock(this.GetType(), "Refresh", "opener.document.getElementById('btnRefresh').click();window.close();", true);
         
         //if the opener page is already closed, direct back to the opener page.
         ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "history.go(-2);", true);
-       
+       */
+
+        ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "location.href='"+Previous_Page_URL_Session+"'", true);
     }
 
 
