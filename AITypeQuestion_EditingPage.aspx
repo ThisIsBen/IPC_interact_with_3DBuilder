@@ -435,19 +435,21 @@
                      
                      
                         <div >
-                          <h3 style="text-align: left;">Please write down the question description here. </h3>
+                          <h3 style="text-align: left;"><b>Step 1</b> Please write down the question description here. </h3>
                           <textarea class="form-control" rows="5" style="min-width: 100%;font-size: 22px;" id="AITypeQuestionDescription" runat="server" ></textarea>
                         </div>
 
 
-                        
-                        
-                      
+                        <div class="row">
+                         
 
-                        <div class="roles" style="text-align: left; width:100%">
-                            <h3 >Please choose the question mode here.</h3><h4>(Surgery/Anatomy Mode)</h4>
+                          <!-- 9 + 4 = 13 > 12，因此以下斷行放置多出來的Column -->
+                          <div class="col-md-8">
+
+                               <div class="roles" style="text-align: left; width:100%">
+                            <h3 ><b>Step 2</b> Please choose the question mode here.</h3><h4>(Surgery/Anatomy Mode)</h4>
                             
-                            <label class="role" for="SurgeryModeRadioBtn"><input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" checked="checked" >&nbsp <b >Surgery Mode</b> &nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step1 Create IPC Pipe"   onclick=" sethidden_selectedAnatomyMode();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_connectTo3DBuilder" runat="server" value="Step2 Connect to 3DBuilder"  onclick="    sethidden_selectedAnatomyMode();" onserverclick="btn_connectTo3DBuilder_Onclick"><br/><h4>(The skin of the body part will be displayed and can not be hidden.The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) </h4> </label>
+                            <label class="role" for="SurgeryModeRadioBtn"><input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" checked="checked" >&nbsp <b >Surgery Mode</b> &nbsp &nbsp  &nbsp<h4>(The skin of the body part will be displayed and can not be hidden.The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) </h4> </label>
                        <br />
                            
                             <label class="role" for="AnatomyModeRadioBtn"> <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn" >&nbsp <b >Anatomy Mode</b> <h4>(The skin of the body part will be hidden.)</h4></label>
@@ -462,6 +464,16 @@
                              <input type="button" class='btn-danger btn-lg' value="Create IRS selection question"  onclick="go2HintsSelectionQuestionEditingPage()">
                            
                         </div>
+                          </div>
+                          <div class="col-md-4  text-left">
+                             <h3 ><b>Step 4</b></br> Preview the question in the 3DBuilder.</h3>
+                              <input type="button"  class="btn-info btn-lg" style="display:block;"  id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step4-1 Create IPC Pipe"   onclick=" sethidden_selectedAnatomyMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br> <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_connectTo3DBuilder" runat="server" value="Step4-2 Connect to 3DBuilder"  onclick="    sethidden_selectedAnatomyMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
+                          </div>
+                        </div>
+                        
+                      
+
+                       
 
                      
                     </div>
@@ -488,7 +500,10 @@
             <div>
 
                
-                
+                <div class="row text-left">
+                    <div class="col-md-9"> <h3 ><b>Step 3</b> Select the organs to be the questions.<br />You can also set the visibility of each organ</h3></div>
+
+                </div>
               
             </div>
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
@@ -759,6 +774,12 @@
 
 
 
+        }
+
+
+        function askUserOpen3DBuilder() {
+
+            alert("IPC Pipe has been created! \n\nNow,please activate the 3DBuilder by clicking the '3DBuilder MFC Application.rdp'.");
         }
      </script>
 

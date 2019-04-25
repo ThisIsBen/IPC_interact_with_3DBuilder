@@ -152,6 +152,9 @@ public partial class IPC : CsSessionManager
         //Step 2-1 apply the retrieved student’s question organ number to display the student’s answer in this order.
         applyStudentsQuestionOrganNo();
 
+        //display student's total score of this AITypeQuestion
+        LB_StudentScore.Text = "Your score: "+getStudentScoreAndQuestionTotalScore();
+
     }
 
 
@@ -798,6 +801,9 @@ public partial class IPC : CsSessionManager
         loadOrganXMLIn3DBuilderForExamMode(strStuQuestionOrdering);
 
         displayShowHideIconCol_BtnClick();
+
+        //display the show all btn
+        ShowOrHideAll.Style.Add("display", "block");
     }
 
 

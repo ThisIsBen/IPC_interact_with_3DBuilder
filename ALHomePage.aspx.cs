@@ -28,7 +28,7 @@ public partial class ALHomePage : System.Web.UI.Page
         //os.StartInfo.UseShellExecute = false;
 
         //check if the ASP Application Variable works
-        Response.Write("The num of users online=" + Application["visitors"].ToString());
+        //Response.Write("The num of users online=" + Application["visitors"].ToString());
 
 
         //get the parameters in URL and store there value in global var.

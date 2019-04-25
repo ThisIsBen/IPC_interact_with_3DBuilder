@@ -17,7 +17,7 @@
         th {
             font-size: 20px;
             text-align: center;
-            background-color: rgb(215, 111, 241)
+            background-color: rgb(215, 111, 241);
         }
 
         .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
@@ -307,26 +307,26 @@
 
 
             //The 配分 of each question organ
-            scoreOfEachQuestionOrgan=studentEachQuestionOrganScoreString[0]/(studentEachQuestionOrganScoreString.length-1);
+            scoreOfEachQuestionOrgan = studentEachQuestionOrganScoreString[0] / (studentEachQuestionOrganScoreString.length - 1);
 
             for (i = 1; i < studentEachQuestionOrganScoreString.length; i++) {
 
 
-               
+
                 gvDrv.rows[i].cells[2].getElementsByTagName("span")[0].innerHTML = studentEachQuestionOrganScoreString[i] + "/" + scoreOfEachQuestionOrgan;
 
-                
+
 
                 //if the student's answer is not correct, we set the background of the row to red
                 if (studentEachQuestionOrganScoreString[i] != scoreOfEachQuestionOrgan) {
-                    
+
                     gvDrv.rows[i].style.backgroundColor = incorrectAnswerTRBgColor;
 
                     //Step 2-3 Display the correct answer of the question organ if the student didn’t answer it correctly.
                     displayCorrectQuestionOrganAnswer(i, gvDrv);
-                    
-                    
-                   
+
+
+
 
                 }
 
@@ -337,33 +337,32 @@
 
 
         //Step 2-3 Display the correct answer of the question organ if the student didn’t answer it correctly.
-        function displayCorrectQuestionOrganAnswer(rowIndex, gvDrv)
-        {
+        function displayCorrectQuestionOrganAnswer(rowIndex, gvDrv) {
 
             var correctAnswerOfTheAITypeQuestionJSArray = [];
                         <% 
         
                             
-            var correctAnswerOfTheAITypeQuestion = RandomQuestionNoSession;
+        var correctAnswerOfTheAITypeQuestion = RandomQuestionNoSession;
 
-            //if RandomQuestionNoSession is not null
+        //if RandomQuestionNoSession is not null
 
-            for (int i = 0; i < correctAnswerHT[0].Count; i++)
-                {
+        for (int i = 0; i < correctAnswerHT[0].Count; i++)
+        {
                                 
                          
                             %>
 
-                correctAnswerOfTheAITypeQuestionJSArray.push('<%= correctAnswerHT[0][ScoreAnalysisList[0].questionOrderingString[i+1]] %>');
+            correctAnswerOfTheAITypeQuestionJSArray.push('<%= correctAnswerHT[0][ScoreAnalysisList[0].questionOrderingString[i+1]] %>');
 
                 <% 
-                        }
+                }
                 %>
 
-            
 
-                    
-            gvDrv.rows[rowIndex].cells[3].getElementsByTagName("span")[0].innerHTML = correctAnswerOfTheAITypeQuestionJSArray[rowIndex-1];
+
+
+            gvDrv.rows[rowIndex].cells[3].getElementsByTagName("span")[0].innerHTML = correctAnswerOfTheAITypeQuestionJSArray[rowIndex - 1];
 
         }
 
@@ -555,16 +554,16 @@
 
             //go back to the previous page
             window.history.back();
-            }
+        }
 
 
-            function showTBOfQuestionOrgans(inExamMode) {
-                //console.log(inExamMode);
-                //console.log(questionArray);
+        function showTBOfQuestionOrgans(inExamMode) {
+            //console.log(inExamMode);
+            //console.log(questionArray);
 
 
 
-                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+            var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
 
 
@@ -699,19 +698,16 @@
 
 
                     <input type="hidden" id="hidden_serverSideRemainingTimeSec" runat="server" value="0">
-                
-                   
                 </div>
                 <div id="headerFunctionBar" class="container" style="position: fixed; background-color: lightblue;">
                     <div class="row">
                         <div class="col-md-8">
-                            
                         </div>
                         <div class="col-md-4">
-                            
-                            
-                           
-                                <%--<div id="clockdiv">
+
+
+
+                            <%--<div id="clockdiv">
   
                           <div>
                             <span class="hours"></span>
@@ -728,7 +724,6 @@
  
 
                         </div>--%>
-                            
                         </div>
                     </div>
                     <br />
@@ -738,46 +733,56 @@
 
                 <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
                     <ContentTemplate>
-                         <%--to record Show/HideCol is currently displayed or hidden--%>
-                         <input type="hidden" id="hidden_DisplayShow_HideCol" runat="server" value="Yes">
-                
+                        <%--to record Show/HideCol is currently displayed or hidden--%>
+                        <input type="hidden" id="hidden_DisplayShow_HideCol" runat="server" value="Yes">
+
                         <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
             <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
                         <div class="container" style="position: fixed;">
-                            <div class="row">
-                                <div class="col-sm-5 ">
+                            <div class="row text-left">
+                                <div class="col-sm-4 ">
                                     <asp:Button ID="btnBack" CssClass='btn-danger btn-lg ' OnClick="btnBack_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="<< Back" runat="server" />
                                     &nbsp&nbsp&nbsp&nbsp
-                        <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR" value="Hide/Show Non Answer Rows" onclick="hideNonQuestionTR()" />
+                                    <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR" value="Hide/Show Non Answer Rows" onclick="hideNonQuestionTR()" />
 
-                        <%--<input id="Button1" type="button" class='btn-info btn-lg ' value="View organs in 3D" runat="server" onserverclick="displayShowHideIconCol_BtnClick">--%>
-                       
+                                    <%--<input id="Button1" type="button" class='btn-info btn-lg ' value="View organs in 3D" runat="server" onserverclick="displayShowHideIconCol_BtnClick">--%>
                                 </div>
-                                <div class="col-sm-3">
-                                    <div>
-                                        <label style="font-size: 20px;">Show all hidden organs</label>
-
+                                <div class="col-sm-4 ">
+                                  
+                                    <div class="row text-right">
+                                        <div >
+                                         
+                                            <label style="font-size: 20px;">Show all hidden organs</label>
+                                        </div>
+                                        <div class="row text-right ">
+                                            <div style="">
+                                               
+                                                 </br>
+                                            <asp:Label ID="LB_StudentScore" CliendIDMode="static" CssClass='label label-success' Font-Size="20pt" Font-Names="TextBox3" Visible="true" runat="server" />
+                                           
+                                            </div>
+                                      </div>
                                     </div>
-                                    <input type="image" id="ShowOrHideAll" class="img-thumbnail" src="" style="max-height: 100px; max-width: 100px;" onserverclick="ShowOrHideAll_Click" runat="server" />
                                     <br />
 
-                                   <%-- <div>
+                                    <%-- <div>
                                         <label style="font-size: 20px;">Your total score:</label>
 
                                     </div>--%>
-
                                 </div>
 
-                                <div class="col-sm-1">
+                               <div class="col-sm-1 text-left">
+                                    <input type="image" id="ShowOrHideAll" class="img-thumbnail " src="" style="display: none; max-height: 60px; max-width: 60px;" onserverclick="ShowOrHideAll_Click" runat="server" />
+                                      
+                                   </div>
 
-                                    <%--the backend C# fun can not be called--%>
-                                    <asp:Label ID="LB_StudentScore" CliendIDMode="static"  Font-Names="TextBox3" Visible="true" runat="server"   Text='<%# getStudentScoreAndQuestionTotalScore() %>' />
+                                <div class="col-sm-3">
+                                    <label style="font-size: 20px;">View 3D organs:</label>
+                                   
+                                    <input type="button" class="btn btn-info btn-md" id="btn_setUpCSNamedPipe" runat="server" value="Step1 Create IPC Pipe" onclick="askUserOpen3DBuilder();" onserverclick="btn_setUpCSNamedPipe_Onclick">
 
+                                    <input type="button" class="btn btn-info btn-md" id="btn_connectTo3DBuilder" runat="server" value="Step2 Connect to 3DBuilder" onserverclick="btn_connectTo3DBuilder_Onclick">
                                 </div>
-
-                                 <div class="col-sm-3">
-                                      <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_setUpCSNamedPipe" runat="server" value="Step1 Create IPC Pipe"  onserverclick="btn_setUpCSNamedPipe_Onclick">&nbsp &nbsp  &nbsp <input type="button"  class="btn-info btn-lg" style="display:inline;"  id="btn_connectTo3DBuilder" runat="server" value="Step2 Connect to 3DBuilder"  onserverclick="btn_connectTo3DBuilder_Onclick">
-                                 </div>
 
                             </div>
                             <%--<input type="text" id="TBX_Input" runat="server" />--%>
@@ -786,12 +791,14 @@
 
 
 
-                        </br>
+                       
             </br>
             </br>
             </br>
             </br>
-            
+            </br>
+            </br>
+           
             
 
                         
@@ -802,14 +809,14 @@
                 <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
 
                     <Columns>
-                         <%--cells[0]--%>
+                        <%--cells[0]--%>
                         <asp:TemplateField ItemStyle-Width="40px" HeaderText="Question Number">
                             <ItemTemplate>
                                 <asp:Label ID="TextBox_Number" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
 
-                         <%--cells[1]--%>
+                        <%--cells[1]--%>
                         <asp:TemplateField ControlStyle-Width="100%" ControlStyle-Height="40px" HeaderText="Your Answer">
                             <ItemTemplate>
                                 <asp:TextBox ID="TextBox_Text" ItemStyle-Width="130%" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
@@ -824,8 +831,6 @@
                                 <input type="hidden" id="markRecord" runat="server" value="0">
 
                                 <input type="hidden" id="clickedOrganSubmitBtn" runat="server" value="99">
-
-                                
                             </ItemTemplate>
 
                         </asp:TemplateField>
@@ -836,29 +841,29 @@
                             <ControlStyle CssClass=" submit_img" />
                         </asp:ButtonField>
                        ---%>
-                         <%--cells[2]--%>
+                        <%--cells[2]--%>
                         <asp:TemplateField ItemStyle-Width="40px" HeaderText="Point you got">
                             <ItemTemplate>
-                                <asp:Label ID="TextBox_StudentScorePerQuestion" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server"  />
+                                <asp:Label ID="TextBox_StudentScorePerQuestion" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" />
                             </ItemTemplate>
                         </asp:TemplateField>
 
                         <%--cells[3]--%>
                         <asp:TemplateField HeaderText="Correct<br/>Answer">
                             <ItemTemplate>
-                                <asp:Label ID="TextBox_CorrectOrganAnswer" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server"  />
+                                <asp:Label ID="TextBox_CorrectOrganAnswer" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" />
                             </ItemTemplate>
 
-                       
+
                         </asp:TemplateField>
-                        
+
                         <%--cells[4]--%>
                         <%--<asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide" Visible='<%# ShowHideIconCol_displayStatus() %>'>--%>
-                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide" Visible=true>
-                            <controlstyle cssclass=" menu_img" />
+                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide <b>abc</b>" Visible="true">
+                            <ControlStyle CssClass=" menu_img" />
                         </asp:ButtonField>
-                            
-                       
+
+
                     </Columns>
                 </asp:GridView>
                     </ContentTemplate>
@@ -871,7 +876,7 @@
         //to keep all the organ numbers that are assigned as questions 
         var questionArray = []
 
-        
+
 
         //In the near future ,we will get the questionXMLPath from URL para or other para transmission method.
         XMLFolder = "<%=  CsDynamicConstants.relativeKneeXMLFolder %>";//"IPC_Questions/1161-1450/";
@@ -885,7 +890,7 @@
         $(document).ready(function () {
 
             //set the default value of each parameters that are retrieved from URL.
-            questionXMLPath="tea1_Q_20190205145709";//anatomy 
+            questionXMLPath = "tea1_Q_20190205145709";//anatomy 
             //questionXMLPath = "tea1_Q_20181210231100";//surgery
             examMode = "Yes";
 
@@ -1055,7 +1060,7 @@
                         pickedRandQNo.push('<%= arrayData[i] %>');
 
             <% 
-                    }
+            }
             %>
                         //alert(pickedRandQNo);
 
@@ -1328,7 +1333,7 @@
                 pickedRandQNo.push('<%= randomQuestionNoArrayData[i] %>');
 
                         <% 
-                                }
+            }
                         %>
                 //alert(pickedRandQNo);
 
@@ -1422,7 +1427,6 @@
 
 
 
-
         }
 
 
@@ -1472,6 +1476,12 @@
             sessionStorage.setItem('clickedOrganSubmitBtnNo', clickedOrganSubmitBtnNo);
 
         });
+
+
+        function askUserOpen3DBuilder() {
+
+            alert("IPC Pipe has been created! \n\nNow,please activate the 3DBuilder by clicking the '3DBuilder MFC Application.rdp'.");
+        }
 
 
 
