@@ -804,6 +804,7 @@ public partial class IPC : CsSessionManager
 
         //display the show all btn
         ShowOrHideAll.Style.Add("display", "block");
+        lb_showHiddenOrgans.Style.Add("display", "block");
     }
 
 

@@ -752,7 +752,7 @@
                                     <div class="row text-right">
                                         <div >
                                          
-                                            <label style="font-size: 20px;">Show all hidden organs</label>
+                                            <label style="display:none; font-size: 20px;" id="lb_showHiddenOrgans" runat="server">Show all hidden organs</label>
                                         </div>
                                         <div class="row text-right ">
                                             <div style="">
