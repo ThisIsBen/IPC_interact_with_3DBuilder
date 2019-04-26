@@ -285,88 +285,8 @@
 <Cut>0</Cut>
 </Organ>
 <Organ>
-<Name>(1166,632,263)</Name>
-<Number>36</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data\(1166,632,263)\(1166,632,263).mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>1</Cut>
-</Organ>
-<Organ>
-<Name>(1183,372,2)</Name>
-<Number>37</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data\(1183,372,2)\(1183,372,2).mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
-<Name>(1210,614,31)</Name>
-<Number>38</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data_Bone\(1210,614,31)\(1210,614,31).mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
-<Name>(1280,511,98)</Name>
-<Number>39</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data_Bone\(1280,511,98)\(1280,511,98).mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
-<Name>(1283,496,90)</Name>
-<Number>40</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data_Bone\(1283,496,90)\(1283,496,90).mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
-<Name>(1309,666,117)</Name>
-<Number>41</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data_Bone\(1309,666,117)\(1309,666,117).mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
-<Name>(1329,543,99)</Name>
-<Number>42</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data_Bone\(1329,543,99)\(1329,543,99).mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
-<Name>(1348,584,95)</Name>
-<Number>43</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data_Bone\(1348,584,95)\(1348,584,95).mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
-<Name>103_A</Name>
-<Number>44</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Vessel\Region Growth Data_Bone\103_A\103_A.mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
-<Name>fibular collateral ligament</Name>
-<Number>45</Number>
-<Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\fibular collateral ligament\fibular collateral ligament.mcod</Path>
-<Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
-<Visible>1</Visible>
-<Cut>0</Cut>
-</Organ>
-<Organ>
 <Name>Common Fibular Nerve-TE</Name>
-<Number>46</Number>
+<Number>36</Number>
 <Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Common Fibular Nerve\Common Fibular Nerve-TE.extrusiond</Path>
 <Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
 <Visible>1</Visible>
@@ -374,7 +294,7 @@
 </Organ>
 <Organ>
 <Name>Left Popliteal Artery-TE</Name>
-<Number>47</Number>
+<Number>37</Number>
 <Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Left Popliteal Artery\Left Popliteal Artery-TE.extrusiond</Path>
 <Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
 <Visible>1</Visible>
@@ -382,7 +302,7 @@
 </Organ>
 <Organ>
 <Name>Tibial nerve-TE</Name>
-<Number>48</Number>
+<Number>38</Number>
 <Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Tibial nerve\Tibial nerve-TE.extrusiond</Path>
 <Matrix>-0.556378 -0.186951 -0.809625 0.000000 -0.313946 0.949434 -0.003489 0.000000 0.769338 0.252238 -0.586937 0.000000 587.210632 50.322800 556.773071 1.000000 </Matrix>
 <Visible>1</Visible>
