@@ -370,7 +370,7 @@
 
             }
 
-
+            //show all the buttons or textbox for each Question Organ
             function showTBOfQuestionOrgans(inExamMode) {
                 //console.log(inExamMode);
                 //console.log(questionArray);
@@ -572,16 +572,16 @@
                   
                     <Columns>
                          <%--cells[0]--%>
-                        <asp:TemplateField ItemStyle-Width="40px"  HeaderText="Question Number">
+                        <asp:TemplateField ItemStyle-Width="40px"  HeaderText="Organ Indicator">
                             <ItemTemplate>
-                                <asp:Label ID="TextBox_Number" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
+                                <asp:Label ID="TB_OrganIndicator" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server"  />
                             </ItemTemplate>
                         </asp:TemplateField>
 
                          <%--cells[1]--%>
-                        <asp:TemplateField ControlStyle-Width="100%"   ControlStyle-Height="40px" HeaderText="Organ Name">
+                        <asp:TemplateField ControlStyle-Width="100%"   ControlStyle-Height="40px" HeaderText="Answering Field">
                             <ItemTemplate >
-                                <asp:TextBox ID="TextBox_Text" ItemStyle-Width="130%" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
+                                <asp:TextBox ID="TB_AnsweringField" ItemStyle-Width="130%" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
                                 
                                 <%--show the corresponding correct organ name for debugging purpose--%>
                               <%-- <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />--%>

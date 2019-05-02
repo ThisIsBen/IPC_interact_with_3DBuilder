@@ -88,6 +88,10 @@ public partial class IPC : CsSessionManager
             gvScore.DataBind();
             gvScore.HeaderRow.TableSection = TableRowSection.TableHeader;
 
+
+            // display organ name or organ number to be the organ indicator based on the value of <NameOrNumberAnsweringMode> in the AITypeQuestion XML file.
+            displayOrganNameOrNumber();
+
             //to contain the content read from organ XML file.
             List<string> CorrectOrganNameList = new List<string>();
 
@@ -562,6 +566,50 @@ public partial class IPC : CsSessionManager
         }
     }
 
+
+    // display organ name or organ number to be the organ indicator based on the value of <NameOrNumberAnsweringMode> in the AITypeQuestion XML file.
+    public void displayOrganNameOrNumber()
+    {
+      
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(questionXMLPath));
+
+        //get the "NameOrNumberAnsweringMode" of the  AITypeQuestion from the AITypeQuestion XML file
+        string NameOrNumberAnsweringMode = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
+
+        if (NameOrNumberAnsweringMode == "Number Answering Mode")
+        {
+
+            //get the organ name from AITypeQuestion XML file.
+            List<string> strAllOrganName=xmlHandler.getValuesOfEachSpecificTagName("Name");
+
+
+            for (int i = 0; i < gvScore.Rows.Count; i++)
+            {
+
+
+                var organIndicator = gvScore.Rows[i].FindControl("TB_OrganIndicator") as Label;
+
+                organIndicator.Text = strAllOrganName[i];
+            }
+        }
+
+        else if (NameOrNumberAnsweringMode == "Name Answering Mode")
+        {
+            for (int i = 0; i < gvScore.Rows.Count; i++)
+            {
+
+
+                var organIndicator = gvScore.Rows[i].FindControl("TB_OrganIndicator") as Label;
+
+                organIndicator.Text = (i+1).ToString();
+            }
+        }
+
+    }
+     
+
+
+
     private void FinishBtn_ClickEventHandler()
     {
 
@@ -628,7 +676,7 @@ public partial class IPC : CsSessionManager
             {
 
                 RandomQuestionNum = RandomQuestionNoSession[i];
-                TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
+                TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TB_AnsweringField");
                 strTB1 = tb.Text.Trim();
                 if (i == (RandomQuestionNoSession.Length - 1))
                 {
@@ -871,8 +919,8 @@ public partial class IPC : CsSessionManager
             // Get the last name of the selected author from the appropriate
             // cell in the GridView control.
             GridViewRow selectedRow = gvScore.Rows[index];
-            var tbx = selectedRow.FindControl("TextBox_Text") as TextBox;
-            var num = selectedRow.FindControl("TextBox_Number") as Label;
+            var tbx = selectedRow.FindControl("TB_AnsweringField") as TextBox;
+            var num = selectedRow.FindControl("TB_OrganIndicator") as Label;
             /////////////////////////////////////////////
             //text exam mode
             //store the Question number
@@ -929,7 +977,7 @@ public partial class IPC : CsSessionManager
             // cell in the GridView control.
             GridViewRow selectedRow = gvScore.Rows[index];
 
-            var num = selectedRow.FindControl("TextBox_Number") as Label; //Index of the selected 3D object
+            var num = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
 
             //get the corresponding correct organ name 
             var answer = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 

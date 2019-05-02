@@ -159,6 +159,10 @@ public partial class IPC : CsSessionManager
 
 
     //required global variable from displaying the exam result on teacher's page
+    /*
+     Here on viewAITypeQuestionResult.aspx page, we only calculate and show the current using student's score
+    so, we only use ScoreAnalysisList[0] here.
+     */
     public List<ScoreAnalysisM> ScoreAnalysisList = new List<ScoreAnalysisM>();
     private List<int[]> QuestionAvg = new List<int[]>();
     private List<string> correctXML = new List<string>();
@@ -333,16 +337,45 @@ public partial class IPC : CsSessionManager
         if (AnsewerTemp == null)
             return;
 
-        //若尚未批改過這次AI題考試或練習的話，執行批改AI題的function，並將批改後的成績顯示出來。
-        ScoreAnalysisM log = new ScoreAnalysisM(StudentIDTemp, AnsewerTemp, QuesOrdering, correctXML, correctAnswerHT, cQID_Selector, questionTotalScore, cActivityID);
-        ScoreAnalysisList.Add(log);
+        //create a XMLHandler object to access the content in the AITypeQuestion XML file.
+        XMLHandler xmlHandler = new  XMLHandler(Server.MapPath(questionXMLPath));
 
-        //比對學生作答內容中的XML檔名
-        if (log.XMLerror)
+        //get the "NameOrNumberAnsweringMode" of the  AITypeQuestion from the AITypeQuestion XML file
+        string NameOrNumberAnsweringMode = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
+
+
+        
+        //for marking "NumberAnsweringMode" AITypeQuestion
+        if (NameOrNumberAnsweringMode == "Number Answering Mode")
         {
-            Response.Write("alert('Student answer XML file name does not match Correct answer XML file name')");
-            Response.End();
+            //若尚未批改過這次AI題考試或練習的話，執行批改AI題的function，並將批改後的成績顯示出來。
+            ScoreAnalysisM log = new ScoreAnalysisM(StudentIDTemp, AnsewerTemp, QuesOrdering, correctXML, cQID_Selector, questionTotalScore, cActivityID);
+            ScoreAnalysisList.Add(log);
+            //比對學生作答內容中的XML檔名
+            if (log.XMLerror)
+            {
+                Response.Write("alert('Student answer XML file name does not match Correct answer XML file name')");
+                Response.End();
+            }
         }
+        //for marking "NameAnsweringMode" AITypeQuestion
+        else if (NameOrNumberAnsweringMode == "Name Answering Mode")
+        {
+            //若尚未批改過這次AI題考試或練習的話，執行批改AI題的function，並將批改後的成績顯示出來。
+            ScoreAnalysisM log = new ScoreAnalysisM(StudentIDTemp, AnsewerTemp, QuesOrdering, correctXML, correctAnswerHT, cQID_Selector, questionTotalScore, cActivityID);
+            ScoreAnalysisList.Add(log);
+            //比對學生作答內容中的XML檔名
+            if (log.XMLerror)
+            {
+                Response.Write("alert('Student answer XML file name does not match Correct answer XML file name')");
+                Response.End();
+            }
+        }
+
+       
+        
+
+        
 
 
     }
@@ -743,18 +776,7 @@ public partial class IPC : CsSessionManager
     }
 
 
-    //get the picked Question number from Question XML file
-    private int[] getPickedQuestionNumber()
-    {
-        ////Get The Question Number of organs  picked by instructor////////// 
-        //read in the XML files that contains all organs of a certain body part. e.g., Knee 
-        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(questionXMLPath));
-
-      
-        //get the number of the Organs whose Question tag are marked "Yes".
-        return xmlHandler.getPickedQuestionNumber();
-
-    }
+   
 
     //activate CSNamedPipe.exe automatically, and wait for the user to activate the 3DBuilder.
     public void btn_setUpCSNamedPipe_Onclick(object sender, EventArgs e)

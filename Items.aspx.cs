@@ -29,7 +29,7 @@ public partial class Items : CsSessionManager
     string strUserID="stu2";
     string  examMode = "Yes";//examMode的中控, we set its default value to Yes
     string cActivityID = "1023";
-    
+    string NameOrNumberAnsweringMode = "TextMode";
     
     //the seed of randomizing the organ numbers that are picked as questions, which are stored in pickedQuestions array.
     string randomizeSeed = "";
@@ -40,7 +40,10 @@ public partial class Items : CsSessionManager
     protected void Page_Load(object sender, EventArgs e)
     {
         
-           
+        
+
+        
+
         
     }
 
@@ -94,7 +97,7 @@ public partial class Items : CsSessionManager
 
     }
 
-    //get the picked Question number from Question XML file
+    //get the picked Question number from the AITypeQuestion XML file
     public int[] getPickedQuestionNumber()
     {
         ////Get The Question Number of organs  picked by instructor////////// 
@@ -108,19 +111,49 @@ public partial class Items : CsSessionManager
        
     }
 
+  
 
+    //shuffle the array of organ number
+    private void shuffleOrganNumber(int[] arr_OrganRearrangedNumber)
+    {
+
+        Random r = new Random();
+
+        arr_OrganRearrangedNumber = arr_OrganRearrangedNumber.OrderBy(x => r.Next()).ToArray();
+    }
+
+    //create an array that stores 1~numOfOrgans
+    private int[] createArr_OrganRearrangedNumber()
+    {
+        //get number of organs in AITypeQuestion XML file.
+        int numOfOrgans = 38;
+        int[] arr_OrganRearrangedNumber = new int[numOfOrgans];
+        for (int i = 0; i < numOfOrgans; i++)
+        {
+            arr_OrganRearrangedNumber[i] = i+1;
+        }
+
+
+            return arr_OrganRearrangedNumber;
+    }
 
     protected void btnKnee_Click(object sender, EventArgs e)
     {
         //get the parameters in URL and store there value in global var.
         retrieveURLParameters();
 
-        //Get The Question Number of organs  picked by instructor ( from Question XML file)
-        int[] pickedQuestions = getPickedQuestionNumber();
-     
-       
-       
+        
 
+
+        //Get The Question Number of organs  picked by instructor ( from AITypeQuestion XML file)
+        ////Get The Question Number of organs  picked by instructor////////// 
+        //read in the XML files that contains all organs of a certain body part. e.g., Knee 
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_QuestionXMLFolder + questionXMLPath + ".xml"));
+
+        //get the number of the Organs whose Question tag are marked "Yes".
+        int[] pickedQuestions = xmlHandler.getPickedQuestionNumber();
+
+        
        
 
 
@@ -131,19 +164,62 @@ public partial class Items : CsSessionManager
         //if it's in exam mode.
         if (examMode=="Yes")
         {
-            //randomize the  Question Numbers picked by instructor using student's ID as seed.
-            int[] randomQuestionNo = RandomQuestionNo.rand(randomizeSeed, pickedQuestions);
-
-
-            //send randomized  Question Numbers picked by instructor to IPC.aspx through Session
-            RandomQuestionNoSession = randomQuestionNo;
-
-
-
-            //send randomized  Question Numbers picked by instructor to 3DBuilder .
+            //store the randomized question number to be sending to 3DBuilder.
             string strRandomQuestionNo = "";
-            intArray2AString(randomQuestionNo,ref strRandomQuestionNo);
 
+
+            //get the "NameOrNumberAnsweringMode" of the  AITypeQuestion from the AITypeQuestion XML file
+            NameOrNumberAnsweringMode = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
+
+
+            //if the AITypeQuestion is set as Number Answering Mode AITypeQuestion       
+            if (NameOrNumberAnsweringMode == "Number Answering Mode")
+            {
+
+                //We Create an array called ‘arr_OrganRearrangedNumber’ with length=number of organs in the AITypeQuestion XML file, and store the rearranged organ number into the array.        
+                int[] arr_OrganRearrangedNumber = createArr_OrganRearrangedNumber();
+
+                //Step 2-1 We randomly rearrange all the organ numbers in the AITypeQuestion xml file.
+                //shuffle the array of organ number
+                shuffleOrganNumber(arr_OrganRearrangedNumber);
+
+                //Step 2-3 Store the randomly rearranged organ numbers of the organs that are picked as question to ‘RandomQuestionNoSession’.
+                for (int i = 0; i < pickedQuestions.Length; i++)
+                {
+                    RandomQuestionNoSession[i] = arr_OrganRearrangedNumber[pickedQuestions[i] - 1];
+                }
+
+                // Step 2-2 Send the randomly rearranged organ numbers result to the 3DBuilder.
+                //create randomized  Question Numbers picked by instructor, and change its format for 3DBuilder to read.
+                intArray2AString(arr_OrganRearrangedNumber, ref strRandomQuestionNo);
+
+
+
+
+            }
+
+
+
+
+             //if the AITypeQuestion is set as Name Answering Mode AITypeQuestion       
+            else if (NameOrNumberAnsweringMode == "Name Answering Mode")
+            {
+
+                //randomize the  Question Numbers picked by instructor using student's ID as seed.
+                int[] randomQuestionNo = RandomQuestionNo.rand(randomizeSeed, pickedQuestions);
+
+
+                //send randomized  Question Numbers picked by instructor to IPC.aspx through Session
+                RandomQuestionNoSession = randomQuestionNo;
+
+
+                //create randomized  Question Numbers picked by instructor, and change its format for 3DBuilder to read.
+                intArray2AString(randomQuestionNo, ref strRandomQuestionNo);
+
+
+            }
+
+           
             
             //use JS alert() in C#
             //ScriptManager.RegisterStartupScript(this,

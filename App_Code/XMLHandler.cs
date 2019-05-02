@@ -29,6 +29,22 @@ public class XMLHandler
         xDoc = XElement.Load(new XmlNodeReader(xmlDoc));
     }
 
+
+    //get the values of each specific tag
+    public List<string> getValuesOfEachSpecificTagName(string SpecificTagName)
+    {
+        var targets = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element(SpecificTagName).Name == SpecificTagName);
+
+        //to contain the value retrieved.
+        List<string> retrievedValueList = new List<string>();
+        foreach (var node in targets)
+        {
+            retrievedValueList.Add(node.Element(SpecificTagName).Value);
+        }
+        return retrievedValueList;
+    }
+
+
     //get  values from specific Tag name with specific value
     public List<string> getValueOfSpecificTagName(string targetTagName,string SpecificTagName, string SpecificValue)
     {
@@ -148,7 +164,7 @@ public class XMLHandler
     }
 
 
-   //set a given value to a specific tag
+    //set a given value to a specific NonNestedTag
     public void setValueOfSpecificNonNestedTag(string SpecificTagName, string value)
     {
 
@@ -167,6 +183,38 @@ public class XMLHandler
 
 
     }
+
+
+    //get a given value to a specific NonNestedTag
+    public string getValueOfSpecificNonNestedTag(string SpecificTagName)
+    {
+
+        //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Question").Value == "Yes").Single();
+        var targets = xDoc.Elements(SpecificTagName);
+
+        string valueOfSpecificNonNestedTag = "";
+
+        foreach (var node in targets)
+        {
+            if (node.Value != "" || node.Value != null)
+            {
+                valueOfSpecificNonNestedTag = node.Value;
+                break;
+            }
+            
+
+
+
+        }
+
+        return valueOfSpecificNonNestedTag;
+
+
+
+    }
+
+
+
 
     //append Question tag to each Organ
     /*
