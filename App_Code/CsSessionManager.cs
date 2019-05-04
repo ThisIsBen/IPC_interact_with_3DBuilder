@@ -88,4 +88,25 @@ public class CsSessionManager : System.Web.UI.Page
             Session["Previous_Page_URL_Session"] = value;
         }
     }
+
+    //store the URLof the previous page
+    protected string NameOrNumberAnsweringMode_Session//Store correct answer of Organ name
+    {
+        get
+        {
+            if (Session["NameOrNumberAnsweringMode_Session"] == null)
+            {
+                //出始值為""
+                Session["NameOrNumberAnsweringMode_Session"] = "";
+            }
+            return (string)Session["NameOrNumberAnsweringMode_Session"];
+
+        }
+        set
+        {
+            Session["NameOrNumberAnsweringMode_Session"] = value;
+        }
+    }
+
+    
 }

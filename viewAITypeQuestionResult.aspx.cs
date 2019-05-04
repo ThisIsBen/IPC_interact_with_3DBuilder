@@ -340,13 +340,13 @@ public partial class IPC : CsSessionManager
         //create a XMLHandler object to access the content in the AITypeQuestion XML file.
         XMLHandler xmlHandler = new  XMLHandler(Server.MapPath(questionXMLPath));
 
-        //get the "NameOrNumberAnsweringMode" of the  AITypeQuestion from the AITypeQuestion XML file
-        string NameOrNumberAnsweringMode = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
+        //get the "NameOrNumberAnsweringMode_Session" of the  AITypeQuestion from the AITypeQuestion XML file
+        string NameOrNumberAnsweringMode_Session = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
 
 
         
         //for marking "NumberAnsweringMode" AITypeQuestion
-        if (NameOrNumberAnsweringMode == "Number Answering Mode")
+        if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
             //若尚未批改過這次AI題考試或練習的話，執行批改AI題的function，並將批改後的成績顯示出來。
             ScoreAnalysisM log = new ScoreAnalysisM(StudentIDTemp, AnsewerTemp, QuesOrdering, correctXML, cQID_Selector, questionTotalScore, cActivityID);
@@ -359,7 +359,7 @@ public partial class IPC : CsSessionManager
             }
         }
         //for marking "NameAnsweringMode" AITypeQuestion
-        else if (NameOrNumberAnsweringMode == "Name Answering Mode")
+        else if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
         {
             //若尚未批改過這次AI題考試或練習的話，執行批改AI題的function，並將批改後的成績顯示出來。
             ScoreAnalysisM log = new ScoreAnalysisM(StudentIDTemp, AnsewerTemp, QuesOrdering, correctXML, correctAnswerHT, cQID_Selector, questionTotalScore, cActivityID);

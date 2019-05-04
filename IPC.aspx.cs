@@ -50,6 +50,7 @@ public partial class IPC : CsSessionManager
     string strUserID = "stu2";
     string cActivityID = "1023";
     string examMode = "Yes";
+   
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -89,7 +90,7 @@ public partial class IPC : CsSessionManager
             gvScore.HeaderRow.TableSection = TableRowSection.TableHeader;
 
 
-            // display organ name or organ number to be the organ indicator based on the value of <NameOrNumberAnsweringMode> in the AITypeQuestion XML file.
+            // display organ name or organ number to be the organ indicator based on the value of <NameOrNumberAnsweringMode_Session> in the AITypeQuestion XML file.
             displayOrganNameOrNumber();
 
             //to contain the content read from organ XML file.
@@ -567,16 +568,16 @@ public partial class IPC : CsSessionManager
     }
 
 
-    // display organ name or organ number to be the organ indicator based on the value of <NameOrNumberAnsweringMode> in the AITypeQuestion XML file.
+    // display organ name or organ number to be the organ indicator based on the value of <NameOrNumberAnsweringMode_Session> in the AITypeQuestion XML file.
     public void displayOrganNameOrNumber()
     {
       
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(questionXMLPath));
 
-        //get the "NameOrNumberAnsweringMode" of the  AITypeQuestion from the AITypeQuestion XML file
-        string NameOrNumberAnsweringMode = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
+        //get the "NameOrNumberAnsweringMode_Session" of the  AITypeQuestion from the AITypeQuestion XML file
+        NameOrNumberAnsweringMode_Session = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
 
-        if (NameOrNumberAnsweringMode == "Number Answering Mode")
+        if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
 
             //get the organ name from AITypeQuestion XML file.
@@ -587,13 +588,13 @@ public partial class IPC : CsSessionManager
             {
 
 
-                var organIndicator = gvScore.Rows[i].FindControl("TB_OrganIndicator") as Label;
-
+                //var organIndicator = gvScore.Rows[i].FindControl("TB_OrganIndicator") as Label;
+                var organIndicator = ((Label)gvScore.Rows[i].FindControl("TB_OrganIndicator"));
                 organIndicator.Text = strAllOrganName[i];
             }
         }
 
-        else if (NameOrNumberAnsweringMode == "Name Answering Mode")
+        else if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
         {
             for (int i = 0; i < gvScore.Rows.Count; i++)
             {
@@ -908,55 +909,87 @@ public partial class IPC : CsSessionManager
         // CommandName property to determine which button was clicked.
         if (e.CommandName == "Submit")
         {
+                //store the msg that will be sent to the 3DBuilder.
+                string msgFor3DBuilder = "";
 
-            //generated random question number with Peter's function
-            int[] randQuestionNoList = RandomQuestionNoSession;
+                if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+                {
+                    // Convert the row index stored in the CommandArgument
+                    // property to an Integer.
+                    int index = Convert.ToInt32(e.CommandArgument);
+                    // Get the last name of the selected author from the appropriate
+                    // cell in the GridView control.
+                    GridViewRow selectedRow = gvScore.Rows[index];
+                    var answeringField = selectedRow.FindControl("TB_AnsweringField") as TextBox;
+                    var organIndicator = selectedRow.FindControl("TB_OrganIndicator") as Label;
 
-            // Convert the row index stored in the CommandArgument
-            // property to an Integer.
-            int index = Convert.ToInt32(e.CommandArgument);
+                    string givenOrganName = organIndicator.Text;
+                    string studentOrganNumberAnswer = answeringField.Text;
 
-            // Get the last name of the selected author from the appropriate
-            // cell in the GridView control.
-            GridViewRow selectedRow = gvScore.Rows[index];
-            var tbx = selectedRow.FindControl("TB_AnsweringField") as TextBox;
-            var num = selectedRow.FindControl("TB_OrganIndicator") as Label;
-            /////////////////////////////////////////////
-            //text exam mode
-            //store the Question number
-            string QuestionNo;
+                    //Here the first para is the same as the third para.
+                    string correctOrganName = givenOrganName;
+                    //Update student answer to the 3D label in the 3DBuilder
+                    msgFor3DBuilder = "5 " + givenOrganName + " " + studentOrganNumberAnswer + " " + correctOrganName;
+         
 
-            //if it's in the exam mode
+                }
 
-            //2019/4/9 Ben commented for using default URL value if no paras provided.
-            //if (Request["examMode"] == "Yes")
-            if (examMode == "Yes")
-            {
 
-                QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(num.Text)) + 1).ToString();
-                // QuestionNo = index.ToString();
+                else if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+                {
+                    //generated random question number with Peter's function
+                    int[] randQuestionNoList = RandomQuestionNoSession;
 
+                    // Convert the row index stored in the CommandArgument
+                    // property to an Integer.
+                    int index = Convert.ToInt32(e.CommandArgument);
+
+                    // Get the last name of the selected author from the appropriate
+                    // cell in the GridView control.
+                    GridViewRow selectedRow = gvScore.Rows[index];
+                    var answeringField = selectedRow.FindControl("TB_AnsweringField") as TextBox;
+                    var organIndicator = selectedRow.FindControl("TB_OrganIndicator") as Label;
+                    /////////////////////////////////////////////
+                    //text exam mode
+                    //store the Question number
+                    string QuestionNo;
+
+                    //if it's in the exam mode
+
+                    //2019/4/9 Ben commented for using default URL value if no paras provided.
+                    //if (Request["examMode"] == "Yes")
+                    if (examMode == "Yes")
+                    {
+
+                        QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(organIndicator.Text)) + 1).ToString();
+                        // QuestionNo = index.ToString();
+
+                    }
+
+                    //if it's not in the exam mode
+                    else
+                    {
+                        QuestionNo = organIndicator.Text;
+                    }
+                    /////////////////////////////
+
+
+                    //get the corresponding correct organ name 
+                    // var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo) - 1];
+
+                    var correctOrganName = CorrectOrganNameSession[Convert.ToInt32(QuestionNo)];
+
+
+                    string studentOrganNameAnswer = answeringField.Text.Replace(" ", "_");
+            
+                    //Update student answer to the 3D label in the 3DBuilder
+                    msgFor3DBuilder = "5 " + studentOrganNameAnswer + " " + QuestionNo + " " + correctOrganName.ToString();
+                    //string contact = "5 " + input + " "  + answer.Value.ToString();
+            
             }
 
-            //if it's not in the exam mode
-            else
-            {
-                QuestionNo = num.Text;
-            }
-            /////////////////////////////
-
-
-            //get the corresponding correct organ name 
-            // var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo) - 1];
-
-            var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo)];
-
-
-            string input = tbx.Text.Replace(" ", "_");
-            //Bent 2017 test
-            string contact = "5 " + input + " " + QuestionNo + " " + answer.ToString();
-            //string contact = "5 " + input + " "  + answer.Value.ToString();
-            sendMsg23DBuilder(contact);
+            //send the message to the 3DBuilder.
+            sendMsg23DBuilder(msgFor3DBuilder);
 
         }
 

@@ -440,19 +440,30 @@
 
 
             function rearrangeQNo() {
-                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
-           
+                if (("<%= NameOrNumberAnsweringMode_Session %>") == "Name Answering Mode") {
 
-                for (i = 1; i < gvDrv.rows.length; i++) {
+                    var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
-             
-               
-                    //show the textbox of the organs that have been chosen as part of question.
-               
-               
-                    gvDrv.rows[i].cells[0].getElementsByTagName("span")[0].innerHTML = i;
+
+
+                    for (i = 1; i < gvDrv.rows.length; i++) {
+
+
+
+                        //show the textbox of the organs that have been chosen as part of question.
+
+
+                        gvDrv.rows[i].cells[0].getElementsByTagName("span")[0].innerHTML = i;
+                    }
                 }
+
+
+                else if (("<%= NameOrNumberAnsweringMode_Session %>") == "Number Answering Mode") {
+
+                    //do rearrangement  for Number Answering Mode
+                 }
+               
             }
 
         //clear the ajax cache to read the latest content from the organ xml file
@@ -575,6 +586,9 @@
                         <asp:TemplateField ItemStyle-Width="40px"  HeaderText="Organ Indicator">
                             <ItemTemplate>
                                 <asp:Label ID="TB_OrganIndicator" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server"  />
+                            
+
+                                
                             </ItemTemplate>
                         </asp:TemplateField>
 
@@ -614,6 +628,7 @@
                             <ItemTemplate>
                                 <asp:ImageButton ID="btnMark" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick="if (!toNotSureIcon(this)) return false;  " ControlStyle-Height="40px" />
                                 <asp:ImageButton ID="btnMarkGiveUp" runat="server" CssClass="img-thumbnail hideIfNotQuestion"  ImageUrl="" OnClientClick=" if (!toGiveUpIcon(this)) return false; " ControlStyle-Height="40px" />
+
 
                             </ItemTemplate>
                         </asp:TemplateField>
@@ -779,23 +794,44 @@
                         //get the randomized  Question Numbers picked by instructor to IPC.aspx sent through Session
                         var pickedRandQNo = [];
                         <% 
+     
+        if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
+           
         
-                            
-                            var arrayData = RandomQuestionNoSession;
-
-                            //if RandomQuestionNoSession is not null
-                            if(arrayData[0]!=-1)
-                                for(int i=0;i<arrayData.Length;i++)
-                                {
+       
+        
+                 var questionOrganNumber = RandomQuestionNoSession;
+                                    //if RandomQuestionNoSession is not null
+                if (questionOrganNumber[0] != -1)
+                    for (int i = 0; i < questionOrganNumber.Length; i++)
+                    {
                                 
                          
                         %>
 
-                        pickedRandQNo.push('<%= arrayData[i] %>');
+                        pickedRandQNo.push('<%= questionOrganNumber[i] %>');
 
                         <% 
-                                }
-                        %>
+                    }
+                                
+                                
+        }
+
+
+        else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+            // do nothing to leave pickedRandQNo empty.
+        
+            %>
+                        //set the pickedRandQNo as the Question Number of organs picked by instructor.
+                        pickedRandQNo = questionArray;
+
+            <% 
+        }
+            %>
+        
+    
                         //alert(pickedRandQNo);
 
 
@@ -861,8 +897,8 @@
 
 
                         //rearrange Question numbers in ascending order to keep Question numbers being arranged as ususal order.
-                        rearrangeQNo();
-
+                         rearrangeQNo();
+                        
 
                         //show the TextBox of the question Organs.
                         inExamMode = true;
