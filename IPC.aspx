@@ -797,20 +797,20 @@
      
         if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
         {
-           
-        
-       
-        
-                 var questionOrganNumber = RandomQuestionNoSession;
+
+
+
+
+            var randomizedQuestionOrganNumber = RandomQuestionNoSession;
                                     //if RandomQuestionNoSession is not null
-                if (questionOrganNumber[0] != -1)
-                    for (int i = 0; i < questionOrganNumber.Length; i++)
+            if (randomizedQuestionOrganNumber[0] != -1)
+                for (int i = 0; i < randomizedQuestionOrganNumber.Length; i++)
                     {
                                 
                          
                         %>
 
-                        pickedRandQNo.push('<%= questionOrganNumber[i] %>');
+                        pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
                         <% 
                     }
@@ -1084,27 +1084,45 @@
                         
 
 
-                        //get the randomized  Question Numbers picked by instructor to IPC.aspx sent through Session
-                        var pickedRandQNo = [];
+                //get the randomized  Question Numbers picked by instructor to IPC.aspx sent through Session
+                var pickedRandQNo = [];
                         <% 
+     
+        if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
+           
         
-                            
-                            var randomQuestionNoArrayData = RandomQuestionNoSession;
-
-                            //if RandomQuestionNoSession is not null
-                            if (randomQuestionNoArrayData[0] != -1)
-                                for (int i = 0; i < randomQuestionNoArrayData.Length; i++)
-                                {
+       
+        
+                 var randomizedQuestionOrganNumber = RandomQuestionNoSession;
+                                    //if RandomQuestionNoSession is not null
+                 if (randomizedQuestionOrganNumber[0] != -1)
+                     for (int i = 0; i < randomizedQuestionOrganNumber.Length; i++)
+                    {
                                 
                          
                         %>
 
-                        pickedRandQNo.push('<%= randomQuestionNoArrayData[i] %>');
+                pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
                         <% 
-                                }
-                        %>
-                        //alert(pickedRandQNo);
+                    }
+                                
+                                
+        }
+
+
+        else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+            // do nothing to leave pickedRandQNo empty.
+        
+            %>
+                //set the pickedRandQNo as the Question Number of organs picked by instructor.
+                pickedRandQNo = questionArray;
+
+            <% 
+        }
+            %>
 
 
 

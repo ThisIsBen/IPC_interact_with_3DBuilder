@@ -912,6 +912,7 @@ public partial class IPC : CsSessionManager
                 //store the msg that will be sent to the 3DBuilder.
                 string msgFor3DBuilder = "";
 
+                //if the AITypeQuestion is set to be of "Number Answering Mode"
                 if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
                 {
                     // Convert the row index stored in the CommandArgument
@@ -934,7 +935,7 @@ public partial class IPC : CsSessionManager
 
                 }
 
-
+                //if the AITypeQuestion is set to be of "Number Answering Mode"
                 else if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
                 {
                     //generated random question number with Peter's function
