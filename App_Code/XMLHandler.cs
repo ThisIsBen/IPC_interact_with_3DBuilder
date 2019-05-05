@@ -167,19 +167,27 @@ public class XMLHandler
     //set a given value to a specific NonNestedTag
     public void setValueOfSpecificNonNestedTag(string SpecificTagName, string value)
     {
-
-        //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Question").Value == "Yes").Single();
-        var targets = xDoc.Elements(SpecificTagName);
-
-        foreach (var node in targets)
+         //check if a xml tag exists
+        if (!checkXMLElement_OutsideOrgansTag_Existence(SpecificTagName))
         {
-            node.Value = value;
+            //append the tag to the xml outside the <Organs> and inside the <Scene>
+            appendATag2OrganXML_OutsideOrgansTag(SpecificTagName, value);
+        }
+
+        //set a given value to a specific NonNestedTag if it exists.
+        else { 
+            //var target = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element("Question").Value == "Yes").Single();
+            var targets = xDoc.Elements(SpecificTagName);
+
+            foreach (var node in targets)
+            {
+                node.Value = value;
 
 
           
+            }
+
         }
-
-
 
 
     }
@@ -228,7 +236,7 @@ public class XMLHandler
     {
         
         //check if a xml tag exists
-        if (!checkXMLElementExistence(parentTag, tagName))
+        if (!checkXMLElementOfEachOrganExistence(parentTag, tagName))
         {
             //if the tag we want to append doesn't exist, we can append it.
             var targets = xDoc.Element("Organs").Elements(parentTag);
@@ -250,12 +258,45 @@ public class XMLHandler
        
     }
 
-    //check if a xml element exists
-    public bool checkXMLElementExistence(string parentTag, string tagName)
+
+
+    //append NameOrNumberAnsweringMode tag to the Organ XML file outside the <Organs> and inside the <Scene>.
+    /*
+     Arg description:
+     tagName: the name of the new tag you want to append 
+     initValue: the init value of the new tag you want to append
+     appendOneEle_InNestedStructure: append the new tag as an One element to the XML file or append it to a nested structure.
+     parentTag: to indicate under which tag you want to append the new tag to
+    */
+    public void appendATag2OrganXML_OutsideOrgansTag(string tagName, string initValue, string parentTag = "")
+    {
+
+       
+            //if the tag we want to append doesn't exist, we can append it.
+            var targets = xDoc;
+
+            var elem = new XElement(tagName);
+            elem.Value = initValue;
+            targets.Add(elem);
+            
+            
+        
+
+
+
+
+
+
+    }
+
+
+
+    //check if a xml element of each organ exists
+    public bool checkXMLElementOfEachOrganExistence(string parentTag, string tagName)
     {
         var targets = xDoc.Element("Organs").Elements(parentTag).Elements(tagName);
 
-        if (targets.Count() > 1)
+        if (targets.Count() > 0)
         {
             return true;
 
@@ -267,7 +308,26 @@ public class XMLHandler
         }
 
     }
-    
+
+
+
+    //check if a xml element outside the <Organs> and inside the <Scene> exists
+    public bool checkXMLElement_OutsideOrgansTag_Existence( string tagName)
+    {
+        var targets = xDoc.Elements(tagName);
+
+        if (targets.Count() >0)
+        {
+            return true;
+
+        }
+
+        else
+        {
+            return false;
+        }
+
+    }
 
     //append a tag directly under the root tag in a XML
     public void appendTagUnderRoot(string tagName,string initValue)

@@ -365,7 +365,7 @@
             //store the Picked Organ Questions in a hidden field so that we can access it on backend
             function sendThePickedOrganQuestions2Backend() {
 
-                document.getElementById("<%= hidden_pickedQuestions.ClientID %>").value = questionArray.join(',');  // convert the array into a string using , (comma) as a separator
+                document.getElementById("<%= hidden_pickedQuestions.ClientID %>").value = pickedQuestionOrganArray.join(',');  // convert the array into a string using , (comma) as a separator
 
 
             }
@@ -373,7 +373,7 @@
             //show all the buttons or textbox for each Question Organ
             function showTBOfQuestionOrgans(inExamMode) {
                 //console.log(inExamMode);
-                //console.log(questionArray);
+                //console.log(pickedQuestionOrganArray);
 
             
 
@@ -381,9 +381,9 @@
 
            
 
-                for (i = 0; i < questionArray.length; i++) {
+                for (i = 0; i < pickedQuestionOrganArray.length; i++) {
 
-                    showTBItems = questionArray[i];
+                    showTBItems = pickedQuestionOrganArray[i];
                     if (inExamMode)//if it's in exam mode,do showTBItems = i
                         showTBItems = i+1;
                 
@@ -644,7 +644,7 @@
 
     <script>
         //to keep all the organ numbers that are assigned as questions 
-        var questionArray = []
+        var pickedQuestionOrganArray = []
 
         //to decide the background color of the question TR.
         questionTRBgColor = "rgb(145, 201, 27)";
@@ -710,8 +710,8 @@
                         if (isQuestionVal == "Yes") {
                             $questionNo = $(this).find("Number");
 
-                            //push to questionArray
-                            questionArray.push($questionNo.text());
+                            //push to pickedQuestionOrganArray
+                            pickedQuestionOrganArray.push($questionNo.text());
                             //alert($no.text());
 
                         }
@@ -821,11 +821,11 @@
 
         else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
-            // do nothing to leave pickedRandQNo empty.
-        
+          
             %>
-                        //set the pickedRandQNo as the Question Number of organs picked by instructor.
-                        pickedRandQNo = questionArray;
+                        //set the pickedRandQNo as the Question Number of organs picked by the instructor. 
+                        //the content of 'pickedQuestionOrganArray' may look like '1,2,6,9,12'
+                        pickedRandQNo = pickedQuestionOrganArray;
 
             <% 
         }
@@ -1071,7 +1071,7 @@
 
         function resetParameters()
         {
-            questionArray = [];
+            pickedQuestionOrganArray = [];
         }
         function partOf_documentReadyFun() {
            
@@ -1118,7 +1118,7 @@
         
             %>
                 //set the pickedRandQNo as the Question Number of organs picked by instructor.
-                pickedRandQNo = questionArray;
+                pickedRandQNo = pickedQuestionOrganArray;
 
             <% 
         }

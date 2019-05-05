@@ -419,14 +419,9 @@ public partial class IPC: CsSessionManager
         }
     }
 
-    private XMLHandler saveAITypeQuestion2XMLFile()
+    //Set the AITypeQuestion Mode according to which mode the teacher picked. It could be 'Anatomy' or 'Surgery' Mode.
+    private XMLHandler saveAITypeQuestionMode(XMLHandler xmlHandler)
     {
-
-        //read in the XML files that contains all organs of a certain body part. e.g., Knee 
-        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(completeBodyPartOrgansXMLPath));
-
-
-
         //if the selected AITypeQuestionMode is the "SurgeryMode", we append AITypeQuestionMode tag to "SurgeryMode".
         if (Request.Form["radioBtn_AITypeQuestionMode"] != null)
         {
@@ -455,6 +450,57 @@ public partial class IPC: CsSessionManager
 
         }
 
+
+        return xmlHandler;
+
+    }
+
+    //Step 1 Allow the teacher to switch the mode of an AITypeQuestion to be ‘Name Mode AITypeQuestion’ or the ‘Number Mode AITypeQuestion’.
+    //Set the NameOrNumberAnsweringMode  according to which mode the teacher picked. It could be 'Name Answering ' or 'Number Answering' Mode.
+    private XMLHandler saveNameOrNumberAnsweringMode(XMLHandler xmlHandler)
+    {
+        //if the selected NameOrNumberAnsweringMode is the "SurgeryMode", we set NameOrNumberAnsweringMode tag to "Number Answering Mode".
+        if (Request.Form["radioBtn_NameOrNumberAnsweringMode"] != null)
+        {
+            string selectedNameOrNumberAnsweringMode = Request.Form["radioBtn_NameOrNumberAnsweringMode"].ToString();
+
+            //set the Mode according to which AITypeQuestion NameOrNumberAnsweringMode is selected by the teacher
+            if (selectedNameOrNumberAnsweringMode == "Number Answering Mode")
+            {
+                
+                xmlHandler.setValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode", "Number Answering Mode");
+
+               
+            }
+
+            if (selectedNameOrNumberAnsweringMode == "Name Answering Mode")
+            {
+
+                xmlHandler.setValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode", "Name Answering Mode");
+
+              
+            }
+
+
+
+        }
+        return xmlHandler;
+
+    }
+
+    private XMLHandler saveAITypeQuestion2XMLFile()
+    {
+
+        //read in the XML files that contains all organs of a certain body part. e.g., Knee 
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(completeBodyPartOrgansXMLPath));
+
+
+        //Set the AITypeQuestion Mode according to which mode the teacher picked. It could be 'Anatomy' or 'Surgery' Mode.
+        xmlHandler=saveAITypeQuestionMode(xmlHandler);
+
+        //Set the NameOrNumberAnsweringMode  according to which mode the teacher picked. It could be 'Name Answering' or 'Number Answering' Mode.
+        xmlHandler = saveNameOrNumberAnsweringMode(xmlHandler);
+        
         //Only if this is new question do we append <Question> to each organ in the xml file
         if (Request.QueryString["viewContent"] != "Yes")
         {
