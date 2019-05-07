@@ -64,7 +64,7 @@
         visibleImg = "Image/visible.png";
         invisibleImg = "Image/invisible.png";
         visible_disabledByTeacher = "image/visible_disabledByTeacher.png";
-        invisible_disabledByTeacher = "image/invisible_disabledByTeacher.png";
+        invisible_disabledByTeacherImg = "image/invisible_disabledByTeacher.png";
         notSureImg = "image/notSure.png";
         giveUpImg = "image/giveUp.png";
         notSureClickImg = "image/notSureClick.png";
@@ -180,7 +180,7 @@
 
                 //set all the disableByTeacher icon to be invisibleImg and disabled.
                 else if (gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value == "disableByTeacher") {
-                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisible_disabledByTeacher;
+                    gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisible_disabledByTeacherImg;
                     gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].disabled = true;
 
 
@@ -462,6 +462,7 @@
                 else if (("<%= NameOrNumberAnsweringMode_Session %>") == "Number Answering Mode") {
 
                     //do rearrangement  for Number Answering Mode
+                    //currently we don't need to do anything.
                  }
                
             }
@@ -732,7 +733,7 @@
 
                             var i = $(this).find("Number").text();
                             gvDrv.rows[i].cells[1].getElementsByTagName("input")[1].value = "disableByTeacher";
-                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisible_disabledByTeacher;
+                            gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].src = invisible_disabledByTeacherImg;
                             gvDrv.rows[i].cells[3].getElementsByTagName("input")[0].disabled = true;
                             
                         }
@@ -823,9 +824,14 @@
         {
           
             %>
+                        //Currently we don't need to do any swap or rearrangement of the organs in Number Answering Mode.
+                        //We can leave pickedRandQNo empty.
+
+                        /*
                         //set the pickedRandQNo as the Question Number of organs picked by the instructor. 
                         //the content of 'pickedQuestionOrganArray' may look like '1,2,6,9,12'
                         pickedRandQNo = pickedQuestionOrganArray;
+                        */
 
             <% 
         }
@@ -1105,7 +1111,7 @@
 
                 pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
-                        <% 
+                <% 
                     }
                                 
                                 
@@ -1117,8 +1123,13 @@
             // do nothing to leave pickedRandQNo empty.
         
             %>
+                //Currently we don't need to do any swap or rearrangement of the organs in Number Answering Mode.
+                //We can leave pickedRandQNo empty.
+
+                /*
                 //set the pickedRandQNo as the Question Number of organs picked by instructor.
                 pickedRandQNo = pickedQuestionOrganArray;
+                */
 
             <% 
         }

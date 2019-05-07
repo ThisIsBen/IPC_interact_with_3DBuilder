@@ -176,12 +176,12 @@ public partial class Items : CsSessionManager
             if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
             {
 
-                //We Create an array called ‘arr_OrganRearrangedNumber’ with length=number of organs in the AITypeQuestion XML file, and store the rearranged organ number into the array.        
+                //We Create an array called ‘arr_OrganRearrangedNumber' whose content is "1~number of organs" in the AITypeQuestion XML file, and store the rearranged organ number into the array.        
                 int[] arr_OrganRearrangedNumber = createArr_OrganRearrangedNumber();
 
                 //Step 2-1 We randomly rearrange all the organ numbers in the AITypeQuestion xml file.
                 //shuffle the array of organ number
-                shuffleOrganNumber(ref arr_OrganRearrangedNumber);
+                //shuffleOrganNumber(ref arr_OrganRearrangedNumber);
 
                 //assign an array to RandomQuestionNoSession
                 int[] arr_RearrangedPickedOrganNumber = new int[pickedQuestions.Length];
@@ -278,7 +278,10 @@ public partial class Items : CsSessionManager
     {
 
         sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
-         
+
+        //sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15");//send protocol,Data to 3DBuilder.
+
+        
     }
 
 
@@ -324,6 +327,7 @@ public partial class Items : CsSessionManager
             //send cmd2
             wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
 
+           
             // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
 
             //wr.Flush();

@@ -93,6 +93,10 @@ public partial class IPC : CsSessionManager
             gvScore.DataBind();
             gvScore.HeaderRow.TableSection = TableRowSection.TableHeader;
 
+            // display organ name or organ number to be the organ indicator based on the value of <NameOrNumberAnsweringMode_Session> in the AITypeQuestion XML file.
+            displayOrganNameOrNumber();
+
+
             //to contain the content read from organ XML file.
             List<string> CorrectOrganNameList = new List<string>();
 
@@ -138,11 +142,15 @@ public partial class IPC : CsSessionManager
             //turn off the display of the "Show/Hide" icon column
             //which is used to allow the student to hide or show the 3D organs displayed in the 3DBuilder.
             switchOfDisplayShowHideIconCol("off");
+
+
+
+            
+           
         }
-
+        //2019/5/6 Ben commented the timer because we don't need timer for viewing the result of the AITypeQuestion.
         //set the remaining time to the timer and check whether time is already up.
-        setUp_and_CheckCountdownTimer();
-
+        //setUp_and_CheckCountdownTimer();
 
         //Step 1  Because each student has different order of the organ number, 
         //so we access database to get the student’s order of the organ number 
@@ -152,8 +160,10 @@ public partial class IPC : CsSessionManager
         //Step 2-1 apply the retrieved student’s question organ number to display the student’s answer in this order.
         applyStudentsQuestionOrganNo();
 
+
         //display student's total score of this AITypeQuestion
-        LB_StudentScore.Text = "Your score: "+getStudentScoreAndQuestionTotalScore();
+        LB_StudentScore.Text = "Your score: " + getStudentScoreAndQuestionTotalScore();
+            
 
     }
 
@@ -553,8 +563,11 @@ public partial class IPC : CsSessionManager
         if (remainingTimeSec < 0 && remainingTimeSec != -1)
         {
             //Response.Write("<script>alert('考試時間已結束')</script>");
-            Response.Write("<script>alert('考試時間已結束');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
+            //Response.Write("<script>alert('考試時間已結束');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
 
+            //remind the student that the exam is over, and redirect back to the ALHomePage.aspx, the first page when answering the AITypeQuestion. 
+            Response.Write("<script>alert('The exam time is already over.');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
+            
         }
 
         else if (remainingTimeSec == -1)
@@ -699,9 +712,10 @@ public partial class IPC : CsSessionManager
         //if it's in exam mode.
         if (ExamMode)
         {
+
+
            
-            
-            //send randomized  Question Numbers picked by instructor to IPC.aspx through Session
+
             int[] intQuestionOrderingString = new int[ScoreAnalysisList[0].questionOrderingString.Length-1];
 
             for (int x = 0; x < intQuestionOrderingString.Length; x++)
@@ -972,6 +986,52 @@ public partial class IPC : CsSessionManager
         }
     }
 
+
+
+    // display organ name or organ number to be the organ indicator based on the value of <NameOrNumberAnsweringMode_Session> in the AITypeQuestion XML file.
+    public void displayOrganNameOrNumber()
+    {
+
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(questionXMLPath));
+
+        //get the "NameOrNumberAnsweringMode_Session" of the  AITypeQuestion from the AITypeQuestion XML file
+        NameOrNumberAnsweringMode_Session = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
+
+        if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+
+            //get the organ name from AITypeQuestion XML file.
+            List<string> strAllOrganName = xmlHandler.getValuesOfEachSpecificTagName("Name");
+
+
+            for (int i = 0; i < gvScore.Rows.Count; i++)
+            {
+
+
+                //var organIndicator = gvScore.Rows[i].FindControl("TB_OrganIndicator") as Label;
+                var organIndicator = ((Label)gvScore.Rows[i].FindControl("TB_OrganIndicator"));
+                organIndicator.Text = strAllOrganName[i];
+            }
+        }
+
+        else if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
+            for (int i = 0; i < gvScore.Rows.Count; i++)
+            {
+
+
+                var organIndicator = gvScore.Rows[i].FindControl("TB_OrganIndicator") as Label;
+
+                organIndicator.Text = (i + 1).ToString();
+            }
+        }
+
+    }
+     
+
+
+
+
     private void FinishBtn_ClickEventHandler()
     {
 
@@ -1038,7 +1098,7 @@ public partial class IPC : CsSessionManager
             {
 
                 RandomQuestionNum = RandomQuestionNoSession[i];
-                TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TextBox_Text");
+                TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TB_AnsweringField");
                 strTB1 = tb.Text.Trim();
                 if (i == (RandomQuestionNoSession.Length - 1))
                 {
@@ -1271,8 +1331,8 @@ public partial class IPC : CsSessionManager
             // Get the last name of the selected author from the appropriate
             // cell in the GridView control.
             GridViewRow selectedRow = gvScore.Rows[index];
-            var tbx = selectedRow.FindControl("TextBox_Text") as TextBox;
-            var num = selectedRow.FindControl("TextBox_Number") as Label;
+            var tbx = selectedRow.FindControl("TB_AnsweringField") as TextBox;
+            var num = selectedRow.FindControl("TB_OrganIndicator") as Label;
             /////////////////////////////////////////////
             //text exam mode
             //store the Question number
@@ -1329,7 +1389,7 @@ public partial class IPC : CsSessionManager
             // cell in the GridView control.
             GridViewRow selectedRow = gvScore.Rows[index];
 
-            var num = selectedRow.FindControl("TextBox_Number") as Label; //Index of the selected 3D object
+            var num = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
 
             //get the corresponding correct organ name 
             var answer = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 

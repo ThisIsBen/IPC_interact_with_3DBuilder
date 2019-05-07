@@ -38,7 +38,9 @@ namespace CSNamedPipe
             public FileStream stream;
         }
 
-        public const int BUFFER_SIZE = 100;
+        //This Buffer,'BUFFER_SIZE' is used to receive the message sent from the 3DBuilder
+        //the  size of the buffer that is used to keep the message,which is going to be sent to the 3DBuilder is decided by the length of the message.
+        public const int BUFFER_SIZE = 1000;
         public Client clientse =null;
 
         public string pipeName;
@@ -147,6 +149,8 @@ namespace CSNamedPipe
         {
 
                 ASCIIEncoding encoder = new ASCIIEncoding();
+
+                //the  size of the buffer that is used to keep the message,which is going to be sent to the 3DBuilder is decided by the length of the message.
                 byte[] messageBuffer = encoder.GetBytes(message);
 
                 if (client.stream.CanWrite)

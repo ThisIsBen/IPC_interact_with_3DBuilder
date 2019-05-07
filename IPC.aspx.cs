@@ -198,8 +198,12 @@ public partial class IPC : CsSessionManager
         if (remainingTimeSec < 0 && remainingTimeSec != -1)
         {
             //Response.Write("<script>alert('考試時間已結束')</script>");
+            /*
             Response.Write("<script>alert('考試時間已結束');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
-
+            */
+            //remind the student that the exam is over, and redirect back to Paper_DisplayForORCS.aspx to view the exam paper. 
+            Response.Write("<script>alert('The exam time is already over.');location.href='" + Previous_Page_URL_Session + "'</script>");
+            
         }
 
         else if (remainingTimeSec == -1)
@@ -663,7 +667,7 @@ public partial class IPC : CsSessionManager
 
             StuAnsM StudentAnswer = new StuAnsM();
             int RandomQuestionNum;//將題號一個一個取出來
-            string strTB1;//暫儲存學生每格答案
+            string strTB1="";//暫儲存學生每格答案
             /*
             List<string> StudentAnswerList = new List<string>();//to store student's answer.
             */
@@ -677,8 +681,18 @@ public partial class IPC : CsSessionManager
             {
 
                 RandomQuestionNum = RandomQuestionNoSession[i];
-                TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TB_AnsweringField");
-                strTB1 = tb.Text.Trim();
+
+                if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+                {
+                    TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TB_AnsweringField");
+                    strTB1 = tb.Text.Trim();
+                }
+                else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+                {
+                    TextBox tb = (TextBox)gvScore.Rows[i].FindControl("TB_AnsweringField");
+                    strTB1 = tb.Text.Trim();
+                }
+                
                 if (i == (RandomQuestionNoSession.Length - 1))
                 {
                     _QuesOrdering = RandomQuestionNum.ToString();
@@ -935,7 +949,7 @@ public partial class IPC : CsSessionManager
 
                 }
 
-                //if the AITypeQuestion is set to be of "Number Answering Mode"
+                //if the AITypeQuestion is set to be of "Name Answering Mode"
                 else if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
                 {
                     //generated random question number with Peter's function
@@ -1007,14 +1021,56 @@ public partial class IPC : CsSessionManager
             // property to an Integer.
             int index = Convert.ToInt32(e.CommandArgument);
 
+
+
+
             // Get the last name of the selected author from the appropriate
             // cell in the GridView control.
             GridViewRow selectedRow = gvScore.Rows[index];
 
-            var num = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
+            //to store the correct organ name
+            var correctOrganName="";
 
-            //get the corresponding correct organ name 
-            var answer = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 
+            if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+            {
+
+                var num = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
+
+                //get the corresponding correct organ name 
+                correctOrganName = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 
+            }
+
+            
+            //Step 5-1 When the student clicks the “Show/Hide” icon of a question organ, we will hide the corresponding organ according to the number entered by the student.
+            //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
+            else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+            {
+                TextBox tb = (TextBox)gvScore.Rows[index].FindControl("TB_AnsweringField");
+                correctOrganName = tb.Text.Trim();
+
+                //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
+                if (correctOrganName == "")
+                {
+                    //If we use Response.Write to insert JS code, 
+                    //JS Bundles/MsAjax error: PRM_ParserErrorDetails will occur on the frontend.
+                    /*
+                    Response.Write("<script>alert('Please enter the answer before clicking the 'Show/Hide' icon.');</script>");
+                    */
+
+                    //We use ScriptManager to inset JS code can 
+                    //avoid the JS Bundles/MsAjax error: PRM_ParserErrorDetails 
+                    ScriptManager.RegisterStartupScript(this,
+                     typeof(Page),
+                     "Alert",
+                     "<script>alert('Please enter the answer before clicking the \"Show/Hide\" icon.');</script>",
+                     false);
+
+                    //no need to do the rest of the work of the function if the student click the "Show/Hide" icon before answering the organ number
+                    return;
+                }
+                
+            }
+
 
             //switch visibility icon of the selected row .
             String HideOrShow = switchVisible_Invisible(selectedRow, "InOrVisible", null);
@@ -1030,7 +1086,7 @@ public partial class IPC : CsSessionManager
              //send hide 3D organ msg to 3DBuilder
              */
 
-            string contact = "6 " + HideOrShow + " " + answer.ToString(); //send "6 Hide realOrganName" to 3DBuilder
+            string contact = "6 " + HideOrShow + " " + correctOrganName.ToString(); //send "6 Hide realOrganName" to 3DBuilder
 
             sendMsg23DBuilder(contact);
 

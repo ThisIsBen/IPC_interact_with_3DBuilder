@@ -95,7 +95,7 @@ public partial class IPC: CsSessionManager
 
 
 
-            //get the URL of the previous page
+            //store the URL of the previous page to a session var.
             storePreviousPageURL();
 
 

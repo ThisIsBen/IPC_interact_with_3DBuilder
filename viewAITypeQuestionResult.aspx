@@ -653,19 +653,30 @@
 
 
             function rearrangeQNo() {
-                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+                if (("<%= NameOrNumberAnsweringMode_Session %>") == "Name Answering Mode") {
+
+                    var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
 
 
 
-                for (i = 1; i < gvDrv.rows.length; i++) {
+                  for (i = 1; i < gvDrv.rows.length; i++) {
 
 
 
-                    //show the textbox of the organs that have been chosen as part of question.
+                      //show the textbox of the organs that have been chosen as part of question.
 
 
-                    gvDrv.rows[i].cells[0].getElementsByTagName("span")[0].innerHTML = i;
-                }
+                      gvDrv.rows[i].cells[0].getElementsByTagName("span")[0].innerHTML = i;
+                  }
+              }
+
+
+              else if (("<%= NameOrNumberAnsweringMode_Session %>") == "Number Answering Mode") {
+
+                  //do rearrangement  for Number Answering Mode
+                  //currently we don't need to do anything.
+              }
+
             }
 
             //clear the ajax cache to read the latest content from the organ xml file
@@ -812,14 +823,14 @@
                         <%--cells[0]--%>
                         <asp:TemplateField ItemStyle-Width="40px" HeaderText="Question Number">
                             <ItemTemplate>
-                                <asp:Label ID="TextBox_Number" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
+                                <asp:Label ID="TB_OrganIndicator" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
                         </asp:TemplateField>
 
                         <%--cells[1]--%>
                         <asp:TemplateField ControlStyle-Width="100%" ControlStyle-Height="40px" HeaderText="Your Answer">
                             <ItemTemplate>
-                                <asp:TextBox ID="TextBox_Text" ItemStyle-Width="130%" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
+                                <asp:TextBox ID="TB_AnsweringField" ItemStyle-Width="130%" ClientIDMode="static" CssClass=" hideIfNotQuestion" runat="server" Text="" />
 
                                 <%--show the corresponding correct organ name for debugging purpose--%>
                                 <%-- <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />--%>
@@ -1045,23 +1056,48 @@
                         //get the randomized  Question Numbers picked by instructor to IPC.aspx sent through Session
                         var pickedRandQNo = [];
                         <% 
-        
-                            
-        var arrayData = RandomQuestionNoSession;
+     
+        if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
 
-        //if RandomQuestionNoSession is not null
-        if (arrayData[0] != -1)
-            for (int i = 0; i < arrayData.Length; i++)
-            {
+
+
+
+            var randomizedQuestionOrganNumber = RandomQuestionNoSession;
+                                    //if RandomQuestionNoSession is not null
+            if (randomizedQuestionOrganNumber[0] != -1)
+                for (int i = 0; i < randomizedQuestionOrganNumber.Length; i++)
+                    {
                                 
                          
                         %>
 
-                        pickedRandQNo.push('<%= arrayData[i] %>');
+                        pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
-            <% 
-            }
+                        <% 
+                    }
+                                
+                                
+        }
+
+
+        else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+          
             %>
+                        //Currently we don't need to do any swap or rearrangement of the organs in Number Answering Mode.
+                        //We can leave pickedRandQNo empty.
+
+                        /*
+                        //set the pickedRandQNo as the Question Number of organs picked by the instructor. 
+                        //the content of 'pickedQuestionOrganArray' may look like '1,2,6,9,12'
+                        pickedRandQNo = pickedQuestionOrganArray;
+                        */
+
+                        <% 
+        }
+            %>
+        
                         //alert(pickedRandQNo);
 
 
@@ -1318,23 +1354,48 @@
                 //get the randomized  Question Numbers picked by instructor to IPC.aspx sent through Session
                 var pickedRandQNo = [];
                         <% 
+     
+        if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
+           
         
-                            
-        var randomQuestionNoArrayData = RandomQuestionNoSession;
-
-        //if RandomQuestionNoSession is not null
-        if (randomQuestionNoArrayData[0] != -1)
-            for (int i = 0; i < randomQuestionNoArrayData.Length; i++)
-            {
+       
+        
+                 var randomizedQuestionOrganNumber = RandomQuestionNoSession;
+                                    //if RandomQuestionNoSession is not null
+                 if (randomizedQuestionOrganNumber[0] != -1)
+                     for (int i = 0; i < randomizedQuestionOrganNumber.Length; i++)
+                    {
                                 
                          
                         %>
 
-                pickedRandQNo.push('<%= randomQuestionNoArrayData[i] %>');
+                pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
-                        <% 
-            }
-                        %>
+                <% 
+                    }
+                                
+                                
+        }
+
+
+        else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+            // do nothing to leave pickedRandQNo empty.
+        
+            %>
+                //Currently we don't need to do any swap or rearrangement of the organs in Number Answering Mode.
+                //We can leave pickedRandQNo empty.
+
+                /*
+                //set the pickedRandQNo as the Question Number of organs picked by instructor.
+                pickedRandQNo = pickedQuestionOrganArray;
+                */
+
+                <% 
+        }
+            %>
+
                 //alert(pickedRandQNo);
 
 

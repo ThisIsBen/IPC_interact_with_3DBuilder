@@ -8,7 +8,7 @@ using System.IO;
 using System.Diagnostics;
 
 
-public partial class ALHomePage : System.Web.UI.Page
+public partial class ALHomePage : CsSessionManager
 {
     public static Process os = new Process();
 
@@ -43,9 +43,21 @@ public partial class ALHomePage : System.Web.UI.Page
             //temporarily we only activate CSNamedPipe.exe, and manually activate 3DBuilder before clicking the button btnCheck
             //run CSNamedPipe.exe
             runCSNamedPipe();
+
+
+            //store the URL of the previous page to a session var.
+            storePreviousPageURL();
         }
 
     }
+
+
+    private void storePreviousPageURL()
+    {
+        Previous_Page_URL_Session = Request.UrlReferrer.AbsoluteUri;
+    }
+
+
     protected void btnCheck_Click(object sender, EventArgs e)
     {
 
