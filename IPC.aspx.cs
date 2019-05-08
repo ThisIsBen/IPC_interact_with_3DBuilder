@@ -747,8 +747,13 @@ public partial class IPC : CsSessionManager
             //    Response.Write(c.StudentAnswer + ", " + c.QuesOrdering + " ");
             //}
 
+
+            
             //Insert the student's ID, student's answer, question order of this AITypeQuestion to the NewVestionDB/AITypeQuestionStudentAnswer datatable
             CsDBOp.InsertStuIPCAns(strUserID, strQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session, cActivityID);//插入學生data至darabase
+            
+
+
 
             //InsertStuIPCAns2DB(strUserID, questionXMLPath, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session);//插入學生data至darabase
             ///////////////////////////////////////
@@ -786,6 +791,12 @@ public partial class IPC : CsSessionManager
         //RandomQuestionNoSession.Length ==3
         //C# GridView gvScore
         //gvScore.Rows
+
+        /*removes all the objects stored in a Session. 
+         If you do not call the Abandon method explicitly, the server removes these objects and destroys the session when the session times out.
+         It also raises events like Session_End.*/
+        Session.Abandon();
+
 
         //redirect back to the exam paper
         redirectBack2ExamPaper();
