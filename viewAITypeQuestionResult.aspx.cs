@@ -1001,7 +1001,7 @@ public partial class IPC : CsSessionManager
         {
 
             //get the organ name from AITypeQuestion XML file.
-            List<string> strAllOrganName = xmlHandler.getValuesOfEachSpecificTagName("Name");
+            List<string> strAllOrganName = xmlHandler.getValuesOfEachSpecificTag("Name");
 
 
             for (int i = 0; i < gvScore.Rows.Count; i++)

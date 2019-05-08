@@ -98,15 +98,33 @@ public partial class IPC : CsSessionManager
 
             // For each correct organ name in the table, 
             //add it to a list called CorrectOrganNameList .
-
             foreach (DataRow row in ds.Tables["Organ"].Rows)
             {
 
                 CorrectOrganNameList.Add(row["Name"].ToString());
 
             }
-            //store correct organ list to session
-            CorrectOrganNameSession = CorrectOrganNameList;
+
+            if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+            {
+                
+                //store correct organ list to session
+                CorrectOrganNameSession = CorrectOrganNameList;
+            }
+
+            //We make use of a dictionary session variable to store the mapping of organ number and the randomized organ name.
+            else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+            {
+
+                //create the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
+                for (int i = 0; i < NumberAnsweringMode_WholeRandOrganNo_Session.Length; i++)
+                {
+                    NumberAnsweringMode_RandOrganNoNameMapping_Session.Add(NumberAnsweringMode_WholeRandOrganNo_Session[i], CorrectOrganNameList[i]);
+                   
+                }
+               
+
+            }
 
 
             //2019/1/28 Ben comment it because we can't bring 3DBuilder to run in foreground
@@ -123,13 +141,16 @@ public partial class IPC : CsSessionManager
              */
 
             
-            //wait for the 3DBuilder to respond before show 3D Labels in 3DBuilder
-            //Because it takes longer for the 3DBuilder to load all the organs when 
-            //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
-            System.Threading.Thread.Sleep(100);
+            
 
             //2019/4/10 Ben commented the function to show 3D Labels in 3DBuilder when AITypeQuestion is loaded.
             /*
+             * 
+             //wait for the 3DBuilder to respond before show 3D Labels in 3DBuilder
+            //Because it takes longer for the 3DBuilder to load all the organs when 
+            //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
+            System.Threading.Thread.Sleep(100);
+             
             //Show 3D Labels in 3DBuilder
             ShowOrHide3DLabels_Click();
             */
@@ -585,7 +606,7 @@ public partial class IPC : CsSessionManager
         {
 
             //get the organ name from AITypeQuestion XML file.
-            List<string> strAllOrganName=xmlHandler.getValuesOfEachSpecificTagName("Name");
+            List<string> strAllOrganName = xmlHandler.getValuesOfEachSpecificTag("Name");
 
 
             for (int i = 0; i < gvScore.Rows.Count; i++)
@@ -940,9 +961,38 @@ public partial class IPC : CsSessionManager
 
                     string givenOrganName = organIndicator.Text;
                     string studentOrganNumberAnswer = answeringField.Text;
+                    //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
+                    if (studentOrganNumberAnswer == "")
+                    {
 
+                   
+                        //If we use Response.Write to insert JS code, 
+                        //JS Bundles/MsAjax error: PRM_ParserErrorDetails will occur on the frontend.
+                        /*
+                        Response.Write("<script>alert('Please enter the answer before clicking the 'Show/Hide' icon.');</script>");
+                        */
+
+
+                        //We use ScriptManager to inset JS code can 
+                        //avoid the JS Bundles/MsAjax error: PRM_ParserErrorDetails 
+                        ScriptManager.RegisterStartupScript(this,
+                         typeof(Page),
+                         "Alert",
+                         "<script>alert('Please enter the answer before clicking the \"Submit\" icon.');</script>",
+                         false);
+
+
+                       
+                        //no need to do the rest of the work of the function if the student click the "Show/Hide" icon before answering the organ number
+                        return;
+                    }
                     //Here the first para is the same as the third para.
                     string correctOrganName = givenOrganName;
+
+
+                    //Replace the " " space in student's answer with "_" so that the 3DBuilder can extract and display the student's answer correctly
+                    givenOrganName = givenOrganName.Replace(" ", "_");
+
                     //Update student answer to the 3D label in the 3DBuilder
                     msgFor3DBuilder = "5 " + givenOrganName + " " + studentOrganNumberAnswer + " " + correctOrganName;
          
@@ -994,7 +1044,7 @@ public partial class IPC : CsSessionManager
 
                     var correctOrganName = CorrectOrganNameSession[Convert.ToInt32(QuestionNo)];
 
-
+                    //Replace the " " space in student's answer with "_" so that the 3DBuilder can extract and display the student's answer correctly
                     string studentOrganNameAnswer = answeringField.Text.Replace(" ", "_");
             
                     //Update student answer to the 3D label in the 3DBuilder
@@ -1046,10 +1096,10 @@ public partial class IPC : CsSessionManager
             else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
             {
                 TextBox tb = (TextBox)gvScore.Rows[index].FindControl("TB_AnsweringField");
-                correctOrganName = tb.Text.Trim();
+                string TB_AnsweringField_Content = tb.Text.Trim();
 
                 //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
-                if (correctOrganName == "")
+                if (TB_AnsweringField_Content == "")
                 {
                     //If we use Response.Write to insert JS code, 
                     //JS Bundles/MsAjax error: PRM_ParserErrorDetails will occur on the frontend.
@@ -1068,6 +1118,28 @@ public partial class IPC : CsSessionManager
                     //no need to do the rest of the work of the function if the student click the "Show/Hide" icon before answering the organ number
                     return;
                 }
+
+
+
+                //if the student wants to hide a 'Non Answer Row' organ,
+                //we hide the correponding 3D organ in the 3DBuilder by getting its organ name from TB_OrganIndicator of that row.
+                if (TB_AnsweringField_Content=="Non Answer Row")
+                {
+                    var organIndicator = selectedRow.FindControl("TB_OrganIndicator") as Label;
+
+                    correctOrganName = organIndicator.Text;
+                }
+
+                //look up the corresponding organ name of the organ number entered by the student.    
+                else
+                {
+                    int studentNumberAnswer = Int32.Parse(TB_AnsweringField_Content);
+                    correctOrganName = NumberAnsweringMode_RandOrganNoNameMapping_Session[studentNumberAnswer].ToString();
+
+
+                }
+
+
                 
             }
 
@@ -1107,7 +1179,7 @@ public partial class IPC : CsSessionManager
 
     }
 
-
+   
     /// <summary>產生亂數字串</summary>
     /// <param name="Number">字元數</param>
     /// <returns></returns>

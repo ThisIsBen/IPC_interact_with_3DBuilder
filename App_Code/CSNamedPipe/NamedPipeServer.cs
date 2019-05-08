@@ -88,6 +88,9 @@ namespace CSNamedPipe
                 }
             }
         }
+
+        //Read the message sent from the 3DBuilder.
+        //The size of the message buffer is decided by the var,'BUFFER_SIZE'
         private void Read()
         {
             //Client client = (Client)clientObj;
@@ -145,6 +148,9 @@ namespace CSNamedPipe
             clientse.handle.Close();
             
         }
+
+        //Send the message to the 3DBuilder.
+        //The size of the message buffer is decided by the length of the message. 
         public void SendMessage(string message, Client client)
         {
 

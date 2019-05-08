@@ -89,7 +89,7 @@ public class CsSessionManager : System.Web.UI.Page
         }
     }
 
-    //store the URLof the previous page
+    //store the URL of the previous page
     protected string NameOrNumberAnsweringMode_Session//Store correct answer of Organ name
     {
         get
@@ -108,5 +108,48 @@ public class CsSessionManager : System.Web.UI.Page
         }
     }
 
-    
+
+    //store the mapping of organ number and the randomized organ name with a dictionary.
+    protected Dictionary<int,string> NumberAnsweringMode_RandOrganNoNameMapping_Session//Store correct answer of Organ name
+    {
+        get
+        {
+            if (Session["NumberAnsweringMode_RandOrganNoNameMapping_Session"] == null)
+            {
+                //出始值為null
+                Session["NumberAnsweringMode_RandOrganNoNameMapping_Session"] = new Dictionary<int, string>(); 
+            }
+            return Session["NumberAnsweringMode_RandOrganNoNameMapping_Session"] as Dictionary<int, string>;
+
+        }
+        set
+        {
+            Session["NumberAnsweringMode_RandOrganNoNameMapping_Session"] = value;
+        }
+    }
+
+
+
+    //When the AITypeQuestion is of 'Number Answering Mode',
+    //we need to store the whole randomized organ number for creating a  mapping of organ number and the randomized organ name
+    protected int[] NumberAnsweringMode_WholeRandOrganNo_Session
+    {
+        get
+        {
+            if (Session["NumberAnsweringMode_WholeRandOrganNo_Session"] == null)
+            {
+                int[] empty = { -1 };
+                Session["NumberAnsweringMode_WholeRandOrganNo_Session"] = empty;
+            }
+            return (int[])Session["NumberAnsweringMode_WholeRandOrganNo_Session"]; ;
+
+        }
+        set
+        {
+            Session["NumberAnsweringMode_WholeRandOrganNo_Session"] = value;
+        }
+    }
+
+
+
 }

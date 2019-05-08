@@ -607,7 +607,8 @@
                                <%-- <input type="hidden" id="InOrVisible" runat="server" value="true">--%>
                                 <input type="hidden" id="markRecord" runat="server" value="0">
 
-                                <input type="hidden" id="clickedOrganSubmitBtn" runat="server" value="99">
+                                 <asp:HiddenField ID="hidden_IfclickedOrganSubmitBtn" runat="server" Value="99" />
+                                <%--<input type="hidden" id="hidden_IfclickedOrganSubmitBtn" runat="server" value="99">--%>
                             </ItemTemplate>
 
                         </asp:TemplateField>

@@ -31,7 +31,7 @@ public class XMLHandler
 
 
     //get the values of each specific tag
-    public List<string> getValuesOfEachSpecificTagName(string SpecificTagName)
+    public List<string> getValuesOfEachSpecificTag(string SpecificTagName)
     {
         var targets = xDoc.Element("Organs").Elements("Organ").Where(element => element.Element(SpecificTagName).Name == SpecificTagName);
 
@@ -46,7 +46,7 @@ public class XMLHandler
 
 
     //get  values from specific Tag name with specific value
-    public List<string> getValueOfSpecificTagName(string targetTagName,string SpecificTagName, string SpecificValue)
+    public List<string> getValueOfSpecificTagWithSpecificValue(string targetTagName,string SpecificTagName, string SpecificValue)
     {
         //to contain the value retrieved.
         List<string> retrievedValueList = new List<string>();
@@ -66,7 +66,7 @@ public class XMLHandler
     public int[] getPickedQuestionNumber()
     {
         //get  values from tag "Number" whose tag "Question" is marked "Yes"
-        List<string> strPickedQuesionNumber = getValueOfSpecificTagName("Number", "Question", "Yes");
+        List<string> strPickedQuesionNumber = getValueOfSpecificTagWithSpecificValue("Number", "Question", "Yes");
         
         
         //Convert the string list to int array.

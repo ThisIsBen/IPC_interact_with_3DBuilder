@@ -181,7 +181,7 @@ public partial class Items : CsSessionManager
 
                 //Step 2-1 We randomly rearrange all the organ numbers in the AITypeQuestion xml file.
                 //shuffle the array of organ number
-                //shuffleOrganNumber(ref arr_OrganRearrangedNumber);
+                shuffleOrganNumber(ref arr_OrganRearrangedNumber);
 
                 //assign an array to RandomQuestionNoSession
                 int[] arr_RearrangedPickedOrganNumber = new int[pickedQuestions.Length];
@@ -196,12 +196,17 @@ public partial class Items : CsSessionManager
                 //Store the randomly rearranged organ numbers of the organs that are picked as question to ‘RandomQuestionNoSession’.
                 RandomQuestionNoSession = arr_RearrangedPickedOrganNumber;
 
+                //When the AITypeQuestion is of 'Number Answering Mode',
+                //we need to store the whole randomized organ number for creating a  mapping of organ number and the randomized organ name
+                NumberAnsweringMode_WholeRandOrganNo_Session = arr_OrganRearrangedNumber;
+
+
                 // Step 2-2 Send the randomly rearranged organ numbers result to the 3DBuilder.
                 //create randomized  Question Numbers picked by instructor, and change its format for 3DBuilder to read.
                 intArray2AString(arr_OrganRearrangedNumber, ref strRandomQuestionNo);
 
 
-
+                
             }
 
 
