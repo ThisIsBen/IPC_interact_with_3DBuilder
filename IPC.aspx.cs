@@ -748,10 +748,11 @@ public partial class IPC : CsSessionManager
             //}
 
 
-            
+            //2019/5/8 Ben commented to test Number Answering Mode
+            /*
             //Insert the student's ID, student's answer, question order of this AITypeQuestion to the NewVestionDB/AITypeQuestionStudentAnswer datatable
             CsDBOp.InsertStuIPCAns(strUserID, strQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session, cActivityID);//插入學生data至darabase
-            
+            */
 
 
 
