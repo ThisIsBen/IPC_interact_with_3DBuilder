@@ -160,7 +160,7 @@ public partial class IPC: CsSessionManager
     private void decide_QuestionBodyPartOrganXML()
     {
             //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
-        //questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml"; The hidden field value will be "" at the first page load because we set the value of the hidden field,hidden_AITypeQuestionTitle, in document.ready in front end, which is run after the page_load function on backend.
+        //questionXMLPath = hidden_cQID.Value + ".xml"; The hidden field value will be "" at the first page load because we set the value of the hidden field,hidden_cQID, in document.ready in front end, which is run after the page_load function on backend.
             questionXMLPath = Request.QueryString["strQID"] + ".xml";
 
 
@@ -231,7 +231,7 @@ public partial class IPC: CsSessionManager
         //originating from Item.aspx
         string absoluteKneeXMLFolder = CsDynamicConstants.absoluteKneeXMLFolder;
         //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
-        questionXMLPath = hidden_AITypeQuestionTitle.Value + ".xml";
+        questionXMLPath = hidden_cQID.Value + ".xml";
 
       
       
@@ -544,7 +544,7 @@ public partial class IPC: CsSessionManager
 
 
         //retrieve the cQID from the hidden field   
-        cQID = hidden_AITypeQuestionTitle.Value;
+        cQID = hidden_cQID.Value;
 
         string xmlpath = XMLFolder + questionXMLPath;
         
@@ -596,7 +596,7 @@ public partial class IPC: CsSessionManager
             Session.Abandon();
 
             //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
-            redirectBack2HintsPaper_MainPage();
+            redirectBack2HintsPaper_MainPage("Save the Question");
         }
           
         
@@ -619,7 +619,7 @@ public partial class IPC: CsSessionManager
 
         //direct back the Hints exam editing page
         //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
-        redirectBack2HintsPaper_MainPage();
+        redirectBack2HintsPaper_MainPage("Back");
     }
 
 
@@ -752,7 +752,7 @@ public partial class IPC: CsSessionManager
     }
 
     //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
-    private void redirectBack2HintsPaper_MainPage()
+    private void redirectBack2HintsPaper_MainPage(string clickedBtnName)
     {
         //After modified an existing AITypeQuestion
         if (Request.QueryString["viewContent"] != null && Request.QueryString["viewContent"] == "Yes")
@@ -761,15 +761,30 @@ public partial class IPC: CsSessionManager
         }
 
         else 
-        { 
-            //After created a new AITypeQuestion
+        {
+            //if the teacher clicks 'Save the Question' btn
+            if (clickedBtnName == "Save the Question")
+            {
+                //After created a new AITypeQuestion
 
-            //if the opener page is still opened, refresh it and close the current page.
-            ClientScript.RegisterClientScriptBlock(this.GetType(), "Refresh", "opener.document.getElementById('btnRefresh').click();window.close();", true);
-        
-            //if the opener page is already closed, direct back to the opener page.
-            ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "history.go(-2);", true);
-        }
+                //if the opener page is still opened, refresh it and close the current page.
+                ClientScript.RegisterClientScriptBlock(this.GetType(), "Refresh", "opener.document.getElementById('btnRefresh').click();window.close();", true);
+
+                //if the opener page is already closed, direct back to the opener page.
+                ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "location.href='" + Previous_Page_URL_Session + "'", true);
+ 
+            }
+            //if the teacher clicks '<< Back' btn
+            else if (clickedBtnName == "Back")
+            {
+                
+                //if the opener page is already closed, direct back to the opener page.
+                ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "location.href='" + Previous_Page_URL_Session + "'", true);
+
+            }
+
+
+         }
        
     }
 

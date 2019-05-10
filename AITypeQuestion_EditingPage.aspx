@@ -494,16 +494,16 @@
                                             <h4>(Number/Name Answering Mode)</h4>
 
                                             <label class="role" for="NameAnsweringModeRadioBtn">
-                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Name Answering Mode" id="NameAnsweringModeRadioBtn" checked="checked">&nbsp <b>Name Answering Mode</b>
+                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Name Answering Mode" id="NameAnsweringModeRadioBtn" checked="checked">&nbsp <b>Organ Name Answering Mode</b>
                                                 <h4>(Students have to answer the name of the organs.)</h4>
                                             </label>
                                             <br />
 
 
                                             <label class="role" for="NumberAnsweringModeRadioBtn">
-                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Number Answering Mode" id="NumberAnsweringModeRadioBtn">&nbsp <b>Number Answering Mode</b> &nbsp &nbsp  &nbsp<h4>(Students have to answer the label number displayed inthe 3DBuilder of the organs.) </h4>
+                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Number Answering Mode" id="NumberAnsweringModeRadioBtn">&nbsp <b>Organ Number Answering Mode</b> &nbsp &nbsp  &nbsp<h4>(Students have to answer the label number displayed inthe 3DBuilder of the organs.) </h4>
                                             </label>
-                                            <asp:HiddenField ID="hidden_selectedNameOrNumberAnsweringMode" runat="server" Value="Surgery Mode" />
+                                            <asp:HiddenField ID="hidden_selectedNameOrNumberAnsweringMode" runat="server" Value="Name Answering Mode" />
                                         </div>
 
 
@@ -603,7 +603,7 @@
 
                 </Columns>
             </asp:GridView>
-            <input type="hidden" id="hidden_AITypeQuestionTitle" runat="server">
+            <input type="hidden" id="hidden_cQID" runat="server">
         </asp:Panel>
     </div>
     </div>
@@ -710,8 +710,8 @@
 
             if (url.searchParams.get("strQID") != null) {
                 //load XML to check the organs that are picked to be part of question.
-                var hidden_AITypeQuestionTitle = document.getElementById("<%= hidden_AITypeQuestionTitle.ClientID %>");
-                hidden_AITypeQuestionTitle.value = url.searchParams.get("strQID");
+                var hidden_cQID = document.getElementById("<%= hidden_cQID.ClientID %>");
+                hidden_cQID.value = url.searchParams.get("strQID");
 
             }
 
@@ -794,7 +794,7 @@
 
             if (document.getElementById("NameAnsweringModeRadioBtn").checked) {
                 //the radio button of the Surgery Mode is checked
-                document.getElementById("<%= hidden_selectedAITypeQuestionMode.ClientID %>").value = "Name Answering Mode";
+                document.getElementById("<%= hidden_selectedNameOrNumberAnsweringMode.ClientID %>").value = "Name Answering Mode";
 
 
             }
@@ -802,7 +802,7 @@
 
             else {
                 //the radio button of the Anatomy Mode is checked
-                document.getElementById("<%= hidden_selectedAITypeQuestionMode.ClientID %>").value = "Number Answering Mode";
+                document.getElementById("<%= hidden_selectedNameOrNumberAnsweringMode.ClientID %>").value = "Number Answering Mode";
 
 
             }

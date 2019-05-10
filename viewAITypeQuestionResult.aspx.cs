@@ -148,14 +148,47 @@ public partial class IPC : CsSessionManager
             
            
         }
-        //2019/5/6 Ben commented the timer because we don't need timer for viewing the result of the AITypeQuestion.
-        //set the remaining time to the timer and check whether time is already up.
-        //setUp_and_CheckCountdownTimer();
-
+       
         //Step 1  Because each student has different order of the organ number, 
         //so we access database to get the student’s order of the organ number 
         //and the student’s answer for the question.
         getAndMarkStudentAnswer();
+
+        //If the student is absent from this exam, we will prompt him that he is absent from the exam, and thus has no score for thie AITypeQuestion.
+        if (ScoreAnalysisList.Count == 0)
+        {
+
+            //If the student is absent from this exam, we will prompt him that he is absent from the exam, and thus has no score for thie AITypeQuestion.
+            //and redirect back to the previous page.
+
+            //We use ScriptManager to inset JS code can 
+            //avoid the JS Bundles/MsAjax error: PRM_ParserErrorDetails 
+            //Response.Write("<script>alert('You were absent from this exam so there is no your score record for this Anatomy Image Type Question.');window.history.back();</script>");
+            /*
+            ScriptManager.RegisterStartupScript(this,
+             typeof(Page),
+             "Alert",
+             "<script>alert('You were absent from this exam so there is no your score record for this Anatomy Image Type Question.');window.history.back();</script>",
+             false);
+             * */
+            /*
+             * Trying to make a fake student ScoreAnalysisM object to pass the C# code used on the frontend.
+            ScoreAnalysisM log_temp = new ScoreAnalysisM();
+            ScoreAnalysisList.Add(log_temp);
+            ScoreAnalysisList[0].Grade.Add(new string[1]);
+            ScoreAnalysisList[0].questionOrderingString=new string[1];
+             * */
+            //redirect to the previous page.
+            Previous_Page_URL_Session = Request.UrlReferrer.ToString();
+
+            Response.Redirect("./AlertMessageDisplayPage.aspx?messageContent='You were absent from this exam so there is no your score record for this Anatomy Image Type Question.'" );
+
+           
+
+            //no need to do the rest of the work of the function if the student was absent from this exam.
+            //return;
+        }
+
 
         //Step 2-1 apply the retrieved student’s question organ number to display the student’s answer in this order.
         applyStudentsQuestionOrganNo();
@@ -545,55 +578,7 @@ public partial class IPC : CsSessionManager
     }
 
 
-    //set the remaining time to the timer and check whether time is already up.
-    private void setUp_and_CheckCountdownTimer()
-    {
-        //2019/4/8 Ben commented for using default URL value if no paras provided.
-        /*
-        strUserID = Request["strUserID"];
-        string questionXMLPath = Request["strQID"];
-         * 
-         
-        cActivityID = Request["cActivityID"];
-         * 
-        */
-        int remainingTimeSec = CsDBOp.getExamRemainingTime(cActivityID); //now I just hard code it to 15 sec
-
-
-        if (remainingTimeSec < 0 && remainingTimeSec != -1)
-        {
-            //Response.Write("<script>alert('考試時間已結束')</script>");
-            //Response.Write("<script>alert('考試時間已結束');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
-
-            //remind the student that the exam is over, and redirect back to the ALHomePage.aspx, the first page when answering the AITypeQuestion. 
-            Response.Write("<script>alert('The exam time is already over.');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "'</script>");
-            
-        }
-
-        else if (remainingTimeSec == -1)
-        {
-            Response.Write("<script>alert('找不到資料');location.href='ALHomePage.aspx?strQID=" + strQID + "&strUserID=" + strUserID + "&cActivityID=" + cActivityID + "' </script>");
-        }
-        else
-        { 
-            
-        Double examTimespan = remainingTimeSec * 1.0;
-        DateTime deadlineDateTime = DateTime.Now.AddSeconds(examTimespan); // return Datetime format
-        /*psedo code:
-         * store deadlineDateTime to DB
-         * */
-        /*This block should be implemented in the Hints set timer for the exam page
-        * */
-
-
-
-        /*psedo code
-         * retrieve deadlineDateTime from DB,which is stored in the datetime format
-         * */
-        //check count down timer to decide whether time is already up.
-        CheckCountdownTimer(deadlineDateTime);
-    }
-}
+   
 
     private void activate3DBuilder()
     {
@@ -714,6 +699,8 @@ public partial class IPC : CsSessionManager
         {
 
 
+
+           
            
 
             int[] intQuestionOrderingString = new int[ScoreAnalysisList[0].questionOrderingString.Length-1];
@@ -772,6 +759,8 @@ public partial class IPC : CsSessionManager
 
 
     }
+
+    
 
     private void intArray2AString(int[] randomQuestionNo, ref string strRandomQuestionNo)
     {
@@ -964,9 +953,12 @@ public partial class IPC : CsSessionManager
        
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
         killCorrespondingCSNamedPipe();
-         
-      
 
+
+        /*removes all the objects stored in a Session. 
+        If you do not call the Abandon method explicitly, the server removes these objects and destroys the session when the session times out.
+        It also raises events like Session_End.*/
+        Session.Abandon();
 
     }
 

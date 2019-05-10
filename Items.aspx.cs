@@ -281,8 +281,9 @@ public partial class Items : CsSessionManager
     //and send the randomized organ question number to the organs displayed in 3DBuilder 
     private void loadOrganXMLIn3DBuilderForExamMode(string strRandomQuestionNo)
     {
+        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + NameOrNumberAnsweringMode_Session +  strRandomQuestionNo);//send protocol,Data to 3DBuilder.
 
-        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+        //sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
 
         //sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15");//send protocol,Data to 3DBuilder.
 
