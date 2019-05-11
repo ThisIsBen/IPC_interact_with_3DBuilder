@@ -203,7 +203,7 @@ public partial class Items : CsSessionManager
 
                 // Step 2-2 Send the randomly rearranged organ numbers result to the 3DBuilder.
                 //create randomized  Question Numbers picked by instructor, and change its format for 3DBuilder to read.
-                intArray2AString(arr_OrganRearrangedNumber, ref strRandomQuestionNo);
+                intArray2AString(NumberAnsweringMode_WholeRandOrganNo_Session, ref strRandomQuestionNo);
 
 
                 

@@ -32,7 +32,7 @@
             width: 50%;
             visibility: hidden;
         }
-        .menu_img {
+        .showHideIcon_img {
             width: 50%;
            
         }
@@ -621,7 +621,7 @@
 
                          <%--cells[3]--%>
                         <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible"  ImageUrl="" ControlStyle-Height="40px"  ControlStyle-Width="40px" HeaderText="Show /<br/>Hide">
-                            <ControlStyle CssClass=" menu_img" />
+                            <ControlStyle CssClass=" showHideIcon_img" />
                         </asp:ButtonField>
 
 
@@ -950,7 +950,8 @@
 
             //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
             //This is the fix terms for using ASP UpdatePanel AJAX
-            loadAfterUpdatePanel();
+            Sys.Application.add_init(appl_init);
+            
 
             //activate the count down timer
             activateCountDownTimer();
@@ -966,7 +967,13 @@
 
         
        
-     
+        function appl_init() {
+            //set the function that  should be done on frontend before UpdatePanel postback
+            Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beforeAsyncPostBack);
+            //set the function that  should be done on frontend after UpdatePanel postback
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(afterAsyncPostBack);
+
+        }
 
        
         function activateCountDownTimer() {
@@ -1040,15 +1047,14 @@
 
         }
 
+        //do  something on the frontend before the asp UpdatePanel post back
+        function beforeAsyncPostBack() {
 
-        
-        //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
-        //This is the fix terms for using ASP UpdatePanel AJAX
-        function loadAfterUpdatePanel() {
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
         }
-
-        function EndRequestHandler() {
+        
+       
+        //do  something on the frontend after the asp UpdatePanel post back
+        function afterAsyncPostBack() {
             
            
             //do the init ready function again after coming back from UpdatePanel AJAX 
@@ -1277,6 +1283,13 @@
 
         });
 
+        //do something if the "Show Hide Icon" is clicked.
+        //this function will be fired after the UpdatePanel updates the content via AJAX.
+        $(document).on("click", ".showHideIcon_img", function () {
+
+
+
+        });
 
         
 

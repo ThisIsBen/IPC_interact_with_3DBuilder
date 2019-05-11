@@ -22,6 +22,7 @@ public partial class ALHomePage : CsSessionManager
 
     protected void Page_Load(object sender, EventArgs e)
     {
+       
         //int osID = Int32.Parse(Session["osId"].ToString());
         //os = System.Diagnostics.Process.GetProcessById(osID);
         //os.StartInfo.RedirectStandardInput = true;
@@ -38,7 +39,9 @@ public partial class ALHomePage : CsSessionManager
 
         if (!IsPostBack)
         {
-           
+
+            
+
 
             //temporarily we only activate CSNamedPipe.exe, and manually activate 3DBuilder before clicking the button btnCheck
             //run CSNamedPipe.exe

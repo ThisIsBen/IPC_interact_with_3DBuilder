@@ -105,26 +105,10 @@ public partial class IPC : CsSessionManager
 
             }
 
-            if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
-            {
-                
-                //store correct organ list to session
-                CorrectOrganNameSession = CorrectOrganNameList;
-            }
+            //set up the mapping of correct organ name and organ number according to the NameOrNumberAnsweringMode.
+            setUpOrganName_NumberMapping(CorrectOrganNameList);
 
-            //We make use of a dictionary session variable to store the mapping of organ number and the randomized organ name.
-            else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
-            {
-
-                //create the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
-                for (int i = 0; i < NumberAnsweringMode_WholeRandOrganNo_Session.Length; i++)
-                {
-                    NumberAnsweringMode_RandOrganNoNameMapping_Session.Add(NumberAnsweringMode_WholeRandOrganNo_Session[i], CorrectOrganNameList[i]);
-                   
-                }
-               
-
-            }
+           
 
 
             //2019/1/28 Ben comment it because we can't bring 3DBuilder to run in foreground
@@ -165,6 +149,32 @@ public partial class IPC : CsSessionManager
 
 
     }
+    //set up the mapping of correct organ name and organ number according to the NameOrNumberAnsweringMode.
+    private void setUpOrganName_NumberMapping(List<string> CorrectOrganNameList)
+    {
+        if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
+
+            //store correct organ list to session
+            CorrectOrganNameSession = CorrectOrganNameList;
+        }
+
+           //We make use of a dictionary session variable to store the mapping of organ number and the randomized organ name.
+        else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+
+            //create the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
+            for (int i = 0; i < NumberAnsweringMode_WholeRandOrganNo_Session.Length; i++)
+            {
+                NumberAnsweringMode_RandOrganNoNameMapping_Session.Add(NumberAnsweringMode_WholeRandOrganNo_Session[i], CorrectOrganNameList[i]);
+
+            }
+
+
+        }
+
+    }
+
 
     //get the parameters in URL and store there value in global var.
     private void retrieveURLParameters()
@@ -749,10 +759,10 @@ public partial class IPC : CsSessionManager
 
 
             //2019/5/8 Ben commented to test Number Answering Mode
-            /*
+            
             //Insert the student's ID, student's answer, question order of this AITypeQuestion to the NewVestionDB/AITypeQuestionStudentAnswer datatable
             CsDBOp.InsertStuIPCAns(strUserID, strQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session, cActivityID);//插入學生data至darabase
-            */
+            
 
 
 
@@ -1110,6 +1120,7 @@ public partial class IPC : CsSessionManager
                 TextBox tb = (TextBox)gvScore.Rows[index].FindControl("TB_AnsweringField");
                 string TB_AnsweringField_Content = tb.Text.Trim();
 
+                //do sanity check of student's input.              
                 //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
                 if (TB_AnsweringField_Content == "")
                 {
@@ -1124,33 +1135,52 @@ public partial class IPC : CsSessionManager
                     ScriptManager.RegisterStartupScript(this,
                      typeof(Page),
                      "Alert",
-                     "<script>alert('Please enter the answer before clicking the \"Show/Hide\" icon.');</script>",
+                     "<script>alert('Please enter the organ number before clicking the \"Show/Hide\" icon.');</script>",
                      false);
 
                     //no need to do the rest of the work of the function if the student click the "Show/Hide" icon before answering the organ number
                     return;
                 }
-
-
-
-                //if the student wants to hide a 'Non Answer Row' organ,
-                //we hide the correponding 3D organ in the 3DBuilder by getting its organ name from TB_OrganIndicator of that row.
-                if (TB_AnsweringField_Content=="Non Answer Row")
+                
+                //if what the student entered is not numeric, we show the warning and return at once.
+                else if (!checkStringIsNumeric(TB_AnsweringField_Content))
                 {
-                    var organIndicator = selectedRow.FindControl("TB_OrganIndicator") as Label;
+                    ScriptManager.RegisterStartupScript(this,
+                     typeof(Page),
+                     "Alert",
+                     "<script>alert('What you entered is not numeric. Please enter it properly again.');</script>",
+                     false);
 
-                    correctOrganName = organIndicator.Text;
+                    return;
                 }
 
-                //look up the corresponding organ name of the organ number entered by the student.    
-                else
-                {
-                    int studentNumberAnswer = Int32.Parse(TB_AnsweringField_Content);
-                    correctOrganName = NumberAnsweringMode_RandOrganNoNameMapping_Session[studentNumberAnswer].ToString();
+                
 
 
-                }
 
+                else{
+                
+
+
+                        //if the student wants to hide a 'Non Answer Row' organ,
+                        //we hide the correponding 3D organ in the 3DBuilder by getting its organ name from TB_OrganIndicator of that row.
+                        if (TB_AnsweringField_Content=="Non Answer Row")
+                        {
+                            var organIndicator = selectedRow.FindControl("TB_OrganIndicator") as Label;
+
+                            correctOrganName = organIndicator.Text;
+                        }
+
+                        //look up the corresponding organ name of the organ number entered by the student.    
+                        else
+                        {
+                            int studentNumberAnswer = Int32.Parse(TB_AnsweringField_Content);
+                            correctOrganName = NumberAnsweringMode_RandOrganNoNameMapping_Session[studentNumberAnswer].ToString();
+
+
+                        }
+
+                   }
 
                 
             }
@@ -1191,7 +1221,16 @@ public partial class IPC : CsSessionManager
 
     }
 
-   
+    //check if a string is numeric
+    private bool checkStringIsNumeric(string str)
+    {
+        int n;
+        bool isNumeric = int.TryParse(str, out n);
+        return isNumeric;
+    }
+
+
+
     /// <summary>產生亂數字串</summary>
     /// <param name="Number">字元數</param>
     /// <returns></returns>

@@ -58,6 +58,8 @@ public partial class IPC : CsSessionManager
 
     protected void Page_Load(object sender, EventArgs e)
     {
+       
+        
         //get the parameters in URL and store there value in global var.
         retrieveURLParameters();
 
@@ -109,8 +111,9 @@ public partial class IPC : CsSessionManager
                 CorrectOrganNameList.Add(row["Name"].ToString());
 
             }
-            //store correct organ list to session
-            CorrectOrganNameSession = CorrectOrganNameList;
+            //set up the mapping of correct organ name and organ number according to the NameOrNumberAnsweringMode.
+            setUpOrganName_NumberMapping(CorrectOrganNameList);
+
 
 
             //2019/1/28 Ben comment it because we can't bring 3DBuilder to run in foreground
@@ -201,6 +204,46 @@ public partial class IPC : CsSessionManager
     }
 
 
+
+    //set up the mapping of correct organ name and organ number according to the NameOrNumberAnsweringMode.
+    private void setUpOrganName_NumberMapping(List<string> CorrectOrganNameList)
+    {
+        if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
+
+            //store correct organ list to session
+            CorrectOrganNameSession = CorrectOrganNameList;
+        }
+
+           //We make use of a dictionary session variable to store the mapping of organ number and the randomized organ name.
+        else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+            //We Create an array called ‘arr_OrganRearrangedNumber' whose content is "1~number of organs" in the AITypeQuestion XML file, and store the rearranged organ number into the array.        
+            int[] arr_OrganRearrangedNumber = createArr_OrganRearrangedNumber();
+
+            //Step 2-1 We randomly rearrange all the organ numbers in the AITypeQuestion xml file.
+            //shuffle the array of organ number
+            shuffleOrganNumber(ref arr_OrganRearrangedNumber);
+            
+            //When the AITypeQuestion is of 'Number Answering Mode',
+            //we need to store the whole randomized organ number for creating a  mapping of organ number and the randomized organ name
+            NumberAnsweringMode_WholeRandOrganNo_Session = arr_OrganRearrangedNumber;
+
+
+
+            //create the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
+            for (int i = 0; i < NumberAnsweringMode_WholeRandOrganNo_Session.Length; i++)
+            {
+                NumberAnsweringMode_RandOrganNoNameMapping_Session.Add(NumberAnsweringMode_WholeRandOrganNo_Session[i], CorrectOrganNameList[i]);
+
+            }
+
+
+        }
+
+    }
+
+
     //required global variable from displaying the exam result on teacher's page
     /*
      Here on viewAITypeQuestionResult.aspx page, we only calculate and show the current using student's score
@@ -244,10 +287,11 @@ public partial class IPC : CsSessionManager
         //Step 1-4 
         //Access the field ‘correctAnswer’ in the datatable ‘AITypeQuestionCorrectAnswer’
         //for the correct answer of question with the current cQID, and construct a QuestionOrdering/correctAnswer Hash table for marking student’s answer.
+        if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
+            getCorrectAns_ConstructCorrectAnsHashTable(cQID_Selector);
 
-        getCorrectAns_ConstructCorrectAnsHashTable( cQID_Selector);
-
-
+        }
         
         //In  博宇's implementation
         /*
@@ -701,38 +745,32 @@ public partial class IPC : CsSessionManager
 
 
            
+
+
            
 
-            int[] intQuestionOrderingString = new int[ScoreAnalysisList[0].questionOrderingString.Length-1];
 
-            for (int x = 0; x < intQuestionOrderingString.Length; x++)
-            {
+                int[] intQuestionOrderingString = new int[ScoreAnalysisList[0].questionOrderingString.Length-1];
 
-                intQuestionOrderingString[x] = Convert.ToInt32(ScoreAnalysisList[0].questionOrderingString[x+1]);
+                for (int x = 0; x < intQuestionOrderingString.Length; x++)
+                {
 
-            }
+                    intQuestionOrderingString[x] = Convert.ToInt32(ScoreAnalysisList[0].questionOrderingString[x+1]);
+
+                }
            
 
-            RandomQuestionNoSession = intQuestionOrderingString;
+                RandomQuestionNoSession = intQuestionOrderingString;
+            
 
-
-
+            //2019/4/10 Ben commented it because currently we don't need to send the randomized question number to 3DBuilder.
+            /*
             //send randomized  Question Numbers picked by instructor to 3DBuilder .
             string strRandomQuestionNo = "";
             intArray2AString(RandomQuestionNoSession, ref strRandomQuestionNo);
 
-            /*
-            //use JS alert() in C#
-            ScriptManager.RegisterStartupScript(this,
-             typeof(Page),
-             "Alert",
-             "<script>alert('" + "3 " + XMLFolder + questionXMLPath +" "+ strRandomQuestionNo + "');</script>",
-             false);
-            */
-
-
-            //2019/4/10 Ben commented it because currently we don't need to send the randomized question number to 3DBuilder.
-            /*
+            
+           
             StreamWriter wr = (StreamWriter)Session["Writer"];
             wr.WriteLine("3 " + absoluteKneeXMLFolder + QuestionFileName + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
             */
@@ -760,7 +798,31 @@ public partial class IPC : CsSessionManager
 
     }
 
-    
+
+    //shuffle the array of organ number
+    private void shuffleOrganNumber(ref int[] arr_OrganRearrangedNumber)
+    {
+
+        Random r = new Random();
+
+        arr_OrganRearrangedNumber = arr_OrganRearrangedNumber.OrderBy(x => r.Next()).ToArray();
+    }
+
+
+    //create an array that stores 1~numOfOrgans
+    private int[] createArr_OrganRearrangedNumber()
+    {
+        //get number of organs in AITypeQuestion XML file.
+        int numOfOrgans = 38;
+        int[] arr_OrganRearrangedNumber = new int[numOfOrgans];
+        for (int i = 0; i < numOfOrgans; i++)
+        {
+            arr_OrganRearrangedNumber[i] = i + 1;
+        }
+
+
+        return arr_OrganRearrangedNumber;
+    }
 
     private void intArray2AString(int[] randomQuestionNo, ref string strRandomQuestionNo)
     {
@@ -813,14 +875,29 @@ public partial class IPC : CsSessionManager
         //compose a string that contains student's question ordering of the organs 
         string strStuQuestionOrdering="";
 
-        //convert the student's question ordering of the organs from an array of string to a string
-        for (int x = 0; x < ScoreAnalysisList[0].questionOrderingString.Length-1; x++)
-        {
 
-            strStuQuestionOrdering += ScoreAnalysisList[0].questionOrderingString[x + 1]+" ";
+         //if the AITypeQuestion is set as Number Answering Mode AITypeQuestion       
+        if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+           
+            // Step 2-2 Send the randomly rearranged organ numbers result to the 3DBuilder.
+            //create randomized  Question Numbers picked by instructor, and change its format for 3DBuilder to read.
+            intArray2AString(NumberAnsweringMode_WholeRandOrganNo_Session, ref strStuQuestionOrdering);
+
 
         }
+           //if the AITypeQuestion is set as Name Answering Mode AITypeQuestion       
+        else if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+        {
 
+            //convert the student's question ordering of the organs from an array of string to a string
+            for (int x = 0; x < ScoreAnalysisList[0].questionOrderingString.Length - 1; x++)
+            {
+
+                strStuQuestionOrdering += ScoreAnalysisList[0].questionOrderingString[x + 1] + " ";
+
+            }
+        }
         //Step 5-2 Send the organ XML file of the AITypeQuestion to the 3DBuilder.
         //Step 5-4 Send students question ordering of the organs to the 3DBuilder to display the organs in the corresponding order.
         loadOrganXMLIn3DBuilderForExamMode(strStuQuestionOrdering);
@@ -849,31 +926,12 @@ public partial class IPC : CsSessionManager
     private void loadOrganXMLIn3DBuilderForExamMode(string strRandomQuestionNo)
     {
 
-        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + QuestionFileName + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + QuestionFileName + "_" + NameOrNumberAnsweringMode_Session+strRandomQuestionNo);//send protocol,Data to 3DBuilder.
 
+       
     }
 
-    private void CheckCountdownTimer(DateTime deadlineDateTime)
-    {
-
-        int serverSideRemainingTimeSec = Convert.ToInt32((deadlineDateTime - DateTime.Now).TotalSeconds);
-
-        //if time is already up, force submit the AI type exam paper. 
-        if (serverSideRemainingTimeSec <= 0)
-        {
-            //call the Finish button event handler to force submit the AI type exam paper.
-            FinishBtn_ClickEventHandler();
-        }
-        else //let the front end JS count down timer to count down.
-        {
-            //pass the server Side Remaining Time (Sec) to front end through hidden field
-            hidden_serverSideRemainingTimeSec.Value = serverSideRemainingTimeSec.ToString();
-
-
-        }
-
-    }
-
+ 
 
     //send message through CSNamedPipe.exe to the corresponding 3DBuilder.
     public void sendMsg23DBuilder(string contact)
@@ -1380,11 +1438,89 @@ public partial class IPC : CsSessionManager
             // Get the last name of the selected author from the appropriate
             // cell in the GridView control.
             GridViewRow selectedRow = gvScore.Rows[index];
+            //to store the correct organ name
+            var correctOrganName = "";
 
-            var num = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
+            if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
+            {
 
-            //get the corresponding correct organ name 
-            var answer = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 
+                          
+
+
+                var num = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
+
+                //get the corresponding correct organ name 
+                correctOrganName = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 
+
+            }
+            //Step 5-1 When the student clicks the “Show/Hide” icon of a question organ, we will hide the corresponding organ according to the number entered by the student.
+            //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
+            else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+            {
+                TextBox tb = (TextBox)gvScore.Rows[index].FindControl("TB_AnsweringField");
+                string TB_AnsweringField_Content = tb.Text.Trim();
+
+                //do sanity check of student's input.
+                //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
+                if (TB_AnsweringField_Content == "")
+                {
+                    //If we use Response.Write to insert JS code, 
+                    //JS Bundles/MsAjax error: PRM_ParserErrorDetails will occur on the frontend.
+                    /*
+                    Response.Write("<script>alert('Please enter the answer before clicking the 'Show/Hide' icon.');</script>");
+                    */
+
+                    //We use ScriptManager to inset JS code can 
+                    //avoid the JS Bundles/MsAjax error: PRM_ParserErrorDetails 
+                    ScriptManager.RegisterStartupScript(this,
+                     typeof(Page),
+                     "Alert",
+                     "<script>alert('Please enter the organ number before clicking the \"Show/Hide\" icon.');</script>",
+                     false);
+
+                    //no need to do the rest of the work of the function if the student click the "Show/Hide" icon before answering the organ number
+                    return;
+                }
+
+
+                //if what the student entered is not numeric, we show the warning and return at once.
+                else if (!checkStringIsNumeric(TB_AnsweringField_Content))
+                {
+                    ScriptManager.RegisterStartupScript(this,
+                     typeof(Page),
+                     "Alert",
+                     "<script>alert('What you entered is not numeric. Please enter it properly again.');</script>",
+                     false);
+
+                    return;
+                }
+
+                
+
+
+                else{
+                        //if the student wants to hide a 'Non Answer Row' organ,
+                        //we hide the correponding 3D organ in the 3DBuilder by getting its organ name from TB_OrganIndicator of that row.
+                        if (TB_AnsweringField_Content == "Non Answer Row")
+                        {
+                            var organIndicator = selectedRow.FindControl("TB_OrganIndicator") as Label;
+
+                            correctOrganName = organIndicator.Text;
+                        }
+
+                        //look up the corresponding organ name of the organ number entered by the student.    
+                        else
+                        {
+                            int studentNumberAnswer = Int32.Parse(TB_AnsweringField_Content);
+                            correctOrganName = NumberAnsweringMode_RandOrganNoNameMapping_Session[studentNumberAnswer].ToString();
+
+
+                        }
+
+                 }
+
+            }
+
 
             //switch visibility icon of the selected row .
             String HideOrShow = switchVisible_Invisible(selectedRow, "InOrVisible", null);
@@ -1400,7 +1536,7 @@ public partial class IPC : CsSessionManager
              //send hide 3D organ msg to 3DBuilder
              */
 
-            string contact = "6 " + HideOrShow + " " + answer.ToString(); //send "6 Hide realOrganName" to 3DBuilder
+            string contact = "6 " + HideOrShow + " " + correctOrganName.ToString(); //send "6 Hide realOrganName" to 3DBuilder
 
             sendMsg23DBuilder(contact);
 
@@ -1419,6 +1555,14 @@ public partial class IPC : CsSessionManager
 
         }
 
+    }
+
+    //check if a string is numeric
+    private bool checkStringIsNumeric(string str)
+    {
+         int n;
+         bool isNumeric = int.TryParse(str, out n);
+         return isNumeric;
     }
 
 

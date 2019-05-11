@@ -30,7 +30,7 @@
             visibility: hidden;
         }
 
-        .menu_img {
+        .showHideIcon_img {
             width: 50%;
         }
 
@@ -296,6 +296,8 @@
 
             }
             */
+            
+
             var studentEachQuestionOrganScoreString = ('<%= convertCsArray2JSONFormat( ScoreAnalysisList[0].Grade[0]) %>')
 
             //parse the JSON string received from backend to a Javascript object
@@ -340,24 +342,41 @@
         function displayCorrectQuestionOrganAnswer(rowIndex, gvDrv) {
 
             var correctAnswerOfTheAITypeQuestionJSArray = [];
-                        <% 
+               <% 
         
                             
-        var correctAnswerOfTheAITypeQuestion = RandomQuestionNoSession;
+        //var correctAnswerOfTheAITypeQuestion = RandomQuestionNoSession;
 
         //if RandomQuestionNoSession is not null
-
-        for (int i = 0; i < correctAnswerHT[0].Count; i++)
+        if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
         {
+
+                for (int i = 0; i < correctAnswerHT[0].Count; i++)
+                {
                                 
                          
-                            %>
+                %>
 
-            correctAnswerOfTheAITypeQuestionJSArray.push('<%= correctAnswerHT[0][ScoreAnalysisList[0].questionOrderingString[i+1]] %>');
+                         correctAnswerOfTheAITypeQuestionJSArray.push('<%= correctAnswerHT[0][ScoreAnalysisList[0].questionOrderingString[i+1]] %>');
 
                 <% 
                 }
-                %>
+                
+                
+         }
+
+
+        else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+            for (int i = 0; i < RandomQuestionNoSession.Length; i++)
+                {
+                  
+            %>
+            correctAnswerOfTheAITypeQuestionJSArray.push('<%=ScoreAnalysisList[0].questionOrderingString[i+1] %>');
+        <%
+                 }
+        }
+        %>
 
 
 
@@ -871,7 +890,7 @@
                         <%--cells[4]--%>
                         <%--<asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide" Visible='<%# ShowHideIconCol_displayStatus() %>'>--%>
                         <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide <b>abc</b>" Visible="true">
-                            <ControlStyle CssClass=" menu_img" />
+                            <ControlStyle CssClass=" showHideIcon_img" />
                         </asp:ButtonField>
 
 
@@ -1209,8 +1228,11 @@
 
             //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
             //This is the fix terms for using ASP UpdatePanel AJAX
-            loadAfterUpdatePanel();
+           
+            /* Don't mess with any of the below code */
+            Sys.Application.add_init(appl_init);
 
+            
             /*
             //activate the count down timer
             activateCountDownTimer();
@@ -1225,7 +1247,13 @@
         });
 
 
-
+        function appl_init() {
+            //set the function that  should be done on frontend before UpdatePanel postback
+            Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beforeAsyncPostBack);
+            //set the function that  should be done on frontend after UpdatePanel postback
+            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(afterAsyncPostBack);
+          
+        }
 
 
 
@@ -1303,13 +1331,16 @@
 
 
 
-        //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
-        //This is the fix terms for using ASP UpdatePanel AJAX
-        function loadAfterUpdatePanel() {
-            Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+       
+
+
+        //do  something on the frontend before the asp UpdatePanel post back
+        function beforeAsyncPostBack() {
+
         }
 
-        function EndRequestHandler() {
+        //do  something on the frontend after the asp UpdatePanel post back
+        function afterAsyncPostBack() {
 
 
             //do the init ready function again after coming back from UpdatePanel AJAX 
@@ -1538,7 +1569,8 @@
 
         });
 
-
+        
+        
         function askUserOpen3DBuilder() {
 
             alert("IPC Pipe has been created! \n\nNow,please activate the 3DBuilder by clicking the '3DBuilder MFC Application.rdp'.");
