@@ -162,6 +162,8 @@ public partial class IPC : CsSessionManager
            //We make use of a dictionary session variable to store the mapping of organ number and the randomized organ name.
         else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
+            //clear the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
+            NumberAnsweringMode_RandOrganNoNameMapping_Session = null;
 
             //create the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
             for (int i = 0; i < NumberAnsweringMode_WholeRandOrganNo_Session.Length; i++)
@@ -610,7 +612,7 @@ public partial class IPC : CsSessionManager
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(questionXMLPath));
 
         //get the "NameOrNumberAnsweringMode_Session" of the  AITypeQuestion from the AITypeQuestion XML file
-        NameOrNumberAnsweringMode_Session = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
+        //NameOrNumberAnsweringMode_Session = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
 
         if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
@@ -1008,6 +1010,20 @@ public partial class IPC : CsSessionManager
                         //no need to do the rest of the work of the function if the student click the "Show/Hide" icon before answering the organ number
                         return;
                     }
+
+
+                    //if what the student entered is not numeric, we show the warning and return at once.
+                    else if (!checkStringIsNumeric(studentOrganNumberAnswer) )
+                    {
+                        ScriptManager.RegisterStartupScript(this,
+                         typeof(Page),
+                         "Alert",
+                         "<script>alert('What you entered is not numeric. Please enter it properly again.');</script>",
+                         false);
+
+                        return;
+                    }
+
                     //Here the first para is the same as the third para.
                     string correctOrganName = givenOrganName;
 
@@ -1143,7 +1159,7 @@ public partial class IPC : CsSessionManager
                 }
                 
                 //if what the student entered is not numeric, we show the warning and return at once.
-                else if (!checkStringIsNumeric(TB_AnsweringField_Content))
+                else if (!checkStringIsNumeric(TB_AnsweringField_Content) && TB_AnsweringField_Content != "Non Answer Row")
                 {
                     ScriptManager.RegisterStartupScript(this,
                      typeof(Page),

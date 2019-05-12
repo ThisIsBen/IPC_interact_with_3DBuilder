@@ -62,6 +62,24 @@ public class XMLHandler
     }
 
 
+    //get number of a given specific tag in the xml file
+    public int getNumOfSpecificTagInXMLFile(string specificTag)
+    {
+        int numOfSpecificTag=0;
+
+        
+        var targets = xDoc.Element("Organs").Elements(specificTag);
+
+        foreach (var node in targets)
+        {
+            numOfSpecificTag++;
+        }
+        return numOfSpecificTag;
+    
+
+    }
+
+
     //get the number of the organ whose Question tag is "Yes"
     public int[] getPickedQuestionNumber()
     {

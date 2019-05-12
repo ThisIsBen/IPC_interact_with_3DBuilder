@@ -126,7 +126,9 @@ public partial class Items : CsSessionManager
     private int[] createArr_OrganRearrangedNumber()
     {
         //get number of organs in AITypeQuestion XML file.
-        int numOfOrgans = 38;
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(IPC_QuestionXMLFolder + questionXMLPath + ".xml"));
+        int numOfOrgans = xmlHandler.getNumOfSpecificTagInXMLFile("Organ");
+       
         int[] arr_OrganRearrangedNumber = new int[numOfOrgans];
         for (int i = 0; i < numOfOrgans; i++)
         {

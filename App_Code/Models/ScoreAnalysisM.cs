@@ -37,10 +37,7 @@ public class ScoreAnalysisM
     //store student's answer of each question organ.
     public List<string[]> studentAnswer = new List<string[]>();
 
-    public ScoreAnalysisM()
-    {
-        ;
-    }
+    
 
     public ScoreAnalysisM(string id, string GradeStr)
     {
@@ -68,7 +65,7 @@ public class ScoreAnalysisM
             MemberQuestionNum[i] = Grade[i].Length - 1;
     }
 
-    //for marking "NumberMode" AITypeQuestion
+    //for marking "Number Answering Mode" AITypeQuestion
     public ScoreAnalysisM(string id, string AnswerStr, string QuesOdrStr, List<string> xmlFile,  string cQID, int questionTotalScore, string cActivityID)
     {
         //StuCouHWDe_ID is still used for displaying the result of the Hints program type question.
@@ -120,7 +117,7 @@ public class ScoreAnalysisM
 
     }
 
-    //for marking "TextMode" AITypeQuestion
+    //for marking "Name Answering Mode" AITypeQuestion
     public ScoreAnalysisM(string id, string AnswerStr, string QuesOdrStr, List<string> xmlFile, Hashtable[] correctAnswerHT, string cQID, int questionTotalScore, string cActivityID)
     {
 

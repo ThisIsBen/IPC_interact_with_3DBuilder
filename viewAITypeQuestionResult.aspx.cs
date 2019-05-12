@@ -59,7 +59,6 @@ public partial class IPC : CsSessionManager
     protected void Page_Load(object sender, EventArgs e)
     {
        
-        
         //get the parameters in URL and store there value in global var.
         retrieveURLParameters();
 
@@ -71,8 +70,8 @@ public partial class IPC : CsSessionManager
         Page.MaintainScrollPositionOnPostBack = true;
         if (!IsPostBack)
         {
-            
-           
+
+
            
 
             gvScore.AllowPaging = false;
@@ -229,7 +228,8 @@ public partial class IPC : CsSessionManager
             //we need to store the whole randomized organ number for creating a  mapping of organ number and the randomized organ name
             NumberAnsweringMode_WholeRandOrganNo_Session = arr_OrganRearrangedNumber;
 
-
+            //clear the the mapping of organ number and the randomized organ name with a dictionary.
+            NumberAnsweringMode_RandOrganNoNameMapping_Session = null;
 
             //create the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
             for (int i = 0; i < NumberAnsweringMode_WholeRandOrganNo_Session.Length; i++)
@@ -255,7 +255,7 @@ public partial class IPC : CsSessionManager
    
     private List<string> AddRowsName = new List<string>();
     private List<string> AddColsName = new List<string>();
-    public string[] QuestionName;
+    //public string[] QuestionName;
     public List<string[]> MemberQuestionAnswer = new List<string[]>();
 
     /*Convert the following global variable to session variable*/
@@ -287,12 +287,19 @@ public partial class IPC : CsSessionManager
         //Step 1-4 
         //Access the field ‘correctAnswer’ in the datatable ‘AITypeQuestionCorrectAnswer’
         //for the correct answer of question with the current cQID, and construct a QuestionOrdering/correctAnswer Hash table for marking student’s answer.
+
+        //This function also get the required XmlFileList for marking "Name Answering Mode" AITypeQuestion
         if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
         {
             getCorrectAns_ConstructCorrectAnsHashTable(cQID_Selector);
 
         }
-        
+
+        //get the required XmlFileList for marking "Number Answering Mode" AITypeQuestion
+        else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
+        {
+            getXmlFileList_NumberAnsweringMode(cQID_Selector);
+        }
         //In  博宇's implementation
         /*
         dt = CsDBOp.GetAllTBData("StuCouHWDe_IPC", cQID_Selector);
@@ -424,12 +431,14 @@ public partial class IPC : CsSessionManager
         if (AnsewerTemp == null)
             return;
 
+
+        /*
         //create a XMLHandler object to access the content in the AITypeQuestion XML file.
         XMLHandler xmlHandler = new  XMLHandler(Server.MapPath(questionXMLPath));
 
         //get the "NameOrNumberAnsweringMode_Session" of the  AITypeQuestion from the AITypeQuestion XML file
         string NameOrNumberAnsweringMode_Session = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
-
+        */
 
         
         //for marking "NumberAnsweringMode" AITypeQuestion
@@ -472,7 +481,7 @@ public partial class IPC : CsSessionManager
     //Access the field ‘correctAnswer’ in the datatable ‘AITypeQuestionCorrectAnswer’
     //for the correct answer of question with the current cQID, and construct a QuestionOrdering/correctAnswer Hash table for marking student’s answer.
 
-
+    //This function also get the required XmlFileList for marking "Name Answering Mode" AITypeQuestion
     private void getCorrectAns_ConstructCorrectAnsHashTable( string cQID_Selector)
     {
 
@@ -483,7 +492,7 @@ public partial class IPC : CsSessionManager
 
 
         //Test for cActivityID with input for AITypeQuestionCorrectAnswer(which was IPCExamHWCorrectAnswer in 博宇's implementation)
-        QuestionName = dt.Rows[0].Field<string>("QuestionBodyPart").Split(',');
+        //QuestionName = dt.Rows[0].Field<string>("QuestionBodyPart").Split(',');
         string TempCA = dt.Rows[0].Field<string>("correctAnswer");
         foreach (string TempCA_fullstr in TempCA.Remove(TempCA.Length - 1).Split(':'))
         {
@@ -511,6 +520,25 @@ public partial class IPC : CsSessionManager
 
 
     }
+
+    //get the required XmlFileList for marking "Number Answering Mode" AITypeQuestion
+    private void getXmlFileList_NumberAnsweringMode(string cQID_Selector)
+    {
+        DataTable dt = CsDBOp.GetAllTBData("AITypeQuestionCorrectAnswer", cQID_Selector);
+        //Exception for empty table data
+        if (dt.Rows.Count == 0)
+            Response.End();
+
+        string temp_str = dt.Rows[0].Field<string>("correctAnswerOrdering");
+        string[] tempCAOstr = temp_str.Remove(temp_str.Length - 1).Split(':');
+
+        foreach (string tempCAOstr_split in tempCAOstr)
+        {
+            string[] tempCAOstr_in_split = tempCAOstr_split.Split(',');
+            correctXML.Add(tempCAOstr_in_split[0]);
+        }
+    }
+
 
     //calculate student's total score
     private void calStudentTotalScore(int studentNoCounter)
@@ -813,7 +841,9 @@ public partial class IPC : CsSessionManager
     private int[] createArr_OrganRearrangedNumber()
     {
         //get number of organs in AITypeQuestion XML file.
-        int numOfOrgans = 38;
+        XMLHandler xmlHandler = new XMLHandler(Server.MapPath(questionXMLPath));
+        int numOfOrgans = xmlHandler.getNumOfSpecificTagInXMLFile("Organ");
+
         int[] arr_OrganRearrangedNumber = new int[numOfOrgans];
         for (int i = 0; i < numOfOrgans; i++)
         {
@@ -1044,7 +1074,8 @@ public partial class IPC : CsSessionManager
 
         XMLHandler xmlHandler = new XMLHandler(Server.MapPath(questionXMLPath));
 
-        //get the "NameOrNumberAnsweringMode_Session" of the  AITypeQuestion from the AITypeQuestion XML file
+        //get the "NameOrNumberAnsweringMode_Session" of the  AITypeQuestion from the AITypeQuestion XML file 
+        //and store it in a session variable
         NameOrNumberAnsweringMode_Session = xmlHandler.getValueOfSpecificNonNestedTag("NameOrNumberAnsweringMode");
 
         if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
@@ -1484,7 +1515,7 @@ public partial class IPC : CsSessionManager
 
 
                 //if what the student entered is not numeric, we show the warning and return at once.
-                else if (!checkStringIsNumeric(TB_AnsweringField_Content))
+                else if (!checkStringIsNumeric(TB_AnsweringField_Content) && TB_AnsweringField_Content != "Non Answer Row")
                 {
                     ScriptManager.RegisterStartupScript(this,
                      typeof(Page),
