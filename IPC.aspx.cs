@@ -629,6 +629,13 @@ public partial class IPC : CsSessionManager
                 var organIndicator = ((Label)gvScore.Rows[i].FindControl("TB_OrganIndicator"));
                 organIndicator.Text = strAllOrganName[i];
             }
+
+          
+            //Hide the "Show/Hide Icon" column when "Number Answering Mode" is being used.
+            //We hide it to avoid cheating by hiding all the organs that are not set to be the question.
+            switchOfDisplayShowHideIconCol("off");
+            
+
         }
 
         else if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
@@ -825,6 +832,51 @@ public partial class IPC : CsSessionManager
 
     }
 
+    //hide or show Show/Hide icon column
+    public void switchOfDisplayShowHideIconCol(string onOrOff)
+    {
+        if (onOrOff == "on")
+        {
+            
+
+            /*this part still doesn't work, we can't display the hidden Show/Hide icon column*/
+            //display all the “Show/Hide” icon for each organ on the webpage to allow the student to hide or show the 3D organs displayed in the 3DBuilder.
+            gvScore.HeaderRow.Cells[3].Visible = true;
+
+
+            for (int i = 0; i < gvScore.Rows.Count; i++)
+            {
+                //gvScore.Rows[i].Cells[3].Visible = true;
+                gvScore.Rows[i].Cells[3].Attributes.Add("style", "display:block");
+            }
+
+        }
+
+
+
+        if (onOrOff == "off")
+        {
+           
+
+            /*this part still doesn't work, we can't display the hidden Show/Hide icon column*/
+            //display all the “Show/Hide” icon for each organ on the webpage to allow the student to hide or show the 3D organs displayed in the 3DBuilder.
+            gvScore.HeaderRow.Cells[3].Visible = false;
+
+
+            for (int i = 0; i < gvScore.Rows.Count; i++)
+            {
+                //gvScore.Rows[i].Cells[3].Visible = false;
+                gvScore.Rows[i].Cells[3].Attributes.Add("style", "display:none");
+            }
+        }
+
+
+    }
+
+
+
+
+    //switch visibility icon for All rows or a specific row
     public String switchVisible_Invisible(GridViewRow selectedRow, string HFID, GridView gvScore)
     {
         bool BooLInOrVisible = false;
