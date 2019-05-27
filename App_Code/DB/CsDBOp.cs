@@ -68,7 +68,23 @@ using System.Text.RegularExpressions;
 
 
 
+        //使用SQLParameter to make the value of the variable to be a parameter to prevent SQL Injection Attack.
+        //Parameter 可以 (1)檢查參數的型別 (2)檢查資料長度 (3)確保參數為非可執行的SQL命令 
+        private static void fillSqlParameters(SqlCommand cmd, object[] pList)
+        {
+            Regex r = new Regex("(@\\w+)", RegexOptions.IgnoreCase);
+            MatchCollection matches = r.Matches(cmd.CommandText);
+            for (int i = 0; i < matches.Count; i++)
+            {
+                Match m = matches[i];
+                if (pList[i] == null)
+                {
+                    pList[i] = " ";
+                }
 
+                cmd.Parameters.AddWithValue(m.Value, pList[i]);
+            }
+        }
 
 
 
@@ -322,23 +338,7 @@ using System.Text.RegularExpressions;
 
     #region set up AITypeQuestion in Hints DB
 
-    //使用SQLParameter to make the value of the variable to be a parameter to prevent SQL Injection Attack.
-    //Parameter 可以 (1)檢查參數的型別 (2)檢查資料長度 (3)確保參數為非可執行的SQL命令 
-    private static void fillSqlParameters(SqlCommand cmd, object[] pList)
-    {
-        Regex r = new Regex("(@\\w+)", RegexOptions.IgnoreCase);
-        MatchCollection matches = r.Matches(cmd.CommandText);
-        for (int i = 0; i < matches.Count; i++)
-        {
-            Match m = matches[i];
-            if (pList[i] == null)
-            {
-                pList[i] = " ";
-            }
-            
-            cmd.Parameters.AddWithValue(m.Value, pList[i]);
-        }
-    }
+    
 
 
     //get the question description of an existing  AITypeQuestion when the instructor wants to edit it.
