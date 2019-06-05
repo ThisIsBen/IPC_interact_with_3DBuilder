@@ -24,7 +24,7 @@ using System.Web;
 
         public static int ExecuteNonQuery(SqlCommand cmd, string targetDB)
         {
-            
+
             try
             {
                 /*
@@ -46,13 +46,13 @@ using System.Web;
 
                 cmd.Connection.Open();
                 int connInt = cmd.ExecuteNonQuery();
-                cmd.Connection.Close();
-                cmd.Connection.Dispose();
                 
+
                 return connInt;
             }
 
-            catch (Exception e){
+            catch (Exception e)
+            {
                 //今日日期
                 DateTime Date = DateTime.Now;
                 string TodyMillisecond = Date.ToString("yyyy-MM-dd HH:mm:ss");
@@ -67,12 +67,18 @@ using System.Web;
 
                 //把例外狀況寫到目的檔案，若檔案存在則附加在原本內容之後(換行)
 
-                File.AppendAllText(string.Format(HttpContext.Current.Server.MapPath("~") + "\\SQLLog\\{0}.txt", Tody), string.Format("\r\n{0} ： 查詢函式 「{1}」\r\n\t\t\t錯誤內容「{2}」\r\n\r\n", TodyMillisecond, cmd.CommandText, e ));
+                File.AppendAllText(string.Format(HttpContext.Current.Server.MapPath("~") + "\\SQLLog\\{0}.txt", Tody), string.Format("\r\n{0} ： 查詢函式 「{1}」\r\n\t\t\t錯誤內容「{2}」\r\n\r\n", TodyMillisecond, cmd.CommandText, e));
                 //File.AppendAllText("J:\\Thisway_Log\\" + Tody + ".txt", "\r\n" + TodyMillisecond + "：" +  e);
                 throw e;
             }
 
-           
+            //to release the resources when exception occurs.
+            finally
+            {
+                cmd.Connection.Close();
+                cmd.Connection.Dispose();
+
+            }
             
             
         }

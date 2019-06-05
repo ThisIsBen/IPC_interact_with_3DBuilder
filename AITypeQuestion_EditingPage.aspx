@@ -510,8 +510,8 @@
                                     </div>
                                     <div class="col-md-4  text-left">
                                         <h3><b>Step 5</b></br> Preview the question in the 3DBuilder.</br>Please click the buttons according to the steps.</h3>
-                                        <input type="button" class="btn-info btn-lg" style="display: block;" id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step4-1 Create IPC Pipe" onclick=" sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br>
-                                        <input type="button" class="btn-info btn-lg" style="display: inline;" id="btn_connectTo3DBuilder" runat="server" value="Step4-2 Connect to 3DBuilder" onclick="    sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
+                                        <input type="button" class="btn-info btn-lg" style="display: block;" id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step5-1 Create IPC Pipe" onclick=" sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br>
+                                        <input type="button" class="btn-info btn-lg" style="display: inline;" id="btn_connectTo3DBuilder" runat="server" value="Step5-2 Connect to the 3DBuilder" onclick="    sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
                                     </div>
                                 </div>
 
