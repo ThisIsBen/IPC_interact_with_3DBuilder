@@ -548,7 +548,7 @@
                     
                     
                     </div>
-                    <div class="col-sm-3" >
+                    <div class="col-sm-3" id="div_ShowOrHideAll" style="display:none" >
                          <div>
                                     <label style="font-size:20px;">Show all hidden organs</label>
                    
@@ -814,6 +814,8 @@
 
                         pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
+                        //show the 'Show all hidden organs' button
+                        document.getElementById("div_ShowOrHideAll").style.display = 'block';
                         <% 
                     }
                                 
@@ -824,6 +826,10 @@
         else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
           
+            
+          
+            
+            
             %>
                         //Currently we don't need to do any swap or rearrangement of the organs in Number Answering Mode.
                         //We can leave pickedRandQNo empty.
@@ -834,6 +840,7 @@
                         pickedRandQNo = pickedQuestionOrganArray;
                         */
 
+                       
             <% 
         }
             %>
@@ -1118,6 +1125,9 @@
 
                 pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
+                //show the 'Show all hidden organs' button
+                document.getElementById("div_ShowOrHideAll").style.display = 'block';
+
                 <% 
                     }
                                 
@@ -1138,6 +1148,7 @@
                 pickedRandQNo = pickedQuestionOrganArray;
                 */
 
+               
             <% 
         }
             %>
