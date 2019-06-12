@@ -889,6 +889,8 @@ public partial class IPC : CsSessionManager
 
 
         String HideOrShow = "";
+
+        //Hide a specified organ
         if (BooLInOrVisible)//if current state is visible
         {
             //means its visible before being clicked
@@ -901,12 +903,15 @@ public partial class IPC : CsSessionManager
         }
         else//if current state is invisible
         {
+            //Show a specified organ
             if (selectedRow != null)
             {
                 (selectedRow.FindControl(HFID) as HiddenField).Value = "true";//switch to visible
                 HideOrShow = "show";
             }
 
+
+            //Show all organs hidden by the student
             else
             {
                 foreach (GridViewRow row in gvScore.Rows)
@@ -934,7 +939,7 @@ public partial class IPC : CsSessionManager
 
 
         //switch visibility icon All rows .
-        String HideOrShow = switchVisible_Invisible(null, "InOrVisible", gvScore);
+        String HideOrShow = switchVisible_Invisible(null, "hf_OrganVisibility", gvScore);
         string contact = "7 " + HideOrShow; //send "6 Hide realOrganName" to 3DBuilder  
 
 
@@ -976,7 +981,7 @@ public partial class IPC : CsSessionManager
 
 
         //switch visibility icon All rows .
-        //String hideOrShow3DLabels = switchVisible_Invisible(null, "InOrVisible", gvScore);
+        //String hideOrShow3DLabels = switchVisible_Invisible(null, "hf_OrganVisibility", gvScore);
         string contact = "8 " + "Show_3D_Labels"; //send "6 Hide realOrganName" to 3DBuilder  
 
         //Hide_3D_Labels
@@ -1255,7 +1260,7 @@ public partial class IPC : CsSessionManager
 
 
             //switch visibility icon of the selected row .
-            String HideOrShow = switchVisible_Invisible(selectedRow, "InOrVisible", null);
+            String HideOrShow = switchVisible_Invisible(selectedRow, "hf_OrganVisibility", null);
 
             /*
              //use JS alert() in C#
@@ -1278,7 +1283,7 @@ public partial class IPC : CsSessionManager
         if (e.CommandName == "relay")
         {
             //switch visibility icon All rows .
-            String HideOrShow = switchVisible_Invisible(null, "InOrVisible", gvScore);
+            String HideOrShow = switchVisible_Invisible(null, "hf_OrganVisibility", gvScore);
             string contact = "7 " + HideOrShow; //send "6 Hide realOrganName" to 3DBuilder  
 
 

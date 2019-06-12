@@ -279,8 +279,8 @@
                 //set the icon of the visibility column if the organ is set to be invisibleIcon 
                 gvDrv.rows[questionOrganRow].cells[2].getElementsByTagName("input")[0].src = invisibleImg
 
-                //store the name of the selected organ that should be hidden in 3DBuilder in the hidden field,hidden_markHideShowOrgan.
-                //we also use the value of the hidden field ,hidden_markHideShowOrgan, to indicate if the corresponding organ is to be stored as visible or hidden to the xml file when we store the content of the AITypeQuestion. 
+                //store the name of the selected organ that should be hidden in 3DBuilder in the hidden field,hf_OrganVisibility.
+                //we also use the value of the hidden field ,hf_OrganVisibility, to indicate if the corresponding organ is to be stored as visible or hidden to the xml file when we store the content of the AITypeQuestion. 
                 gvDrv.rows[questionOrganRow].cells[2].getElementsByTagName("input")[1].value = invisibleOrganArray[j];
             }
 
@@ -356,7 +356,7 @@
 
                     });
 
-
+                    
                     //check the mode of the AITypeQuestion and check its radio buttn accordingly when the teacher modifies an existing AITypeQuestion.
                     checkAITypeQuestionMode_RadioBtnWhenModify(xml);
 
@@ -368,9 +368,8 @@
                     //check the radio buttons of the organs that are set to be the question
                     //and switch the icon of the visibility column if the organ is set to be invisible
                     checkPickedOrgans_InvisibleOrgans(questionOrganArray, invisibleOrganArray);
-
-
-
+                    
+                   
                 }
 
             });
@@ -384,7 +383,7 @@
             if ($(xml).find("AITypeQuestionMode").text() == "Surgery Mode") {
                 //check the radio button of the Surgery Mode
                 document.getElementById("SurgeryModeRadioBtn").checked = true;
-
+                document.getElementById("<%= hidden_selectedAITypeQuestionMode.ClientID %>").value = "Surgery Mode";
 
             }
 
@@ -392,6 +391,7 @@
             else {
                 //check the radio button of the Anatomy Mode
                 document.getElementById("AnatomyModeRadioBtn").checked = true;
+                document.getElementById("<%= hidden_selectedAITypeQuestionMode.ClientID %>").value = "Anatomy Mode";
 
 
             }
@@ -404,6 +404,7 @@
             if ($(xml).find("NameOrNumberAnsweringMode").text() == "Name Answering Mode") {
                 //check the radio button of the Name Answering Mode
                 document.getElementById("NameAnsweringModeRadioBtn").checked = true;
+                document.getElementById("<%= hidden_selectedNameOrNumberAnsweringMode.ClientID %>").value = "Name Answering Mode";
 
 
             }
@@ -412,6 +413,7 @@
             else {
                 //check the radio button of the Number Answering Mode
                 document.getElementById("NumberAnsweringModeRadioBtn").checked = true;
+                document.getElementById("<%= hidden_selectedNameOrNumberAnsweringMode.ClientID %>").value = "Number Answering Mode";
 
 
             }
@@ -423,11 +425,11 @@
 
     <div align="center">
 
-        <div class="jumbotron">
+       
             <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
 
-
+         <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
 
             <div class="container">
                 <div class="row">
@@ -445,6 +447,7 @@
 
                 <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
                     <ContentTemplate>
+                         <div class="jumbotron">
                         <div class="row">
                             <div>
 
@@ -526,17 +529,8 @@
                         </div>
                         <%--<input type="text" id="TBX_Input" runat="server" />--%>
                         <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="row">
-
-        <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
+                                </div>
+                        
             <div>
             </div>
             <div>
@@ -573,10 +567,10 @@
                     <asp:TemplateField ItemStyle-Width="30px" ItemStyle-CssClass="template-checkbox" HeaderText="Visibility">
                         <ItemTemplate>
                             <%--use onclick() to call the JS function and return false to avoid activating postback automatically--%>
-                            <input type="image" class="img-thumbnail hideShowOrganBtn" id="btnHideShowOrgan" onclick="if (!hideShowSelectedOrgan(this)) return false;" src="Image/visible.png">
+                            <input type="image" class="img-thumbnail hideShowOrganBtn" id="btnHideShowOrgan" onclick="hideShowSelectedOrgan(this)" onserverclick="syncOrganVisibility23DBuilder" src ="Image/visible.png" runat="server" >
 
-                            <%-- <input type="hidden" id="hidden_markHideShowOrgan" runat="server" value="-1"> It doesn't work in Gridview--%>
-                            <asp:HiddenField ID="hidden_markHideShowOrgan" runat="server" Value="-1" />
+                            <%-- <input type="hidden" id="hf_OrganVisibility" runat="server" value="true"> It doesn't work in Gridview--%>
+                            <asp:HiddenField ID="hf_OrganVisibility" runat="server" Value="true" />
 
 
 
@@ -604,9 +598,22 @@
                 </Columns>
             </asp:GridView>
             <input type="hidden" id="hidden_cQID" runat="server">
-        </asp:Panel>
-    </div>
-    </div>
+       
+                           
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+                 </asp:Panel>
+            </div>
+        </div>
+   
+
+
+
+   
+
+       
+   
+   
                          
      
     <script type="text/javascript">
@@ -626,12 +633,24 @@
 
 
         $(document).ready(function () {
+            
+           
 
             readyInitProcess();
+            //load XML to check the organs that are picked to be part of question.
+            if (url.searchParams.get("viewContent") != null && url.searchParams.get("viewContent") == "Yes") {
 
+                //load XML to check the organs that are picked to be part of question.              
+                readInExistingQuestion();
+
+            }
+          
+           
+           
             //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
             //This is the fix terms for using ASP UpdatePanel AJAX
             loadAfterUpdatePanel()
+            
 
         });
 
@@ -654,7 +673,7 @@
 
 
         function hideShowSelectedOrgan(selectedHideShowOrganBtn) {
-
+            
             //to know which row's OrganSubmitBtn is clicked
             //get the clicked row of TemplageField
             var row = selectedHideShowOrganBtn.parentNode.parentNode;
@@ -666,8 +685,8 @@
 
                 row.cells[2].getElementsByTagName("input")[0].src = invisibleImg;
 
-                //store the name of the selected organ that should be hidden in 3DBuilder in the hidden field,hidden_markHideShowOrgan.
-                //we also use the value of the hidden field ,hidden_markHideShowOrgan, to indicate if the corresponding organ is to be stored as visible or hidden to the xml file when we store the content of the AITypeQuestion. 
+                //store the name of the selected organ that should be hidden in 3DBuilder in the hidden field,hf_OrganVisibility.
+                //we also use the value of the hidden field ,hf_OrganVisibility, to indicate if the corresponding organ is to be stored as visible or hidden to the xml file when we store the content of the AITypeQuestion. 
                 row.cells[2].getElementsByTagName("input")[1].value = row.cells[1].getElementsByTagName("span")[0].innerHTML;
 
                 //console.log(row.cells[2].getElementsByTagName("input")[1].value);
@@ -677,15 +696,15 @@
                 //switch the icon of the btn of the selected organ to be visibleBtn
                 row.cells[2].getElementsByTagName("input")[0].src = visibleImg;
 
-                //restore the corresponding hidden field,hidden_markHideShowOrgan, from invisible organ to visible organ to indicate that the organ is set to be visible now.
-                row.cells[2].getElementsByTagName("input")[1].value = "-1";
+                //restore the corresponding hidden field,hf_OrganVisibility, from invisible organ to visible organ to indicate that the organ is set to be visible now.
+                row.cells[2].getElementsByTagName("input")[1].value = "true";
 
 
 
             }
 
 
-
+          
 
         }
 
@@ -698,7 +717,7 @@
         function readyInitProcess() {
             $(':checkbox').checkboxpicker();
 
-
+            /*
             //load XML to check the organs that are picked to be part of question.
             if (url.searchParams.get("viewContent") != null && url.searchParams.get("viewContent") == "Yes") {
 
@@ -706,6 +725,7 @@
                 readInExistingQuestion();
 
             }
+            */
 
 
             if (url.searchParams.get("strQID") != null) {
@@ -714,25 +734,29 @@
                 hidden_cQID.value = url.searchParams.get("strQID");
 
             }
-
-
+           
+            
             //keep the visibility icon after coming back from UpdatePanel AJAX
             keepVisibilityIcon();
-
+            
             //keep the Anatomy Mode radio box after coming back from UpdatePanel AJAX
             keepAnatomyModeRadioBox();
 
             //keep the NameOrNumberAnsweringMode Mode radio box after coming back from UpdatePanel AJAX
             keepNameOrNumberAnsweringModeRadioBox();
+            
 
         }
         //keep the Anatomy Mode radio box after coming back from UpdatePanel AJAX
         function keepAnatomyModeRadioBox() {
+
+            
+
             //if the mode of the AITypeQuestion is "Surgery Mode"   
             if (document.getElementById("<%= hidden_selectedAITypeQuestionMode.ClientID %>").value == "Surgery Mode") {
                 //check the radio button of the Surgery Mode
                 document.getElementById("SurgeryModeRadioBtn").checked = true;
-
+              
 
             }
 
@@ -740,7 +764,7 @@
             else {
                 //check the radio button of the Anatomy Mode
                 document.getElementById("AnatomyModeRadioBtn").checked = true;
-
+               
 
             }
 
@@ -749,11 +773,14 @@
 
         //keep the NameOrNumberAnsweringMode Mode radio box after coming back from UpdatePanel AJAX
         function keepNameOrNumberAnsweringModeRadioBox() {
+
+            
+
             //if the mode of the NameOrNumberAnsweringMode is "Name Answering Mode"   
             if (document.getElementById("<%= hidden_selectedNameOrNumberAnsweringMode.ClientID %>").value == "Name Answering Mode") {
                 //check the radio button of the Name Answering  Mode
                 document.getElementById("NameAnsweringModeRadioBtn").checked = true;
-
+               
 
             }
 
@@ -761,7 +788,7 @@
             else {
                 //check the radio button of the Number Answering  Mode
                 document.getElementById("NumberAnsweringModeRadioBtn").checked = true;
-
+              
 
             }
 
@@ -786,6 +813,7 @@
 
             }
 
+            
         }
 
         //set the selected NameOrNumberAnsweringMode Mode in hidden_selectedNameOrNumberAnsweringMode before PostBack
@@ -793,7 +821,7 @@
 
 
             if (document.getElementById("NameAnsweringModeRadioBtn").checked) {
-                //the radio button of the Surgery Mode is checked
+                //the radio button of the Name Answering Mode  is checked
                 document.getElementById("<%= hidden_selectedNameOrNumberAnsweringMode.ClientID %>").value = "Name Answering Mode";
 
 
@@ -801,7 +829,7 @@
 
 
             else {
-                //the radio button of the Anatomy Mode is checked
+                //the radio button of the Number Answering Mode  is checked
                 document.getElementById("<%= hidden_selectedNameOrNumberAnsweringMode.ClientID %>").value = "Number Answering Mode";
 
 
@@ -825,11 +853,12 @@
                 //keep submit btn visible at all times
 
 
-                if (gvDrv.rows[i].cells[2].getElementsByTagName("input")[1].value == "-1") {
+                if (gvDrv.rows[i].cells[2].getElementsByTagName("input")[1].value == "true") {
                     gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = visibleImg;
                 }
                 else {
                     gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = invisibleImg;
+                    
                 }
 
 
@@ -850,11 +879,14 @@
 
             //do the window.onload function again because AJAX doesn't trigger window.onload event.
             //onloadFun();
+            
             readyInitProcess();
-            //alert("Back from updatePanel")
+            
+
+           
 
 
-
+            
 
 
 
@@ -865,6 +897,34 @@
 
             alert("IPC Pipe has been created! \n\nNow,please activate the 3DBuilder by clicking the '3DBuilder MFC Application.rdp'.");
         }
+
+
+        //set the hidden value that stores the AITypeQuestionMode selected by the teacher.
+        //so that we can recover it after postback from the UpdatePanel AJAX
+        $(document).on("change", "input[name*=radioBtn_AITypeQuestionMode]:radio", function () {
+   
+            sethidden_selectedAnatomyMode();
+        });
+
+        //set the hidden value that stores the NameOrNumberAnsweringMode selected by the teacher.
+        //so that we can recover it after postback from the UpdatePanel AJAX
+        $(document).on("change", "input[name*=radioBtn_NameOrNumberAnsweringMode]:radio", function () {
+         
+            sethidden_selectedNameOrNumberAnsweringMode();
+        });
+
+
+        /*
+        $("input[name*=radioBtn_AITypeQuestionMode]:radio").change(function () {
+           
+            sethidden_selectedAnatomyMode();
+        });
+        $("input[name*=NameAnsweringModeRadioBtn]:radio").change(function () {
+
+            sethidden_selectedNameOrNumberAnsweringMode();
+        });
+        */
+        
     </script>
 
 </asp:Content>

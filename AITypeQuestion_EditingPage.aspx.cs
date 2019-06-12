@@ -12,6 +12,7 @@ using System.Data;
 using System.Threading;
 using System.Xml.Linq;
 using System.Text;
+using System.Web.UI.HtmlControls;
 
 
 public partial class IPC: CsSessionManager
@@ -672,7 +673,7 @@ public partial class IPC: CsSessionManager
 
             }
 
-            if ((row.FindControl("hidden_markHideShowOrgan") as HiddenField).Value != "-1")
+            if ((row.FindControl("hf_OrganVisibility") as HiddenField).Value != "true")
             {
                 //2019/1/12 set the "Visible" tag of the organ to be hidden if the teacher set it to be invisible on AITypeQuestion editing page
                 xmlHandler.setATargetTag2ANewValue("Visible", OrganName.Text, "0");
@@ -708,6 +709,7 @@ public partial class IPC: CsSessionManager
         }
 
     }
+
 
 
 
@@ -909,4 +911,41 @@ public partial class IPC: CsSessionManager
         return randomCode;
     }
 
+
+
+    protected void syncOrganVisibility23DBuilder(Object sender, EventArgs e)
+    {
+        //int index = Convert.ToInt32(e.CommandArgument);
+        //Get the button that raised the event
+        HtmlInputControl show_Hide_Icon = (HtmlInputControl)sender;
+
+        //Get the row that contains this button
+        GridViewRow selectedRow = (GridViewRow)show_Hide_Icon.NamingContainer;
+
+
+        // Get the last name of the selected author from the appropriate
+        // cell in the GridView control.
+       
+
+        var organIndicator = selectedRow.FindControl("LBTextBox_OrganName") as Label; 
+
+        string correctOrganName = organIndicator.Text;
+
+        //If the organ is set to be visible
+        if ((selectedRow.FindControl("hf_OrganVisibility") as HiddenField).Value == "true")
+        {
+            string contact = "6 " + "show" + " " + correctOrganName; //send "6 Hide realOrganName" to 3DBuilder
+
+            sendMsg23DBuilder(contact);
+        }
+
+        //If the organ is set to be invisible
+        else 
+        {
+            string contact = "6 " + "hide" + " " + correctOrganName; //send "6 Hide realOrganName" to 3DBuilder
+
+            sendMsg23DBuilder(contact);
+        }
+        
+    }
 }

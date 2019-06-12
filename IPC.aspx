@@ -602,9 +602,9 @@
                               <%-- <asp:HiddenField ID="TextBox_Answer" runat="server" Value='<%# Eval("Name") %>' />--%>
                                 <%--show the corresponding correct organ name for debugging purpose--%>
 
-                               <asp:HiddenField ID="InOrVisible" runat="server" Value="true" />
+                               <asp:HiddenField ID="hf_OrganVisibility" runat="server" Value="true" />
                                <%-- <asp:HiddenField ID="markRecord" runat="server" Value="0" />--%>
-                               <%-- <input type="hidden" id="InOrVisible" runat="server" value="true">--%>
+                               <%-- <input type="hidden" id="hf_OrganVisibility" runat="server" value="true">--%>
                                 <input type="hidden" id="markRecord" runat="server" value="0">
 
                                  <asp:HiddenField ID="hidden_IfclickedOrganSubmitBtn" runat="server" Value="99" />
