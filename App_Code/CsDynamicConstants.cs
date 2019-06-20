@@ -19,4 +19,7 @@ public class CsDynamicConstants
     //e.g., ./IPC_Question_Origin/SceneFile_ex.xml stores all the organs in Knee.
     public static string completeKneeOrgansXMLPath = "./IPC_Question_Origin/SceneFile_Knee_ex.xml";
 
+    //the download link of the 3DBuilder RemoteDeskTopRDPFile.
+    public static string RemoteDeskTopRDPFile_For3DBuilder_DownloadLink="https://drive.google.com/open?id=1h7QUiN2iXEKbTzMXn4UWj-c56tfoAO6i";
+
 }

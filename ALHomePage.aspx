@@ -46,16 +46,37 @@
     <form id="form1" runat="server">
     <div>
         <br /><br /><br />
-        <br /><br /><br />
-        <br /><br /><br />
+  
+       <center><label style="font-size:45px;font-weight:bold;" >歡迎使用  "創新解剖學學習系統"</label></center>      
+       <ContentTemplate>
+           <div class="row">
+               <div class="col-md-2"></div>
+               <div class="col-md-9">
+            
+       <h2 style="color:red;">使用本系統前需下載'3DBuilder MFC Application.rdp'<br />以連線使用顯示3D器官的軟體'3DBuilder'，<br /><span style="color:green;">如已有下載，則不須重新下載。</span>如尚未下載，請點此  <u><a target="_blank" href='<%= CsDynamicConstants.RemoteDeskTopRDPFile_For3DBuilder_DownloadLink %>'>下載</a></u> </h2>
+    
+                    <br /> 
+               
         
-      
-         <center><label style="font-size:45px;font-weight:bold;" >歡迎使用  "創新解剖學學習系統"</label></center>   
-         <center><h2 style="color:red;">請開啟 '3DBuilder MFC Application.rdp'，點選"Yes"按鈕，<br>並輸入Hints帳號後，顯示3D器官的軟體'3DBuilder'會被開啟。<br />接著點選下方的 '進入系統' 按鈕。</h2></center>  
-        <center><h2 style="color:red;">使用本系統前需下載'3DBuilder MFC Application.rdp'，<br />如未下載，請點此  <u><a target="_blank" href="https://drive.google.com/open?id=1h7QUiN2iXEKbTzMXn4UWj-c56tfoAO6i">下載</a></u> </h2></center>  
-       
-
+                <div style="text-align:left">
+                <h2 style="color:red;">請依循下列步驟操作: <br />
+                    <ul class="list-group">
+                         <li class="list-group-item list-group-item-success">第一步: 請開啟 '3DBuilder MFC Application.rdp'</li>
+                              <li class="list-group-item list-group-item-success">第二步: 在'3DBuilder'視窗點選"Yes"按鈕</li>
+                              <li class="list-group-item list-group-item-success">第三步: 輸入您的Hints Web System 使用者帳號後，'3DBuilder'視窗會被開啟</li>
+                              <li class="list-group-item list-group-item-success">第四步: 接著點選本頁下方的 '進入系統' 按鈕<br /><br />
+                                  <center><asp:Button runat="server"  id="btnCheck" class="  btn btn-success btn-lg " Text="進入系統"   OnClick="btnCheck_Click"   style="right:80%;font-size : 60px;"   />
+                             </center>
+                                   </li>
+                   </ul>
+                </div>
+        
+                   </div>
         <br />
+               </div>
+
+           <div class="col-md-1"></div>
+            </ContentTemplate>
        <%-- <center>
         <div style="width:610px;" >
             <label style="font-size:35px;font-weight:bold;" >安裝步驟</label> <br /><br />
@@ -69,7 +90,7 @@
         </div>
         </center>--%>
         <br /><br />
-        <asp:Button runat="server"  id="btnCheck" class="  btn btn-success btn-lg " Text="進入系統"   OnClick="btnCheck_Click"   style="position:absolute;right:40%;font-size : 60px;"   />
+       
     </div>
     </form>
 </body>

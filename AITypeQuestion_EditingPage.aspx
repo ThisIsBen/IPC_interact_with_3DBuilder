@@ -356,7 +356,7 @@
 
                     });
 
-                    
+
                     //check the mode of the AITypeQuestion and check its radio buttn accordingly when the teacher modifies an existing AITypeQuestion.
                     checkAITypeQuestionMode_RadioBtnWhenModify(xml);
 
@@ -368,8 +368,8 @@
                     //check the radio buttons of the organs that are set to be the question
                     //and switch the icon of the visibility column if the organ is set to be invisible
                     checkPickedOrgans_InvisibleOrgans(questionOrganArray, invisibleOrganArray);
-                    
-                   
+
+
                 }
 
             });
@@ -425,37 +425,37 @@
 
     <div align="center">
 
-       
-            <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
+
+        <%--        <asp:Button ID="StartIPC" OnClick="StartIPC_Click" Text="開始" runat="server" />
         <asp:Button ID="Button1" OnClick="Button1_Click" Text="傳遞參數" runat="server" />--%>
 
-         <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
+        <asp:Panel ID="scorePanel" runat="server" Width="100%" HorizontalAlign="Center">
 
-            <div class="container">
-                <div class="row">
-                    <div style="text-align: center;">
-                        <div class="col-sm-6">
-                            <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Save the Question" runat="server" OnClientClick="if(!checkIfAtLeastOneOrganIsPickedAsQuestion()) return false;" />
-                        </div>
 
-                        <div class="col-sm-6">
 
-                            <input type="button" class="btn-danger btn-lg" id="btnBack" runat="server" value="<< Back" onserverclick="btnBack_Click">
-                        </div>
-                    </div>
-                </div>
-
-                <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
-                    <ContentTemplate>
-                         <div class="jumbotron">
+            <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
+                <ContentTemplate>
+                    <div class="jumbotron">
                         <div class="row">
+                             <div class="row">
+                                            <div style="text-align: center;">
+                                                <div class="col-sm-6">
+                                                    <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Save the Question" runat="server" OnClientClick="if(!checkIfAtLeastOneOrganIsPickedAsQuestion()) return false;" />
+                                                </div>
+
+                                                <div class="col-sm-6">
+
+                                                    <input type="button" class="btn-danger btn-lg" id="btnBack" runat="server" value="<< Discard & Back" onserverclick="btnBack_Click">
+                                                </div>
+                                            </div>
+                                        </div>
                             <div>
 
 
 
                                 <div>
                                     <h3 style="text-align: left;"><b>Step 1</b> Please write down the question description here. </h3>
-                                    <textarea class="form-control" rows="5" style="min-width: 100%; font-size: 22px;" id="AITypeQuestionDescription" runat="server"></textarea>
+                                    <textarea class="form-control" rows="3" style="min-width: 100%; font-size: 20px;" id="AITypeQuestionDescription" runat="server"></textarea>
                                 </div>
 
 
@@ -463,21 +463,29 @@
 
 
                                     <!-- 9 + 4 = 13 > 12，因此以下斷行放置多出來的Column -->
-                                    <div class="col-md-8">
+                                    <div class="col-md-7">
 
                                         <div class="roles" style="text-align: left; width: 100%">
                                             <h3><b>Step 2</b> Please choose the question mode here.</h3>
-                                            <h4>(Surgery/Anatomy Mode)</h4>
-
+                                            <h4>This step requires the "3DBuilder MFC Application.rdp" file to access the 3DBuilder installed on our cloud server.<br />
+                                                <span style="color: red;">If you have not downloaded it. Please download the 
+                                                    <br />
+                                                    <u><a target="_blank" href='<%= CsDynamicConstants.RemoteDeskTopRDPFile_For3DBuilder_DownloadLink %>'>"3DBuilder MFC Applicaion.rdp"</a></u>.</span><br />
+                                                <span style="color: red;">If you already have it, You do not need to download it again.</span><br />
+                                                <br />
+                                                <br />
+                                            </h4>
+                                            <h4>
                                             <label class="role" for="SurgeryModeRadioBtn">
-                                                <input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" checked="checked">&nbsp <b>Surgery Mode</b> &nbsp &nbsp  &nbsp<h4>(The skin of the body part will be displayed and can not be hidden.The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) </h4>
+                                                <input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" checked="checked">&nbsp <b>Surgery Mode</b> <br />(The skin of the body part will be displayed and can not be hidden.The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) 
                                             </label>
-                                            <br />
-
+                                            </h4>
+                                            <h4>
                                             <label class="role" for="AnatomyModeRadioBtn">
-                                                <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn">&nbsp <b>Anatomy Mode</b>
-                                                <h4>(The skin of the body part will be hidden.)</h4>
+                                                <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn">&nbsp  <b>Anatomy Mode</b>
+                                               <br />(The skin of the body part will be hidden.)
                                             </label>
+                                                </h4>
                                             <asp:HiddenField ID="hidden_selectedAITypeQuestionMode" runat="server" Value="Surgery Mode" />
 
                                         </div>
@@ -493,28 +501,45 @@
                                         </div>
 
                                         <div class="roles" style="text-align: left; width: 100%">
-                                            <h3><b>Step 3</b> Please choose the answering mode here.</h3>
-                                            <h4>(Number/Name Answering Mode)</h4>
-
+                                            <h3><b>Step 3</b> Please choose the answer mode here.</h3>
+                                           
+                                            <h4>
                                             <label class="role" for="NameAnsweringModeRadioBtn">
-                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Name Answering Mode" id="NameAnsweringModeRadioBtn" checked="checked">&nbsp <b>Organ Name Answering Mode</b>
-                                                <h4>(Students have to answer the name of the organs.)</h4>
+                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Name Answering Mode" id="NameAnsweringModeRadioBtn" checked="checked">&nbsp <b>Name Answer Mode</b>
+                                                <br />(Students have to answer the name of the organs.)
                                             </label>
-                                            <br />
+                                            </h4>
 
-
+                                            <h4>
                                             <label class="role" for="NumberAnsweringModeRadioBtn">
-                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Number Answering Mode" id="NumberAnsweringModeRadioBtn">&nbsp <b>Organ Number Answering Mode</b> &nbsp &nbsp  &nbsp<h4>(Students have to answer the label number displayed inthe 3DBuilder of the organs.) </h4>
+                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Number Answering Mode" id="NumberAnsweringModeRadioBtn">&nbsp <b>Number Answer Mode</b> &nbsp &nbsp  &nbsp<br />(Students have to answer the label number displayed inthe 3DBuilder of the organs.) 
                                             </label>
+                                                </h4>
                                             <asp:HiddenField ID="hidden_selectedNameOrNumberAnsweringMode" runat="server" Value="Name Answering Mode" />
                                         </div>
 
 
                                     </div>
-                                    <div class="col-md-4  text-left">
-                                        <h3><b>Step 5</b></br> Preview the question in the 3DBuilder.</br>Please click the buttons according to the steps.</h3>
-                                        <input type="button" class="btn-info btn-lg" style="display: block;" id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step5-1 Create IPC Pipe" onclick=" sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br>
-                                        <input type="button" class="btn-info btn-lg" style="display: inline;" id="btn_connectTo3DBuilder" runat="server" value="Step5-2 Connect to the 3DBuilder" onclick="    sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
+                                    <div class="col-md-5  text-left">
+                                        <h3><b>Step 5</b></br> Preview the question in the 3DBuilder.</h3>
+                                        <h4><span style="color: red;">Please follow the following steps to display the corresponding 3D organs of the question.</span></h4>
+                                        <ul class="list-group">
+                                            <h4>
+                                                <li class="list-group-item list-group-item-success">Step 5-1 Click the "Step 5-1 Create IPC Pipe" button.
+                                          
+                                            <input type="button" class="btn-success btn-lg" style="display: block;" id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step5-1 Create IPC Pipe" onclick=" sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br>
+                                                </li>
+                                                <li class="list-group-item list-group-item-success">Step 5-2 Activate the "3DBuilder MFC Application.rdp".</li>
+                                                <li class="list-group-item list-group-item-success">Step 5-3 Click "Yes" on the "3DBuilder" window.</li>
+                                                <li class="list-group-item list-group-item-success">Step 5-4 Enter your "Hints Web System" user account on the "3DBuilder" window. </li>
+                                                <li class="list-group-item list-group-item-success">Step 5-5 Click the "Step 5-5 Connect to 3DBuilder" button.
+                                             <input type="button" class="btn-success btn-lg" style="display: inline;" id="btn_connectTo3DBuilder" runat="server" value="Step5-2 Connect to 3DBuilder" onclick="    sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
+                                                </li>
+                                            </h4>
+                                        </ul>
+                                        
+                                       
+
                                     </div>
                                 </div>
 
@@ -529,82 +554,79 @@
                         </div>
                         <%--<input type="text" id="TBX_Input" runat="server" />--%>
                         <%--<input type="button" onclick="" ID="StartRemoteApp"  Text="開始RemoteAPP" runat="server" />--%>
-                                </div>
-                        
-            <div>
-            </div>
-            <div>
-
-
-                <div class="row text-left">
-                    <div class="col-md-9">
-                        <h3><b>Step 4</b> Select the organs to be the questions.<br />
-                            You can also set the visibility of each organ</h3>
                     </div>
 
-                </div>
-
-            </div>
-            <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
-
-                <Columns>
-
-                    <asp:TemplateField ItemStyle-Width="40px" HeaderText="Organ Number">
-                        <ItemTemplate>
-                            <asp:Label ID="TextBox_Number" CssClass="questionNoFontStyle" CliendIDMode="static" name="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
-                        </ItemTemplate>
-                    </asp:TemplateField>
-                    <asp:TemplateField ControlStyle-Width="90%" ControlStyle-Height="5px" HeaderText="Organ Name">
-                        <ItemTemplate>
-
-                            <asp:Label ID="LBTextBox_OrganName" CssClass="organNameoFontStyle" runat="server" Text='<%# Eval("Name") %>' />
+                   
+                    <div>
 
 
-                        </ItemTemplate>
+                        <div class="row text-left">
+                            <div class="col-md-11">
+                                <h3><b>Step 4</b> Select the organs to be the questions.
+                                    You can also set the visibility of each organ.</h3>
+                            </div>
 
-                    </asp:TemplateField>
+                        </div>
 
-                    <asp:TemplateField ItemStyle-Width="30px" ItemStyle-CssClass="template-checkbox" HeaderText="Visibility">
-                        <ItemTemplate>
-                            <%--use onclick() to call the JS function and return false to avoid activating postback automatically--%>
-                            <input type="image" class="img-thumbnail hideShowOrganBtn" id="btnHideShowOrgan" onclick="hideShowSelectedOrgan(this)" onserverclick="syncOrganVisibility23DBuilder" src ="Image/visible.png" runat="server" >
+                    </div>
+                    <asp:GridView CssClass="table  table-condensed table-bordered table-hover table-responsive " ID="gvScore" runat="server" ShowHeaderWhenEmpty="true" OnRowCommand="gvScore_RowCommand">
 
-                            <%-- <input type="hidden" id="hf_OrganVisibility" runat="server" value="true"> It doesn't work in Gridview--%>
-                            <asp:HiddenField ID="hf_OrganVisibility" runat="server" Value="true" />
+                        <Columns>
 
+                            <asp:TemplateField ItemStyle-Width="40px" HeaderText="Organ Number">
+                                <ItemTemplate>
+                                    <asp:Label ID="TextBox_Number" CssClass="questionNoFontStyle" CliendIDMode="static" name="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField ControlStyle-Width="90%" ControlStyle-Height="5px" HeaderText="Organ Name">
+                                <ItemTemplate>
 
-
-                        </ItemTemplate>
-                    </asp:TemplateField>
-
-
-                    <asp:TemplateField ItemStyle-Width="150px" ItemStyle-CssClass="template-checkbox" HeaderText="Select for testing">
-                        <ItemTemplate>
-
-                            <asp:CheckBox runat="server" ID="checkbox_pickedOrgan" />
+                                    <asp:Label ID="LBTextBox_OrganName" CssClass="organNameoFontStyle" runat="server" Text='<%# Eval("Name") %>' />
 
 
+                                </ItemTemplate>
 
-                        </ItemTemplate>
-                    </asp:TemplateField>
+                            </asp:TemplateField>
+
+                            <asp:TemplateField ItemStyle-Width="30px" ItemStyle-CssClass="template-checkbox" HeaderText="Visibility">
+                                <ItemTemplate>
+                                    <%--use onclick() to call the JS function and return false to avoid activating postback automatically--%>
+                                    <input type="image" class="img-thumbnail hideShowOrganBtn" id="btnHideShowOrgan" onclick="hideShowSelectedOrgan(this)" onserverclick="syncOrganVisibility23DBuilder" src="Image/visible.png" runat="server">
+
+                                    <%-- <input type="hidden" id="hf_OrganVisibility" runat="server" value="true"> It doesn't work in Gridview--%>
+                                    <asp:HiddenField ID="hf_OrganVisibility" runat="server" Value="true" />
 
 
 
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
+
+                            <asp:TemplateField ItemStyle-Width="150px" ItemStyle-CssClass="template-checkbox" HeaderText="Select for testing">
+                                <ItemTemplate>
+
+                                    <asp:CheckBox runat="server" ID="checkbox_pickedOrgan" />
+
+
+
+                                </ItemTemplate>
+                            </asp:TemplateField>
 
 
 
 
 
-                </Columns>
-            </asp:GridView>
-            <input type="hidden" id="hidden_cQID" runat="server">
-       
-                           
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-                 </asp:Panel>
-            </div>
-        </div>
+
+
+
+                        </Columns>
+                    </asp:GridView>
+                    <input type="hidden" id="hidden_cQID" runat="server">
+                </ContentTemplate>
+            </asp:UpdatePanel>
+        </asp:Panel>
+    </div>
+    </div>
    
 
 
@@ -633,8 +655,8 @@
 
 
         $(document).ready(function () {
-            
-           
+
+
 
             readyInitProcess();
             //load XML to check the organs that are picked to be part of question.
@@ -644,13 +666,13 @@
                 readInExistingQuestion();
 
             }
-          
-           
-           
+
+
+
             //Let the function called 'EndRequestHandler' executed after coming back from UpdatePanel AJAX 
             //This is the fix terms for using ASP UpdatePanel AJAX
             loadAfterUpdatePanel()
-            
+
 
         });
 
@@ -673,7 +695,7 @@
 
 
         function hideShowSelectedOrgan(selectedHideShowOrganBtn) {
-            
+
             //to know which row's OrganSubmitBtn is clicked
             //get the clicked row of TemplageField
             var row = selectedHideShowOrganBtn.parentNode.parentNode;
@@ -704,7 +726,7 @@
             }
 
 
-          
+
 
         }
 
@@ -734,29 +756,29 @@
                 hidden_cQID.value = url.searchParams.get("strQID");
 
             }
-           
-            
+
+
             //keep the visibility icon after coming back from UpdatePanel AJAX
             keepVisibilityIcon();
-            
+
             //keep the Anatomy Mode radio box after coming back from UpdatePanel AJAX
             keepAnatomyModeRadioBox();
 
             //keep the NameOrNumberAnsweringMode Mode radio box after coming back from UpdatePanel AJAX
             keepNameOrNumberAnsweringModeRadioBox();
-            
+
 
         }
         //keep the Anatomy Mode radio box after coming back from UpdatePanel AJAX
         function keepAnatomyModeRadioBox() {
 
-            
+
 
             //if the mode of the AITypeQuestion is "Surgery Mode"   
             if (document.getElementById("<%= hidden_selectedAITypeQuestionMode.ClientID %>").value == "Surgery Mode") {
                 //check the radio button of the Surgery Mode
                 document.getElementById("SurgeryModeRadioBtn").checked = true;
-              
+
 
             }
 
@@ -764,7 +786,7 @@
             else {
                 //check the radio button of the Anatomy Mode
                 document.getElementById("AnatomyModeRadioBtn").checked = true;
-               
+
 
             }
 
@@ -774,13 +796,13 @@
         //keep the NameOrNumberAnsweringMode Mode radio box after coming back from UpdatePanel AJAX
         function keepNameOrNumberAnsweringModeRadioBox() {
 
-            
+
 
             //if the mode of the NameOrNumberAnsweringMode is "Name Answering Mode"   
             if (document.getElementById("<%= hidden_selectedNameOrNumberAnsweringMode.ClientID %>").value == "Name Answering Mode") {
                 //check the radio button of the Name Answering  Mode
                 document.getElementById("NameAnsweringModeRadioBtn").checked = true;
-               
+
 
             }
 
@@ -788,7 +810,7 @@
             else {
                 //check the radio button of the Number Answering  Mode
                 document.getElementById("NumberAnsweringModeRadioBtn").checked = true;
-              
+
 
             }
 
@@ -813,7 +835,7 @@
 
             }
 
-            
+
         }
 
         //set the selected NameOrNumberAnsweringMode Mode in hidden_selectedNameOrNumberAnsweringMode before PostBack
@@ -848,7 +870,7 @@
 
 
 
-                //recover visbility icon of each row
+                //recover visbility icon of each row by retrieving their values from hidden fields
 
                 //keep submit btn visible at all times
 
@@ -858,7 +880,7 @@
                 }
                 else {
                     gvDrv.rows[i].cells[2].getElementsByTagName("input")[0].src = invisibleImg;
-                    
+
                 }
 
 
@@ -879,14 +901,14 @@
 
             //do the window.onload function again because AJAX doesn't trigger window.onload event.
             //onloadFun();
-            
+
             readyInitProcess();
-            
-
-           
 
 
-            
+
+
+
+
 
 
 
@@ -902,14 +924,14 @@
         //set the hidden value that stores the AITypeQuestionMode selected by the teacher.
         //so that we can recover it after postback from the UpdatePanel AJAX
         $(document).on("change", "input[name*=radioBtn_AITypeQuestionMode]:radio", function () {
-   
+
             sethidden_selectedAnatomyMode();
         });
 
         //set the hidden value that stores the NameOrNumberAnsweringMode selected by the teacher.
         //so that we can recover it after postback from the UpdatePanel AJAX
         $(document).on("change", "input[name*=radioBtn_NameOrNumberAnsweringMode]:radio", function () {
-         
+
             sethidden_selectedNameOrNumberAnsweringMode();
         });
 
@@ -924,7 +946,7 @@
             sethidden_selectedNameOrNumberAnsweringMode();
         });
         */
-        
+
     </script>
 
 </asp:Content>
