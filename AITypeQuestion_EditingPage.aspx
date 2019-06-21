@@ -463,11 +463,11 @@
 
 
                                     <!-- 9 + 4 = 13 > 12，因此以下斷行放置多出來的Column -->
-                                    <div class="col-md-7">
+                                    <div class="col-md-8">
 
                                         <div class="roles" style="text-align: left; width: 100%">
                                             <h3><b>Step 2</b> Please choose the question mode here.</h3>
-                                            <h4>This step requires the "3DBuilder MFC Application.rdp" file to access the 3DBuilder installed on our cloud server.<br />
+                                            <h4>This step requires the "3DBuilder MFC Application.rdp" file to display the corresponding 3D organs.<br />
                                                 <span style="color: red;">If you have not downloaded it. Please download the 
                                                     <br />
                                                     <u><a target="_blank" href='<%= CsDynamicConstants.RemoteDeskTopRDPFile_For3DBuilder_DownloadLink %>'>"3DBuilder MFC Applicaion.rdp"</a></u>.</span><br />
@@ -477,13 +477,13 @@
                                             </h4>
                                             <h4>
                                             <label class="role" for="SurgeryModeRadioBtn">
-                                                <input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" checked="checked">&nbsp <b>Surgery Mode</b> <br />(The skin of the body part will be displayed and can not be hidden.The stuents can only use the surgery knife provided in 3DBuilder to cut and see the interal organ like a real surgery.) 
+                                                <input type="radio" name="radioBtn_AITypeQuestionMode" value="Surgery Mode" id="SurgeryModeRadioBtn" checked="checked">&nbsp <b>Surgery Mode</b> <br />(The teacher can use the surgical knife to cut incisions on the skin of the 3D body part. When the stduent answers the question, the skin and the incisions will be presented. The student can only recognize the organs by seeing through the incisions like an actual surgery.) 
                                             </label>
                                             </h4>
                                             <h4>
                                             <label class="role" for="AnatomyModeRadioBtn">
                                                 <input type="radio" name="radioBtn_AITypeQuestionMode" value="Anatomy Mode" id="AnatomyModeRadioBtn">&nbsp  <b>Anatomy Mode</b>
-                                               <br />(The skin of the body part will be hidden.)
+                                               <br />(The skin of the body part will be hidden when the student answers the question.)
                                             </label>
                                                 </h4>
                                             <asp:HiddenField ID="hidden_selectedAITypeQuestionMode" runat="server" Value="Surgery Mode" />
@@ -506,13 +506,13 @@
                                             <h4>
                                             <label class="role" for="NameAnsweringModeRadioBtn">
                                                 <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Name Answering Mode" id="NameAnsweringModeRadioBtn" checked="checked">&nbsp <b>Name Answer Mode</b>
-                                                <br />(Students have to answer the name of the organs.)
+                                                <br />(The label number of the 3D organs will be provided for students. Students have to answer the name of the organs.)
                                             </label>
                                             </h4>
 
                                             <h4>
                                             <label class="role" for="NumberAnsweringModeRadioBtn">
-                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Number Answering Mode" id="NumberAnsweringModeRadioBtn">&nbsp <b>Number Answer Mode</b> &nbsp &nbsp  &nbsp<br />(Students have to answer the label number displayed inthe 3DBuilder of the organs.) 
+                                                <input type="radio" name="radioBtn_NameOrNumberAnsweringMode" value="Number Answering Mode" id="NumberAnsweringModeRadioBtn">&nbsp <b>Number Answer Mode</b> &nbsp &nbsp  &nbsp<br />(The organ name of the 3D organs will be provided for students.<br /> Students have to answer the label number of the 3D organs.) 
                                             </label>
                                                 </h4>
                                             <asp:HiddenField ID="hidden_selectedNameOrNumberAnsweringMode" runat="server" Value="Name Answering Mode" />
@@ -520,21 +520,23 @@
 
 
                                     </div>
-                                    <div class="col-md-5  text-left">
-                                        <h3><b>Step 5</b></br> Preview the question in the 3DBuilder.</h3>
+                                    <div class="col-md-4  text-left">
+                                        <h3><b>Step 5</b></br> Preview the question in 3D.</h3>
                                         <h4><span style="color: red;">Please follow the following steps to display the corresponding 3D organs of the question.</span></h4>
                                         <ul class="list-group">
                                             <h4>
                                                 <li class="list-group-item list-group-item-success">Step 5-1 Click the "Step 5-1 Create IPC Pipe" button.
                                           
-                                            <input type="button" class="btn-success btn-lg" style="display: block;" id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step5-1 Create IPC Pipe" onclick=" sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br>
+                                            <center><input type="button" class="btn-success btn-lg" style="display: block;" id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step5-1 Create IPC Pipe" onclick=" sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br>
+                                                </center>
                                                 </li>
                                                 <li class="list-group-item list-group-item-success">Step 5-2 Activate the "3DBuilder MFC Application.rdp".</li>
                                                 <li class="list-group-item list-group-item-success">Step 5-3 Click "Yes" on the "3DBuilder" window.</li>
                                                 <li class="list-group-item list-group-item-success">Step 5-4 Enter your "Hints Web System" user account on the "3DBuilder" window. </li>
-                                                <li class="list-group-item list-group-item-success">Step 5-5 Click the "Step 5-5 Connect to 3DBuilder" button.
-                                             <input type="button" class="btn-success btn-lg" style="display: inline;" id="btn_connectTo3DBuilder" runat="server" value="Step5-2 Connect to 3DBuilder" onclick="    sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
-                                                </li>
+                                                <li class="list-group-item list-group-item-success">Step 5-5 Click the "Step 5-5 Load 3D organs" button.
+                                              <center><input type="button" class="btn-success btn-lg" style="display: inline;" id="btn_connectTo3DBuilder" runat="server" value="Step5-5 Load 3D organs" onclick="    sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
+                                                </center>
+                                                   </li>
                                             </h4>
                                         </ul>
                                         
@@ -917,7 +919,7 @@
 
         function askUserOpen3DBuilder() {
 
-            alert("IPC Pipe has been created! \n\nNow,please activate the 3DBuilder by clicking the '3DBuilder MFC Application.rdp'.");
+            alert("IPC Pipe has been created! \n\nNow,please activate the '3DBuilder MFC Application.rdp'.");
         }
 
 
