@@ -501,7 +501,7 @@
                                         </div>
 
                                         <div class="roles" style="text-align: left; width: 100%">
-                                            <h3><b>Step 3</b> Please choose the answer mode here.</h3>
+                                            <h3><b>Step 4</b> Please choose the answer mode here.</h3>
                                            
                                             <h4>
                                             <label class="role" for="NameAnsweringModeRadioBtn">
@@ -521,20 +521,20 @@
 
                                     </div>
                                     <div class="col-md-4  text-left">
-                                        <h3><b>Step 5</b></br> Preview the question in 3D.</h3>
+                                        <h3><b>Step 3</b></br> Preview&Edit the question in 3D.</h3>
                                         <h4><span style="color: red;">Please follow the following steps to display the corresponding 3D organs of the question.</span></h4>
                                         <ul class="list-group">
                                             <h4>
-                                                <li class="list-group-item list-group-item-success">Step 5-1 Click the "Step 5-1 Create IPC Pipe" button.
+                                                <li class="list-group-item list-group-item-success">Step 3-1 Click the "Step 3-1 Create IPC Pipe" button.
                                           
-                                            <center><input type="button" class="btn-success btn-lg" style="display: block;" id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step5-1 Create IPC Pipe" onclick=" sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br>
+                                            <center><input type="button" class="btn-success btn-lg" style="display: block;" id="btn_cutBodyPartIn3DBuilder" runat="server" value="Step3-1 Create IPC Pipe" onclick=" sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode(); askUserOpen3DBuilder();" onserverclick="btn_cutBodyPartIn3DBuilder_Onclick">&nbsp &nbsp  &nbsp</br>
                                                 </center>
                                                 </li>
-                                                <li class="list-group-item list-group-item-success">Step 5-2 Activate the "3DBuilder MFC Application.rdp".</li>
-                                                <li class="list-group-item list-group-item-success">Step 5-3 Click "Yes" on the "3DBuilder" window.</li>
-                                                <li class="list-group-item list-group-item-success">Step 5-4 Enter your "Hints Web System" user account on the "3DBuilder" window. </li>
-                                                <li class="list-group-item list-group-item-success">Step 5-5 Click the "Step 5-5 Load 3D organs" button.
-                                              <center><input type="button" class="btn-success btn-lg" style="display: inline;" id="btn_connectTo3DBuilder" runat="server" value="Step5-5 Load 3D organs" onclick="    sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
+                                                <li class="list-group-item list-group-item-success">Step 3-2 Activate the "3DBuilder MFC Application.rdp".</li>
+                                                <li class="list-group-item list-group-item-success">Step 3-3 Click "Yes" on the "3DBuilder" window.</li>
+                                                <li class="list-group-item list-group-item-success">Step 3-4 Enter your "Hints Web System" user account on the "3DBuilder" window. </li>
+                                                <li class="list-group-item list-group-item-success">Step 3-5 Click the "Step 3-5 Load 3D organs" button.
+                                              <center><input type="button" class="btn-success btn-lg" style="display: inline;" id="btn_connectTo3DBuilder" runat="server" value="Step3-5 Load 3D organs" onclick="    sethidden_selectedAnatomyMode(); sethidden_selectedNameOrNumberAnsweringMode();" onserverclick="btn_connectTo3DBuilder_Onclick">
                                                 </center>
                                                    </li>
                                             </h4>
@@ -564,7 +564,7 @@
 
                         <div class="row text-left">
                             <div class="col-md-11">
-                                <h3><b>Step 4</b> Select the organs to be the questions.
+                                <h3><b>Step 5</b> Select the organs to be the questions.
                                     You can also set the visibility of each organ.</h3>
                             </div>
 
