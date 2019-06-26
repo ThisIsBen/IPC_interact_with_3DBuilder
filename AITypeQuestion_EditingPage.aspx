@@ -380,7 +380,7 @@
         //check the mode of the AITypeQuestion and check its radio buttn accordingly when the teacher modifies an existing AITypeQuestion.
         function checkAITypeQuestionMode_RadioBtnWhenModify(xml) {
             //if the mode of the AITypeQuestion is "Surgery Mode"   
-            if ($(xml).find("AITypeQuestionMode").text() == "Surgery Mode") {
+            if ($(xml).find("AIQMode").text() == "Surgery Mode") {
                 //check the radio button of the Surgery Mode
                 document.getElementById("SurgeryModeRadioBtn").checked = true;
                 document.getElementById("<%= hidden_selectedAITypeQuestionMode.ClientID %>").value = "Surgery Mode";

@@ -432,7 +432,7 @@ public partial class IPC: CsSessionManager
             if (selectedAITypeQuestionMode == "Surgery Mode")
             {
 
-                xmlHandler.setValueOfSpecificNonNestedTag("AITypeQuestionMode", "Surgery Mode");
+                xmlHandler.setValueOfSpecificNonNestedTag("AIQMode", "Surgery Mode");
 
                 //append AITypeQuestionMode tag to "SurgeryMode".
                 //xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");
@@ -441,7 +441,7 @@ public partial class IPC: CsSessionManager
             if (selectedAITypeQuestionMode == "Anatomy Mode")
             {
 
-                xmlHandler.setValueOfSpecificNonNestedTag("AITypeQuestionMode", "Anatomy Mode");
+                xmlHandler.setValueOfSpecificNonNestedTag("AIQMode", "Anatomy Mode");
 
                 //append AITypeQuestionMode tag to "SurgeryMode".
                 //xmlHandler.appendTag2EachOrgan("AITypeQuestionMode", "Surgery Mode", "OneElememt","Scene");

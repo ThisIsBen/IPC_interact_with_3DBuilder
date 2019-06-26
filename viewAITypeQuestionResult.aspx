@@ -227,7 +227,7 @@
 
 
             //if the AITypeQuestion is of Surgery Mode, we set the hide/show icon of the skin to be visible and disabled.
-            if (sessionStorage.getItem("AITypeQuestionMode") == "Surgery Mode") {
+            if (sessionStorage.getItem("AIQMode") == "Surgery Mode") {
 
                 skinOrganNumber = sessionStorage.getItem("skinOrganNumber");
 
@@ -1025,7 +1025,7 @@
                     });
 
                     //access the value of  <AITypeQuestionMode> of this AITypeQuestion in the xml file.
-                    $AITypeQuestionMode = $(xml).find('AITypeQuestionMode')
+                    $AITypeQuestionMode = $(xml).find('AIQMode')
 
                     //access the value of each <Question> in the <Organ>
                     var AITypeQuestionModeVal = $AITypeQuestionMode.text();
@@ -1050,7 +1050,7 @@
 
 
                         //store the mode of the AITypeQuestion in a session storage
-                        sessionStorage.setItem("AITypeQuestionMode", "Surgery Mode");
+                        sessionStorage.setItem("AIQMode", "Surgery Mode");
 
                         //record the organ number of the Skin in this AITypeQuestion.
                         sessionStorage.setItem("skinOrganNumber", skinOrganNumberVal);
@@ -1058,7 +1058,7 @@
 
                     else if (AITypeQuestionModeVal == "Anatomy Mode") {
                         //store the mode of the AITypeQuestion in a session storage
-                        sessionStorage.setItem("AITypeQuestionMode", "Anatomy Mode");
+                        sessionStorage.setItem("AIQMode", "Anatomy Mode");
                     }
 
 

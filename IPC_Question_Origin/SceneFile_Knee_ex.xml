@@ -439,6 +439,6 @@
   </Organs>
 <Alpha>14</Alpha>
 <Beta>54</Beta>
-<AITypeQuestionMode>Anatomy Mode</AITypeQuestionMode>
+<AIQMode>Anatomy Mode</AIQMode>
 <NameOrNumberAnsweringMode>Name Answering Mode</NameOrNumberAnsweringMode>
 </Scene>
