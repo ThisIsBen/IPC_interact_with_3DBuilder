@@ -440,7 +440,7 @@
                              <div class="row">
                                             <div style="text-align: center;">
                                                 <div class="col-sm-6">
-                                                    <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Save the Question" runat="server" OnClientClick="if(!checkIfAtLeastOneOrganIsPickedAsQuestion()) return false;" />
+                                                    <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg' OnClick="FinishBtn_Click" Text="Save the Question" runat="server" OnClientClick="if(!checkIfAtLeastOneOrganIsPickedAsQuestion()){ return false;}" />
                                                 </div>
 
                                                 <div class="col-sm-6">
@@ -658,7 +658,7 @@
 
         $(document).ready(function () {
 
-
+          
 
             readyInitProcess();
             //load XML to check the organs that are picked to be part of question.

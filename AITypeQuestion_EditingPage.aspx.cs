@@ -756,25 +756,31 @@ public partial class IPC: CsSessionManager
     //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
     private void redirectBack2HintsPaper_MainPage(string clickedBtnName)
     {
-        //After modified an existing AITypeQuestion
+        //After modified an existing AITypeQuestion, go back to the previous page.
         if (Request.QueryString["viewContent"] != null && Request.QueryString["viewContent"] == "Yes")
         {
             ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "location.href='" + Previous_Page_URL_Session + "'", true);
         }
-
+    
+       //After creating a new AITypeQuestion, go back to the Paper_Main.aspx (the exam paper editing page)
         else 
         {
             //if the teacher clicks 'Save the Question' btn
             if (clickedBtnName == "Save the Question")
             {
                 //After created a new AITypeQuestion
-
+                /*
                 //if the opener page is still opened, refresh it and close the current page.
+               
                 ClientScript.RegisterClientScriptBlock(this.GetType(), "Refresh", "opener.document.getElementById('btnRefresh').click();window.close();", true);
-
+                
+                
                 //if the opener page is already closed, direct back to the opener page.
                 ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "location.href='" + Previous_Page_URL_Session + "'", true);
- 
+                */
+
+                //if the opener page is still opened, refresh it and close the current page.
+                ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "opener.document.getElementById('btnRefresh').click();window.close();", true);
             }
             //if the teacher clicks '<< Back' btn
             else if (clickedBtnName == "Back")

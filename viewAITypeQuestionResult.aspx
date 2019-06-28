@@ -811,7 +811,7 @@
                                    
                                     <input type="button" class="btn btn-info btn-md" id="btn_setUpCSNamedPipe" runat="server" value="Step1 Create IPC Pipe" onclick="askUserOpen3DBuilder();" onserverclick="btn_setUpCSNamedPipe_Onclick">
 
-                                    <input type="button" class="btn btn-info btn-md" id="btn_connectTo3DBuilder" runat="server" value="Step2 Connect to 3DBuilder" onserverclick="btn_connectTo3DBuilder_Onclick">
+                                    <input type="button" class="btn btn-info btn-md" id="btn_connectTo3DBuilder" runat="server" value="Step2 Load 3D organs" onserverclick="btn_connectTo3DBuilder_Onclick">
                                 </div>
 
                             </div>
