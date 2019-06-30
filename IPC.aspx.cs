@@ -162,10 +162,10 @@ public partial class IPC : CsSessionManager
            //We make use of a dictionary session variable to store the mapping of organ number and the randomized organ name.
         else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
-            //clear the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
+            //clear the mapping of the randomized organ number and the organ name in a dictionary session variable when it's of Number Answering Mode
             NumberAnsweringMode_RandOrganNoNameMapping_Session = null;
 
-            //create the mapping of organ number and the randomized organ name in a dictionary session variable when it's of Number Answering Mode
+            //create the mapping of the randomized organ number and the organ name in a dictionary session variable when it's of Number Answering Mode
             for (int i = 0; i < NumberAnsweringMode_WholeRandOrganNo_Session.Length; i++)
             {
                 NumberAnsweringMode_RandOrganNoNameMapping_Session.Add(NumberAnsweringMode_WholeRandOrganNo_Session[i], CorrectOrganNameList[i]);
@@ -1120,8 +1120,9 @@ public partial class IPC : CsSessionManager
                     //if (Request["examMode"] == "Yes")
                     if (examMode == "Yes")
                     {
-
-                        QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(organIndicator.Text)) + 1).ToString();
+                        var rearrangedQuestionOrganNo = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
+                        QuestionNo = rearrangedQuestionOrganNo.Text;
+                        //QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(organIndicator.Text)) + 1).ToString();
                         // QuestionNo = index.ToString();
 
                     }
@@ -1137,7 +1138,7 @@ public partial class IPC : CsSessionManager
                     //get the corresponding correct organ name 
                     // var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo) - 1];
 
-                    var correctOrganName = CorrectOrganNameSession[Convert.ToInt32(QuestionNo)];
+                    var correctOrganName = CorrectOrganNameSession[Convert.ToInt32(QuestionNo)-1];
 
                     //Replace the " " space in student's answer with "_" so that the 3DBuilder can extract and display the student's answer correctly
                     string studentOrganNameAnswer = answeringField.Text.Replace(" ", "_");
@@ -1179,10 +1180,10 @@ public partial class IPC : CsSessionManager
             if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
             {
 
-                var num = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
+                var rearrangedQuestionOrganNo = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
 
                 //get the corresponding correct organ name 
-                correctOrganName = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 
+                correctOrganName = CorrectOrganNameSession[Convert.ToInt32(rearrangedQuestionOrganNo.Text) - 1];//The correct name of selected 3D object 
             }
 
             
