@@ -222,8 +222,11 @@ public partial class IPC : CsSessionManager
 
             //Step 2-1 We randomly rearrange all the organ numbers in the AITypeQuestion xml file.
             //shuffle the array of organ number
+            //Don't Shuffle. Because we need the fixed label number answer for the Number Answer Mode AITypeQuestion.
+            /*
             shuffleOrganNumber(ref arr_OrganRearrangedNumber);
-            
+            */
+
             //When the AITypeQuestion is of 'Number Answering Mode',
             //we need to store the whole randomized organ number for creating a  mapping of organ number and the randomized organ name
             NumberAnsweringMode_WholeRandOrganNo_Session = arr_OrganRearrangedNumber;

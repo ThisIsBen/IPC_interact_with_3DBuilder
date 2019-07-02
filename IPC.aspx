@@ -839,8 +839,23 @@
                         //the content of 'pickedQuestionOrganArray' may look like '1,2,6,9,12'
                         pickedRandQNo = pickedQuestionOrganArray;
                         */
+                         <%
+                        var randomizedQuestionOrganNumber = RandomQuestionNoSession;
+                        //if RandomQuestionNoSession is not null
+                        if (randomizedQuestionOrganNumber[0] != -1)
+                            for (int i = 0; i < randomizedQuestionOrganNumber.Length; i++)
+                        {
+                                
+                         
+                        %>
 
-                       
+                            pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
+
+                            //show the 'Show all hidden organs' button
+                            document.getElementById("div_ShowOrHideAll").style.display = 'block';
+                        <% 
+                        }
+                        %>
             <% 
         }
             %>
@@ -865,7 +880,8 @@
 
                         }
 
-
+                        console.log("This is pickedRandQNo");
+                        console.log(pickedRandQNo);
 
 
 
@@ -890,9 +906,9 @@
 
 
                             //test
-                            console.log(questionList[swapTarget]);
-                            console.log(questionList[i]);
-                            console.log("\n");
+                            //console.log(questionList[swapTarget]);
+                            //console.log(questionList[i]);
+                            //console.log("\n");
 
 
                             $elem1 = $("#" + rowID + questionList[swapTarget]);
@@ -1123,10 +1139,10 @@
                          
                         %>
 
-                pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
+                            pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
-                //show the 'Show all hidden organs' button
-                document.getElementById("div_ShowOrHideAll").style.display = 'block';
+                            //show the 'Show all hidden organs' button
+                            document.getElementById("div_ShowOrHideAll").style.display = 'block';
 
                 <% 
                     }
@@ -1147,7 +1163,23 @@
                 //set the pickedRandQNo as the Question Number of organs picked by instructor.
                 pickedRandQNo = pickedQuestionOrganArray;
                 */
+                 <%
+                        var randomizedQuestionOrganNumber = RandomQuestionNoSession;
+                        //if RandomQuestionNoSession is not null
+                        if (randomizedQuestionOrganNumber[0] != -1)
+                        for (int i = 0; i < randomizedQuestionOrganNumber.Length; i++)
+                        {
+                                
+                         
+                        %>
 
+                            pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
+
+                            //show the 'Show all hidden organs' button
+                            document.getElementById("div_ShowOrHideAll").style.display = 'block';
+                        <% 
+                        }
+                        %>
                
             <% 
         }
@@ -1171,8 +1203,7 @@
                         }
 
 
-
-
+                        
 
 
 
@@ -1195,9 +1226,9 @@
 
 
                             //test
-                            console.log(questionList[swapTarget]);
-                            console.log(questionList[i]);
-                            console.log("\n");
+                            //console.log(questionList[swapTarget]);
+                            //console.log(questionList[i]);
+                            //console.log("\n");
 
 
                             $elem1 = $("#" + rowID + questionList[swapTarget]);

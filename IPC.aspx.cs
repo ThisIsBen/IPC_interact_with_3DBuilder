@@ -726,23 +726,38 @@ public partial class IPC : CsSessionManager
                 {
                     TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNum - 1].FindControl("TB_AnsweringField");
                     strTB1 = tb.Text.Trim();
+
+                    if (i == (RandomQuestionNoSession.Length - 1))
+                    {
+                        _QuesOrdering = RandomQuestionNum.ToString();
+                        StudentAnswer._StudentAnswer += strTB1;
+                    }
+                    else
+                    {
+                        _QuesOrdering = RandomQuestionNum + ",";
+                        StudentAnswer._StudentAnswer += strTB1 + ",";
+                    }
                 }
                 else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
                 {
-                    TextBox tb = (TextBox)gvScore.Rows[i].FindControl("TB_AnsweringField");
+                    TextBox tb = (TextBox)gvScore.Rows[RandomQuestionNoSession[i]-1].FindControl("TB_AnsweringField");
                     strTB1 = tb.Text.Trim();
+
+
+                    
+                    if (i == (RandomQuestionNoSession.Length - 1))
+                    {
+                        _QuesOrdering = NumberAnsweringMode_WholeRandOrganNo_Session[RandomQuestionNum - 1].ToString();
+                        StudentAnswer._StudentAnswer += strTB1;
+                    }
+                    else
+                    {
+                        _QuesOrdering = NumberAnsweringMode_WholeRandOrganNo_Session[RandomQuestionNum - 1] + ",";
+                        StudentAnswer._StudentAnswer += strTB1 + ",";
+                    }
                 }
                 
-                if (i == (RandomQuestionNoSession.Length - 1))
-                {
-                    _QuesOrdering = RandomQuestionNum.ToString();
-                    StudentAnswer._StudentAnswer += strTB1;
-                }
-                else
-                {
-                    _QuesOrdering = RandomQuestionNum + ",";
-                    StudentAnswer._StudentAnswer += strTB1 + ",";
-                }
+                
                 StudentAnswer._QuesOrdering += _QuesOrdering;
             }
             StudentAnswer._QuesOrdering += ":";
@@ -1120,10 +1135,10 @@ public partial class IPC : CsSessionManager
                     //if (Request["examMode"] == "Yes")
                     if (examMode == "Yes")
                     {
-                        var rearrangedQuestionOrganNo = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
-                        QuestionNo = rearrangedQuestionOrganNo.Text;
-                        //QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(organIndicator.Text)) + 1).ToString();
-                        // QuestionNo = index.ToString();
+
+                        //get the label number of the target organ that is shown in the Organ Indicator column on the AITypeQuestion response page. 
+                        QuestionNo = (Array.IndexOf(randQuestionNoList, Int32.Parse(organIndicator.Text)) + 1).ToString();
+                       
 
                     }
 
@@ -1136,9 +1151,10 @@ public partial class IPC : CsSessionManager
 
 
                     //get the corresponding correct organ name 
-                    // var answer = CorrectOrganNameSession[Convert.ToInt32(QuestionNo) - 1];
+                    var rearrangedQuestionOrganNo = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
 
-                    var correctOrganName = CorrectOrganNameSession[Convert.ToInt32(QuestionNo)-1];
+
+                    var correctOrganName = CorrectOrganNameSession[Convert.ToInt32(rearrangedQuestionOrganNo.Text) - 1];
 
                     //Replace the " " space in student's answer with "_" so that the 3DBuilder can extract and display the student's answer correctly
                     string studentOrganNameAnswer = answeringField.Text.Replace(" ", "_");

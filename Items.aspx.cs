@@ -192,7 +192,8 @@ public partial class Items : CsSessionManager
                 //Step 2-3 Store the randomly rearranged organ numbers of the organs that are picked as question to ‘RandomQuestionNoSession’.
                 for (int i = 0; i < pickedQuestions.Length; i++)
                 {
-                    arr_RearrangedPickedOrganNumber[i] = arr_OrganRearrangedNumber[pickedQuestions[i] - 1];
+                    //arr_RearrangedPickedOrganNumber[i] = arr_OrganRearrangedNumber[pickedQuestions[i] - 1];
+                    arr_RearrangedPickedOrganNumber[i] = pickedQuestions[i];
                 }
 
                 //Store the randomly rearranged organ numbers of the organs that are picked as question to ‘RandomQuestionNoSession’.

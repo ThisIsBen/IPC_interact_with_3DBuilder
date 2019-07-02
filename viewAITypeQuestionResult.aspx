@@ -359,7 +359,7 @@
 
                          correctAnswerOfTheAITypeQuestionJSArray.push('<%= correctAnswerHT[0][ScoreAnalysisList[0].questionOrderingString[i+1]] %>');
 
-                <% 
+               <% 
                 }
                 
                 
@@ -368,13 +368,17 @@
 
         else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
-            for (int i = 0; i < RandomQuestionNoSession.Length; i++)
+            
+            %>
+                for (i = 0; i < questionArray.length; i++)
                 {
                   
-            %>
-            correctAnswerOfTheAITypeQuestionJSArray.push('<%=ScoreAnalysisList[0].questionOrderingString[i+1] %>');
-        <%
-                 }
+                    correctAnswerOfTheAITypeQuestionJSArray.push(questionArray[i]);
+            
+                }
+                
+            <%
+                 
         }
         %>
 
@@ -879,7 +883,7 @@
                         </asp:TemplateField>
 
                         <%--cells[3]--%>
-                        <asp:TemplateField HeaderText="Correct<br/>Answer">
+                        <asp:TemplateField HeaderText="Correct<br/>Corresponding Label Number in the 3DBuilder">
                             <ItemTemplate>
                                 <asp:Label ID="TextBox_CorrectOrganAnswer" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" />
                             </ItemTemplate>
@@ -889,7 +893,7 @@
 
                         <%--cells[4]--%>
                         <%--<asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide" Visible='<%# ShowHideIconCol_displayStatus() %>'>--%>
-                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide <b>abc</b>" Visible="true">
+                        <asp:ButtonField ButtonType="Image" CommandName="InvisibleAndVisible" ImageUrl="" ControlStyle-Height="40px" ControlStyle-Width="40px" HeaderText="Show /<br/>Hide " Visible="true">
                             <ControlStyle CssClass=" showHideIcon_img" />
                         </asp:ButtonField>
 
@@ -1112,12 +1116,18 @@
                         //the content of 'pickedQuestionOrganArray' may look like '1,2,6,9,12'
                         pickedRandQNo = pickedQuestionOrganArray;
                         */
+                        for (i = 0; i < questionArray.length; i++)
+                        {
+                            pickedRandQNo.push(questionArray[i])
+                        }
 
-                        <% 
+                        alert(pickedRandQNo)
+                       
+             <% 
         }
             %>
         
-                        //alert(pickedRandQNo);
+                        
 
 
 
@@ -1422,6 +1432,15 @@
                 //set the pickedRandQNo as the Question Number of organs picked by instructor.
                 pickedRandQNo = pickedQuestionOrganArray;
                 */
+
+                
+                            for (i = 0; i < questionArray.length; i++)
+                            {
+                                pickedRandQNo.push(questionArray[i])
+                            }
+                            alert(pickedRandQNo)
+
+
 
                 <% 
         }
