@@ -851,8 +851,7 @@
 
                             pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
-                            //show the 'Show all hidden organs' button
-                            document.getElementById("div_ShowOrHideAll").style.display = 'block';
+                           
                         <% 
                         }
                         %>
@@ -1175,8 +1174,7 @@
 
                             pickedRandQNo.push('<%= randomizedQuestionOrganNumber[i] %>');
 
-                            //show the 'Show all hidden organs' button
-                            document.getElementById("div_ShowOrHideAll").style.display = 'block';
+                            
                         <% 
                         }
                         %>

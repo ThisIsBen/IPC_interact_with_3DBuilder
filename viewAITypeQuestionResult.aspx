@@ -359,6 +359,10 @@
 
                          correctAnswerOfTheAITypeQuestionJSArray.push('<%= correctAnswerHT[0][ScoreAnalysisList[0].questionOrderingString[i+1]] %>');
 
+                         //display the title of the correct answer for Number Answer Mode
+                         var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+                         gvDrv.rows[0].getElementsByTagName("th")[3].innerHTML = "Correct<br/>Organ Name";
+
                <% 
                 }
                 
@@ -376,6 +380,11 @@
                     correctAnswerOfTheAITypeQuestionJSArray.push(questionArray[i]);
             
                 }
+
+               
+                //display the title of the correct answer for Number Answer Mode
+                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+                gvDrv.rows[0].getElementsByTagName("th")[3].innerHTML = "Correct<br/>Corresponding 3D Organ<br/>Label Number Here:";
                 
             <%
                  
@@ -883,7 +892,7 @@
                         </asp:TemplateField>
 
                         <%--cells[3]--%>
-                        <asp:TemplateField HeaderText="Correct<br/>Corresponding Label Number in the 3DBuilder">
+                        <asp:TemplateField HeaderText="">
                             <ItemTemplate>
                                 <asp:Label ID="TextBox_CorrectOrganAnswer" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" />
                             </ItemTemplate>
@@ -1121,7 +1130,7 @@
                             pickedRandQNo.push(questionArray[i])
                         }
 
-                        alert(pickedRandQNo)
+                        
                        
              <% 
         }
@@ -1438,7 +1447,7 @@
                             {
                                 pickedRandQNo.push(questionArray[i])
                             }
-                            alert(pickedRandQNo)
+                            
 
 
 
