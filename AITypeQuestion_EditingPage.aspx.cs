@@ -113,6 +113,20 @@ public partial class IPC: CsSessionManager
         Previous_Page_URL_Session = Request.UrlReferrer.AbsoluteUri;
     }
 
+
+
+    private void ActivateSaveSceneAsIn3DBuilder()
+    {
+        //switch visibility icon All rows .
+        //String hideOrShow3DLabels = switchVisible_Invisible(null, "InOrVisible", gvScore);
+        string contact = "9 " + "Activate_Save_Scene_As"; //send "6 Hide realOrganName" to 3DBuilder  
+
+      
+
+        sendMsg23DBuilder(contact);
+    }
+
+
     //protected void ShowOrHideAll_Click(object sender, EventArgs e)
     protected void ShowOrHide3DLabels_Click()
     {
@@ -584,6 +598,10 @@ public partial class IPC: CsSessionManager
         // only when the teacher actually click the "Save the Question" button can the system redirect back to the previous page
         if (e != null)
         {
+            //Activate the "File/Save Scene As" callback function in the 3DBuilder to 
+            //save the incisions cut by the teacher or the content that the teacher directly edited  in the 3DBuilder
+            ActivateSaveSceneAsIn3DBuilder();
+
             //store the AITypeQuestion to DB
             storeAITypeQuestion2DB(CA, QBP, CAO); 
 
