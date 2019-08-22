@@ -11,7 +11,7 @@
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>Yes</Question>
+      <Question>No</Question>
     </Organ>
     <Organ>
       <Name>Anterior Cruciate Ligament</Name>
@@ -20,7 +20,7 @@
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>Yes</Question>
+      <Question>No</Question>
     </Organ>
     <Organ>
       <Name>Extensor digitorum longus</Name>
@@ -29,7 +29,7 @@
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>Yes</Question>
+      <Question>No</Question>
     </Organ>
     <Organ>
       <Name>Fibularis longus</Name>
@@ -38,7 +38,7 @@
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>Yes</Question>
+      <Question>No</Question>
     </Organ>
     <Organ>
       <Name>Gastrocnemius</Name>
@@ -47,7 +47,7 @@
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>Yes</Question>
+      <Question>No</Question>
     </Organ>
     <Organ>
       <Name>Gracilis</Name>
@@ -56,7 +56,7 @@
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>Yes</Question>
+      <Question>No</Question>
     </Organ>
     <Organ>
       <Name>Iliotibial tract</Name>
@@ -74,7 +74,7 @@
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>No</Question>
+      <Question>Yes</Question>
     </Organ>
     <Organ>
       <Name>Joint Capsule</Name>
@@ -155,7 +155,7 @@
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
       <Visible>1</Visible>
       <Cut>0</Cut>
-      <Question>No</Question>
+      <Question>Yes</Question>
     </Organ>
     <Organ>
       <Name>Muscle fibularis brevis</Name>
@@ -252,7 +252,7 @@
       <Number>28</Number>
       <Path>D:\Mirac3DBuilder\VHBFolder\1161-1450\Skin\Skin.mcod</Path>
       <Matrix>0.173648 0.000000 0.984808 0.000000 0.221534 0.974370 -0.039062 0.000000 -0.959567 0.224951 0.169198 0.000000 422.961548 -26.555038 -270.995331 1.000000 </Matrix>
-      <Visible>1</Visible>
+      <Visible>0</Visible>
       <Cut>1</Cut>
       <Question>No</Question>
     </Organ>
@@ -386,5 +386,6 @@
     <GetTextureVisible_PLANE_XY>1</GetTextureVisible_PLANE_XY>
     <GetTextureVisible_PLANE_VECTOR>1</GetTextureVisible_PLANE_VECTOR>
   </m_pCDefaultDialogCSServer>
-  <NameOrNumberAnsweringMode>Name Answering Mode</NameOrNumberAnsweringMode>
+  <NameOrNumberAnsweringMode>Number Answering Mode</NameOrNumberAnsweringMode>
+  <AIQMode>Anatomy Mode</AIQMode>
 </Scene>

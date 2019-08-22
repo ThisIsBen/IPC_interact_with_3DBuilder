@@ -49,6 +49,7 @@ public class CsSessionManager : System.Web.UI.Page
             Session["CorrectOrganNameSession"] = value;
         }
     }
+    /*
     //存完成的大題次數
     protected  int Num_Of_Question_Submision_Session//Store correct answer of Organ name
     {
@@ -67,7 +68,7 @@ public class CsSessionManager : System.Web.UI.Page
             Session["Num_Of_Question_Submision_Session"] = value;
         }
     }
-
+    */
 
 
     //store the URLof the previous page

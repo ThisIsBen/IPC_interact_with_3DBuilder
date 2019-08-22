@@ -110,31 +110,40 @@ using System.Text.RegularExpressions;
         return GetDataTable(sql,"NewVersionHintsDB");
     }
     //set
-    public static int InsertStuIPCAns(string cUserID, string cQID, string _QuesOrdering, string _StudentAnswer,int Num_Of_Question_Submision_Session,string cActivityID)
+    public static int InsertStuIPCAns(string cUserID, string cQID, string _QuesOrdering, string _StudentAnswer,string cActivityID)
     {
-        if (Num_Of_Question_Submision_Session==1)
+
+
+
+        DataRowCollection DRC = GetDataTable(string.Format("Select * from AITypeQuestionStudentAnswer where cUserID = '{0}' and cActivityID = {1} and cQID='{2}'", cUserID, cActivityID,cQID), "NewVersionHintsDB").Rows;
+        
+
+        if (DRC.Count == 0)
         {
-
-            
-           
-
-
             //string sql = string.Format("Insert into StuCouHWDe_IPC(StuCouHWDe_ID ,cActivityID,StudentAnswer,QuesOrdering ) VALUES( '{0}', '{1}', '{2}','{3}' )", _StuCouHWDe_ID, cActivityID, _StudentAnswer, _QuesOrdering);
 
             string sql = string.Format("Insert into AITypeQuestionStudentAnswer(cUserID ,cQID,StudentAnswer,QuesOrdering,cActivityID ) VALUES( '{0}', '{1}', @StudentAnswer,'{2}','{3}' )", cUserID, cQID, _QuesOrdering,cActivityID);
             
-            object[] sqlParametersList = { _StudentAnswer }; 
+            object[] sqlParametersList = { _StudentAnswer };
+
+           
+
             return InsertUserEnteredData(sql,sqlParametersList,"NewVersionHintsDB");
 
-            
-           
         }
 
+
+        //update the student's answer to AITypeQuestionStudentAnswer data table
         else {
             
-            //string sql = string.Format("UPDATE[SCOREDB].[dbo].[StuCouHWDe_IPC]  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( '{0}' as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{1}' as nvarchar(max)) where StuCouHWDe_ID =  '{2}' and cActivityID =  '{3}'", _StudentAnswer, _QuesOrdering, _StuCouHWDe_ID, cActivityID);
-
+            /*
+            //append the student's new answer to the existing answer
             string sql = string.Format("UPDATE AITypeQuestionStudentAnswer  set StudentAnswer =  cast(StudentAnswer as nvarchar(max)) + cast( @StudentAnswer as nvarchar(max)), QuesOrdering = cast(QuesOrdering as nvarchar(max)) + cast( '{0}' as nvarchar(max)) where cUserID =  '{1}' and cQID =  '{2}' and  cActivityID='{3}'", _QuesOrdering, cUserID, cQID, cActivityID);
+            */
+
+
+            //replace the student's existing answer with the new answer.
+            string sql = string.Format("UPDATE AITypeQuestionStudentAnswer  set   StudentAnswer = @StudentAnswer, QuesOrdering='{1}'  where cUserID = '{0}' and  cQID =  '{2}' and cActivityID = {3}  ", cUserID, _QuesOrdering, cQID, cActivityID);
             object[] sqlParametersList = { _StudentAnswer };
             return UpdateUserEnteredData(sql, sqlParametersList, "NewVersionHintsDB");
         }

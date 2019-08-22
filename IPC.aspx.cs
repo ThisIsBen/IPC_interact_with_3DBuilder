@@ -763,15 +763,7 @@ public partial class IPC : CsSessionManager
             StudentAnswer._QuesOrdering += ":";
             StudentAnswer._StudentAnswer += ":";
 
-             /*測試將學生答案寫入資料庫用*/
-             //reset session variable Num_Of_Question_Submision_Session to 1
-             //because currently we only allow one AITypeQuestion to contains only one body part
-            /* 因要測試將學生答案寫入資料庫，因此暫時使用此行來reset session var Num_Of_Question_Submision_Session*/
-            Num_Of_Question_Submision_Session =0;
-            /*測試將學生答案寫入資料庫用*/
-
-            //increase the Num_Of_Question_Submision_Session to indicate that we should update, not insert the student answer to the datatable because the student's record has already existed.            
-            Num_Of_Question_Submision_Session++;
+            
              
 
              
@@ -785,7 +777,7 @@ public partial class IPC : CsSessionManager
             //2019/5/8 Ben commented to test Number Answering Mode
             
             //Insert the student's ID, student's answer, question order of this AITypeQuestion to the NewVestionDB/AITypeQuestionStudentAnswer datatable
-            CsDBOp.InsertStuIPCAns(strUserID, strQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer, Num_Of_Question_Submision_Session, cActivityID);//插入學生data至darabase
+            CsDBOp.InsertStuIPCAns(strUserID, strQID, StudentAnswer._QuesOrdering, StudentAnswer._StudentAnswer,  cActivityID);//插入學生data至darabase
             
 
 
