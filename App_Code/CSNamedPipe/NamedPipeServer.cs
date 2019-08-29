@@ -125,7 +125,10 @@ namespace CSNamedPipe
                 int ReadLength = 0;
                 for (int i = 0; i < BUFFER_SIZE; i++)
                 {
-                    if (buffer[i].ToString("x2") != "cc")
+                    //if (buffer[i].ToString("x2") != "cc")
+                    
+                    //don't send the content behind the '\0' to the AIQ web pages through the named pipe.
+                    if (Convert.ToChar(buffer[i]) != '\0')
                     {
                         ReadLength++;
                     }
@@ -137,7 +140,8 @@ namespace CSNamedPipe
                     byte[] Rc = new byte[ReadLength];
                     Buffer.BlockCopy(buffer, 0, Rc, 0, ReadLength);
 
-                    Console.WriteLine("Hints: Received " + ReadLength +" Bytes: "+ encoder.GetString(Rc, 0, ReadLength));
+                    Console.WriteLine(encoder.GetString(Rc, 0, ReadLength));
+                    //Console.WriteLine("Hints: Received " + ReadLength +" Bytes: "+ encoder.GetString(Rc, 0, ReadLength));
                     buffer.Initialize();
                 }
                

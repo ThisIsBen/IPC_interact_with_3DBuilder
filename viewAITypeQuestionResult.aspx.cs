@@ -128,11 +128,14 @@ public partial class IPC : CsSessionManager
             
              */
 
-            
+            //2019/4/10 Ben commented the function to show 3D Labels in 3DBuilder when AITypeQuestion is loaded.
+            /*
             //wait for the 3DBuilder to respond before show 3D Labels in 3DBuilder
             //Because it takes longer for the 3DBuilder to load all the organs when 
             //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
             System.Threading.Thread.Sleep(100);
+            */
+
 
             //2019/4/10 Ben commented the function to show 3D Labels in 3DBuilder when AITypeQuestion is loaded.          
             /*
@@ -679,28 +682,25 @@ public partial class IPC : CsSessionManager
 
     private void runCSNamedPipe()
     {
-        //originating from Default.aspx
-        Process os = new Process();
-        string hintID = "5555";//this hintID is hard-coded by 昇宏學長
+        NamedPipe_IPC_Connection IPC_Connection = new NamedPipe_IPC_Connection(Request.MapPath("~/"), Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe"), strUserID);
 
-        os.StartInfo.WorkingDirectory = Request.MapPath("~/");
-        os.StartInfo.FileName = Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe");
-        os.StartInfo.UseShellExecute = false;
-        os.StartInfo.RedirectStandardInput = true;
-        /*
-        os.StartInfo.Arguments = hintID;
-        */
-        //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
-        os.StartInfo.Arguments = strUserID;
+        //store the StreamWriter of the CSNamedPipe.exe to a session variable
+        //for writing message to CSNamedPipe.exe, and CSNamedPipe.exe will send it to the 3DBuilder.       
+        Session["Writer"] = IPC_Connection.CSNamedPipeWriter;
 
-        os.Start();
-        StreamWriter wr = os.StandardInput;
-        //os.StandardInput.Close();
-        Session["Writer"] = wr;
-        Session["Process"] = os;
+        //store the StreamReader of the CSNamedPipe.exe to a session variable
+        //for reading message from CSNamedPipe.exe 
+        //because 3DBuilder can send message to the CSNamedPipe.exe with named pipe.      
+        Session["Reader"] = IPC_Connection.CSNamedPipeReader;
+
+        //store the process of CSNamedPipe.exe to a session variable  
+        //so that we can access it in other AIQ pages.
+        Session["Process"] = IPC_Connection.CSNamedPipeProcess;
 
         //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
-        Session["ProcessID"] = os.Id.ToString();
+        Session["ProcessID"] = IPC_Connection.CSNamedPipePID;
+
+       
         
 
 

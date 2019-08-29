@@ -9,3 +9,7 @@ D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\obj\Debug\CSNamedPipe.exe
 D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\obj\Debug\CSNamedPipe.pdb
 D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\bin\Debug\CSNamedPipe.exe
 D:\IPC_interact_with_3DBuilder\App_Code\CSNamedPipe\bin\Debug\CSNamedPipe.pdb
+Y:\AIQ\App_Code\CSNamedPipe\obj\Debug\CSNamedPipe.exe
+Y:\AIQ\App_Code\CSNamedPipe\obj\Debug\CSNamedPipe.pdb
+Y:\AIQ\App_Code\CSNamedPipe\bin\Debug\CSNamedPipe.exe
+Y:\AIQ\App_Code\CSNamedPipe\bin\Debug\CSNamedPipe.pdb

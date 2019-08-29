@@ -231,6 +231,89 @@ public partial class IPC: CsSessionManager
        
     }
 
+
+    private string readMsgFrom3DBuilder()
+    {
+        //send cmd1
+        try
+        {
+
+            StreamReader rd = (StreamReader)Session["Reader"];
+            //StreamWriter wr = new StreamWriter((StreamWriter)Session["Writer"]);
+            //StreamWriter wr = new StreamWriter((Stream )Session["Writer"], Encoding.UTF8, 4096, true);
+            //send cmd2
+            return rd.ReadLine();//!!!!!send update msg to 3DBuilder
+            //return rd.ReadToEnd();
+
+            //Process CSNamedPipeProcess = (Process)Session["Process"];
+            //CSNamedPipeProcess.WaitForExit();
+            // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+
+            //wr.Flush();
+        }
+        catch (Exception e)
+        {
+            return "Read message from named pipe failed.";
+        }
+    }
+
+    //wait for the 3DBuilder to finish initialization
+    private void sleepUntil3DBuilderFinishInit()
+    {
+        string messageFrom3DBuilder;
+        int sleepTimeCounter = 0;
+
+        while (true)
+        {
+            //increase sleep time counter
+            sleepTimeCounter++;
+
+            //read message from the 3DBuilder with named pipe.
+            messageFrom3DBuilder = readMsgFrom3DBuilder();
+
+
+            //use JS alert() in C# to alert "Read message from named pipe failed." when we failed to read message from the 3DBuilder.
+            if (messageFrom3DBuilder == "Read message from named pipe failed.")
+            {
+
+                ScriptManager.RegisterStartupScript(
+                 this,
+                 typeof(Page),
+                 "Alert",
+                 "<script>alert('" + messageFrom3DBuilder + "');</script>",
+                 false);
+
+                break;
+            }
+            else if (messageFrom3DBuilder == "3DBuilder init is finished.")
+            {
+                /*
+                ScriptManager.RegisterStartupScript(
+                 this,
+                 typeof(Page),
+                 "Alert",
+                 "<script>alert('" + messageFrom3DBuilder + "');</script>",
+                 false);
+                */
+                break;
+            }
+
+            //keep sleeping until we successfully /fail to get the message from the 3DBuilder or  
+            Thread.Sleep(1);
+        }
+
+        //alert how long it slept
+        ScriptManager.RegisterStartupScript(
+                 this,
+                 typeof(Page),
+                 "Alert",
+                 "<script>alert('The AIQ slept for " + sleepTimeCounter + " millisecond to wait for the 3DBuilder Init.');</script>",
+                 false);
+
+    }
+
+     
+
     public void btn_connectTo3DBuilder_Onclick(object sender, EventArgs e)
     {
 
@@ -239,9 +322,18 @@ public partial class IPC: CsSessionManager
         //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
         setModeIn3DBuilderForInit();
 
-
-        //wait for the 3DBuilder to respond
+        
+        
+        //wait for the 3DBuilder to finish initialization
+        /*
+        //Ben commented to use the message retrieved from the 3DBuilder to indicate how long should the program stop here.
         System.Threading.Thread.Sleep(10);
+        //read message from the 3DBuilder with named pipe.
+        string messageFrom3DBuilder = readMsgFrom3DBuilder();
+         * */
+        sleepUntil3DBuilderFinishInit();
+
+       
 
         //originating from Item.aspx
         string absoluteKneeXMLFolder = CsDynamicConstants.absoluteKneeXMLFolder;
@@ -259,12 +351,13 @@ public partial class IPC: CsSessionManager
 
 
 
-
+        //2019/4/10 Ben commented the function to show 3D Labels in 3DBuilder when AITypeQuestion is loaded.
+        /*
         //wait for the 3DBuilder to respond before show 3D Labels in 3DBuilder
         //Because it takes longer for the 3DBuilder to load all the organs when 
         //the AITypeQuestion is of Surgery Mode or when there are lots of 3D organ that need to be displayed
         System.Threading.Thread.Sleep(100);
-
+        */
 
         //2019/4/23 Ben commented because it will cause lag
         /*
@@ -272,6 +365,9 @@ public partial class IPC: CsSessionManager
         ShowOrHide3DLabels_Click();
         */
         
+
+
+
     }
 
     //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
@@ -359,30 +455,26 @@ public partial class IPC: CsSessionManager
 
     private void runCSNamedPipe()
     {
-        //originating from Default.aspx
-        Process os = new Process();
-        string hintID = "5555";//this hintID is hard-coded by 昇宏學長
+        NamedPipe_IPC_Connection IPC_Connection = new NamedPipe_IPC_Connection(Request.MapPath("~/"), Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe"), Request.QueryString["strUserID"]);
 
-        os.StartInfo.WorkingDirectory = Request.MapPath("~/");
-        os.StartInfo.FileName = Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe");
-        os.StartInfo.UseShellExecute = false;
-        os.StartInfo.RedirectStandardInput = true;
-        /*
-        os.StartInfo.Arguments = hintID;
-        */
-        //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
-        os.StartInfo.Arguments = Request.QueryString["strUserID"];
 
-        os.Start();
-        StreamWriter wr = os.StandardInput;
-        //os.StandardInput.Close();
-        Session["Writer"] = wr;
-        Session["Process"] = os;
+        //store the StreamWriter of the CSNamedPipe.exe to a session variable
+        //for writing message to CSNamedPipe.exe, and CSNamedPipe.exe will send it to the 3DBuilder.       
+        Session["Writer"] = IPC_Connection.CSNamedPipeWriter;
 
+        //store the StreamReader of the CSNamedPipe.exe to a session variable
+        //for reading message from CSNamedPipe.exe 
+        //because 3DBuilder can send message to the CSNamedPipe.exe with named pipe.      
+        Session["Reader"] = IPC_Connection.CSNamedPipeReader;
+
+        //store the process of CSNamedPipe.exe to a session variable  
+        //so that we can access it in other AIQ pages.
+        Session["Process"] = IPC_Connection.CSNamedPipeProcess;
 
         //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
-        Session["ProcessID"] = os.Id.ToString();
-        
+        Session["ProcessID"] = IPC_Connection.CSNamedPipePID;
+
+       
 
 
 

@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 public partial class ALHomePage : CsSessionManager
 {
-    public static Process os = new Process();
+    
 
     //set the default value of each parameters that are retrieved from URL.
     //string questionXMLPath = "tea1_Q_20181210231100"; ////Surgery Mode xml file name //it's included in exam paper cPaperID=tea120181122231914 and cPaperID=tea120181126201801
@@ -118,31 +118,26 @@ public partial class ALHomePage : CsSessionManager
     //run the CSNamedPipe.exe
     private void runCSNamedPipe()
     {
-        //originating from Default.aspx
-        //Process os = new Process();
-        string hintID = "5555";//this hintID is hard-coded by 昇宏學長
 
-        os.StartInfo.WorkingDirectory = Request.MapPath("~/");
-        os.StartInfo.FileName = Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe");
-        os.StartInfo.UseShellExecute = false;
-        os.StartInfo.RedirectStandardInput = true;
-        /*
-        os.StartInfo.Arguments = hintID;
-        */
-        //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
-        os.StartInfo.Arguments = strUserID;
-        os.Start();
+        NamedPipe_IPC_Connection IPC_Connection = new NamedPipe_IPC_Connection(Request.MapPath("~/"), Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe"), strUserID);
 
+        //store the StreamWriter of the CSNamedPipe.exe to a session variable
+        //for writing message to CSNamedPipe.exe, and CSNamedPipe.exe will send it to the 3DBuilder.       
+        Session["Writer"] = IPC_Connection.CSNamedPipeWriter;
 
+        //store the StreamReader of the CSNamedPipe.exe to a session variable
+        //for reading message from CSNamedPipe.exe 
+        //because 3DBuilder can send message to the CSNamedPipe.exe with named pipe.      
+        Session["Reader"] = IPC_Connection.CSNamedPipeReader;
 
-
-        StreamWriter wr = os.StandardInput;
-        //os.StandardInput.Close();
-        Session["Writer"] = wr;
-        Session["Process"] = os;
+        //store the process of CSNamedPipe.exe to a session variable  
+        //so that we can access it in other AIQ pages.
+        Session["Process"] = IPC_Connection.CSNamedPipeProcess;
 
         //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
-        Session["ProcessID"]=os.Id.ToString();
+        Session["ProcessID"] = IPC_Connection.CSNamedPipePID;
+
+       
         
 
 

@@ -18,8 +18,15 @@ namespace CSNamedPipe
             NamedPipeServer PServer2 = new NamedPipeServer(@"\\.\pipe\2", 1);
              */
 
+            
             string namedPipe3DToHints = args[0] + "_3DToHints";
             string namedPipeHintsTo3D = args[0] + "_HintsTo3D";
+            
+            //For debugging
+            /*
+            string namedPipe3DToHints = "tea1" + "_3DToHints";
+            string namedPipeHintsTo3D = "tea1" + "_HintsTo3D";
+            */
             NamedPipeServer PServer3DToHints = new NamedPipeServer(@"\\.\pipe\" + namedPipe3DToHints, 0);
             NamedPipeServer PServerHintsTo3D = new NamedPipeServer(@"\\.\pipe\" + namedPipeHintsTo3D, 1);
             PServer3DToHints.Start();
@@ -28,7 +35,7 @@ namespace CSNamedPipe
             string Ms="Start";
             do
             {
-                Console.WriteLine("Send message to 3DBuilder:");
+                //Console.WriteLine("Send message to 3DBuilder:");
                 Ms = Console.ReadLine();
                 PServerHintsTo3D.SendMessage(Ms, PServerHintsTo3D.clientse);
             } while (Ms != "quit");
