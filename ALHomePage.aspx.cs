@@ -76,12 +76,15 @@ public partial class ALHomePage : CsSessionManager
     //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
     private void setModeIn3DBuilderForInit()
     {
+        /*
         //originating from ALHomePage.aspx
         StreamWriter wr = (StreamWriter)Session["Writer"];
         //Page.ClientScript.RegisterStartupScript(this.GetType(), "", "<script type='text/javascript'>alert('" + os.StartInfo.RedirectStandardInput + os.Id + "');</script>"); 
         //StreamWriter wr = os.StandardInput;
 
         wr.WriteLine("1 2");
+         * */
+        NamedPipe_IPC_Connection.sendMsg23DBuilder("1 2");
     }
 
     //get the parameters in URL and store there value in global var.
@@ -121,6 +124,7 @@ public partial class ALHomePage : CsSessionManager
 
         NamedPipe_IPC_Connection IPC_Connection = new NamedPipe_IPC_Connection(Request.MapPath("~/"), Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe"), strUserID);
 
+        /*
         //store the StreamWriter of the CSNamedPipe.exe to a session variable
         //for writing message to CSNamedPipe.exe, and CSNamedPipe.exe will send it to the 3DBuilder.       
         Session["Writer"] = IPC_Connection.CSNamedPipeWriter;
@@ -137,7 +141,7 @@ public partial class ALHomePage : CsSessionManager
         //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
         Session["ProcessID"] = IPC_Connection.CSNamedPipePID;
 
-       
+       */
         
 
 

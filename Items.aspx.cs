@@ -285,7 +285,7 @@ public partial class Items : CsSessionManager
     private void loadOrganXMLIn3DBuilderForExamMode(string strRandomQuestionNo)
     {
         //send protocol,Data to 3DBuilder.
-        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + NameOrNumberAnsweringMode_Session +  strRandomQuestionNo);
+        NamedPipe_IPC_Connection.sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + NameOrNumberAnsweringMode_Session + strRandomQuestionNo);
 
         //sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml" + "_" + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
 
@@ -299,55 +299,55 @@ public partial class Items : CsSessionManager
     //because it's not of Exam Mode, so we don't need to send the randomized organ question number to 3DBuilder.
     private void loadOrganXMLIn3DBuilderFor_Non_ExamMode()
     {
-        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml");//send protocol,Data to 3DBuilder.
+        NamedPipe_IPC_Connection.sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + questionXMLPath + ".xml");//send protocol,Data to 3DBuilder.
 
         
     }
 
     //send message through CSNamedPipe.exe to the corresponding 3DBuilder.
-    public void sendMsg23DBuilder(string contact)
-    {
-        /*
+    //public void sendMsg23DBuilder(string contact)
+    //{
+    //    /*
 
-        //send cmd1
-        try
-        {
-            using (StreamWriter wr = (StreamWriter)Session["Writer"])
-            {
-                //send cmd2
-                wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
-            }// the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+    //    //send cmd1
+    //    try
+    //    {
+    //        using (StreamWriter wr = (StreamWriter)Session["Writer"])
+    //        {
+    //            //send cmd2
+    //            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+    //        }// the streamwriter WILL be closed and flushed here, even if an exception is thrown.
            
-            //wr.Flush();
-        }
-        catch(Exception e)
-        {
+    //        //wr.Flush();
+    //    }
+    //    catch(Exception e)
+    //    {
 
-        }
-      */
+    //    }
+    //  */
 
 
-        //send cmd1
-        try
-        {
+    //    //send cmd1
+    //    try
+    //    {
 
-            StreamWriter wr = (StreamWriter)Session["Writer"];
-            //StreamWriter wr = new StreamWriter((StreamWriter)Session["Writer"]);
-            //StreamWriter wr = new StreamWriter((Stream )Session["Writer"], Encoding.UTF8, 4096, true);
-            //send cmd2
-            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+    //        StreamWriter wr = (StreamWriter)Session["Writer"];
+    //        //StreamWriter wr = new StreamWriter((StreamWriter)Session["Writer"]);
+    //        //StreamWriter wr = new StreamWriter((Stream )Session["Writer"], Encoding.UTF8, 4096, true);
+    //        //send cmd2
+    //        wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
 
            
-            // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+    //        // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
 
-            //wr.Flush();
-        }
-        catch (Exception e)
-        {
+    //        //wr.Flush();
+    //    }
+    //    catch (Exception e)
+    //    {
 
-        }
+    //    }
 
-    }
+    //}
 
 
 }

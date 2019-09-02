@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.IO;
+using System.Diagnostics;
 /// <summary>
 /// CsSessionManager 的摘要描述
 /// </summary>
@@ -69,9 +70,81 @@ public class CsSessionManager : System.Web.UI.Page
         }
     }
     */
+    //store the StreamWriter of the CSNamedPipe.exe
+    protected static StreamWriter CSNamedPipeStreamWriter_Session//Store correct answer of Organ name
+    {
+        get
+        {
+            if (HttpContext.Current.Session["CSNamedPipeStreamWriter_Session"] == null)
+            {
+                //出始值為""
+                HttpContext.Current.Session["CSNamedPipeStreamWriter_Session"] = "";
+            }
+            return (StreamWriter)HttpContext.Current.Session["CSNamedPipeStreamWriter_Session"];
 
+        }
+        set
+        {
+            HttpContext.Current.Session["CSNamedPipeStreamWriter_Session"] = value;
+        }
+    }
 
-    //store the URLof the previous page
+    //store the StreamReader of the CSNamedPipe.exe
+    protected static StreamReader CSNamedPipeStreamReader_Session//Store correct answer of Organ name
+    {
+        get
+        {
+            if (HttpContext.Current.Session["CSNamedPipeStreamReader_Session"] == null)
+            {
+                //出始值為""
+                HttpContext.Current.Session["CSNamedPipeStreamReader_Session"] = "";
+            }
+            return (StreamReader)HttpContext.Current.Session["CSNamedPipeStreamReader_Session"];
+
+        }
+        set
+        {
+            HttpContext.Current.Session["CSNamedPipeStreamReader_Session"] = value;
+        }
+    }
+    //store the Process of the CSNamedPipe.exe
+    protected Process CSNamedPipeProcess_Session//Store correct answer of Organ name
+    {
+        get
+        {
+            if (Session["CSNamedPipeProcess_Session"] == null)
+            {
+                //出始值為""
+                Session["CSNamedPipeProcess_Session"] = "";
+            }
+            return (Process)Session["CSNamedPipeProcess_Session"];
+
+        }
+        set
+        {
+            Session["CSNamedPipeProcess_Session"] = value;
+        }
+    }
+    //store the Process ID of the CSNamedPipe.exe
+    protected static string CSNamedPipePID_Session//Store correct answer of Organ name
+    {
+        get
+        {
+            if (HttpContext.Current.Session["CSNamedPipePID_Session"] == null)
+            {
+                //出始值為""
+                HttpContext.Current.Session["CSNamedPipePID_Session"] = "";
+            }
+            return (string)HttpContext.Current.Session["CSNamedPipePID_Session"];
+
+        }
+        set
+        {
+            HttpContext.Current.Session["CSNamedPipePID_Session"] = value;
+        }
+    }
+
+    //store the URL of the previous page
     protected string Previous_Page_URL_Session//Store correct answer of Organ name
     {
         get

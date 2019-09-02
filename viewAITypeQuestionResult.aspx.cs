@@ -684,6 +684,7 @@ public partial class IPC : CsSessionManager
     {
         NamedPipe_IPC_Connection IPC_Connection = new NamedPipe_IPC_Connection(Request.MapPath("~/"), Request.MapPath("App_Code/CSNamedPipe/bin/Debug/CSNamedPipe.exe"), strUserID);
 
+        /*
         //store the StreamWriter of the CSNamedPipe.exe to a session variable
         //for writing message to CSNamedPipe.exe, and CSNamedPipe.exe will send it to the 3DBuilder.       
         Session["Writer"] = IPC_Connection.CSNamedPipeWriter;
@@ -699,7 +700,7 @@ public partial class IPC : CsSessionManager
 
         //get process ID of the CSNamedPipe, and store it in a session var so that we can kill the CSNamedPipe process after the user finishes using the connection with 3DBuilder
         Session["ProcessID"] = IPC_Connection.CSNamedPipePID;
-
+        */
        
         
 
@@ -812,11 +813,11 @@ public partial class IPC : CsSessionManager
 
         else//if it's not in exam mode
         {
-
-
+            NamedPipe_IPC_Connection.sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + QuestionFileName);
+            /*
             StreamWriter wr = (StreamWriter)Session["Writer"];
             wr.WriteLine("3 " + absoluteKneeXMLFolder + QuestionFileName);//send protocol,Data to 3DBuilder.
-
+            */
             //!!!!//如何將上方兩個參數傳送到3DBuilder那裏的IPCInterface呢? 上行的WriteLine會寫到哪裡呢?
 
             //head to IPC.aspx
@@ -948,7 +949,7 @@ public partial class IPC : CsSessionManager
     private void setModeIn3DBuilderForInit()
     {
         //originating from ALHomePage.aspx
-        sendMsg23DBuilder("1 2");
+        NamedPipe_IPC_Connection.sendMsg23DBuilder("1 2");
 
     }
 
@@ -959,56 +960,56 @@ public partial class IPC : CsSessionManager
     private void loadOrganXMLIn3DBuilderForExamMode(string strRandomQuestionNo)
     {
 
-        sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + QuestionFileName + "_" + NameOrNumberAnsweringMode_Session+strRandomQuestionNo);//send protocol,Data to 3DBuilder.
+        NamedPipe_IPC_Connection.sendMsg23DBuilder("3 " + absoluteKneeXMLFolder + QuestionFileName + "_" + NameOrNumberAnsweringMode_Session + strRandomQuestionNo);//send protocol,Data to 3DBuilder.
 
        
     }
 
  
 
-    //send message through CSNamedPipe.exe to the corresponding 3DBuilder.
-    public void sendMsg23DBuilder(string contact)
-    {
-        /*
+    ////send message through CSNamedPipe.exe to the corresponding 3DBuilder.
+    ////public void sendMsg23DBuilder(string contact)
+    //{
+    //    /*
 
-        //send cmd1
-        try
-        {
-            using (StreamWriter wr = (StreamWriter)Session["Writer"])
-            {
-                //send cmd2
-                wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
-            }// the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+    //    //send cmd1
+    //    try
+    //    {
+    //        using (StreamWriter wr = (StreamWriter)Session["Writer"])
+    //        {
+    //            //send cmd2
+    //            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+    //        }// the streamwriter WILL be closed and flushed here, even if an exception is thrown.
            
-            //wr.Flush();
-        }
-        catch(Exception e)
-        {
+    //        //wr.Flush();
+    //    }
+    //    catch(Exception e)
+    //    {
 
-        }
-      */
+    //    }
+    //  */
 
 
-        //send cmd1
-        try
-        {
+    //    //send cmd1
+    //    try
+    //    {
 
-            StreamWriter wr = (StreamWriter)Session["Writer"];
-            //StreamWriter wr = new StreamWriter((StreamWriter)Session["Writer"]);
-            //StreamWriter wr = new StreamWriter((Stream )Session["Writer"], Encoding.UTF8, 4096, true);
-            //send cmd2
-            wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
+    //        StreamWriter wr = (StreamWriter)Session["Writer"];
+    //        //StreamWriter wr = new StreamWriter((StreamWriter)Session["Writer"]);
+    //        //StreamWriter wr = new StreamWriter((Stream )Session["Writer"], Encoding.UTF8, 4096, true);
+    //        //send cmd2
+    //        wr.WriteLine(contact);//!!!!!send update msg to 3DBuilder
 
-            // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
+    //        // the streamwriter WILL be closed and flushed here, even if an exception is thrown.
 
-            //wr.Flush();
-        }
-        catch (Exception e)
-        {
+    //        //wr.Flush();
+    //    }
+    //    catch (Exception e)
+    //    {
 
-        }
+    //    }
 
-    }
+    //}
 
     protected void StartIPC_Click(object sender, EventArgs e)
     {
@@ -1043,7 +1044,7 @@ public partial class IPC : CsSessionManager
     {
        
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
-        killCorrespondingCSNamedPipe();
+       NamedPipe_IPC_Connection. killCorrespondingCSNamedPipe();
 
 
         /*removes all the objects stored in a Session. 
@@ -1053,21 +1054,21 @@ public partial class IPC : CsSessionManager
 
     }
 
-    private void killCorrespondingCSNamedPipe()
-    {
-        //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
-        //kill process with processID
-        Process[] procList = Process.GetProcesses();
+    //private void killCorrespondingCSNamedPipe()
+    //{
+    //    //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
+    //    //kill process with processID
+    //    Process[] procList = Process.GetProcesses();
 
-        for (int i = 0; i < procList.Length; i++)
-        {
-            string pid = procList[i].Id.ToString();
-            if (string.Equals(pid, Session["ProcessID"]))
-            {
-                procList[i].Kill();
-            }
-        }
-    }
+    //    for (int i = 0; i < procList.Length; i++)
+    //    {
+    //        string pid = procList[i].Id.ToString();
+    //        if (string.Equals(pid, CSNamedPipePID_Session))
+    //        {
+    //            procList[i].Kill();
+    //        }
+    //    }
+    //}
 
 
 
@@ -1200,7 +1201,7 @@ public partial class IPC : CsSessionManager
 
         //string contact = "6 hide Left Popliteal Vein";
 
-        sendMsg23DBuilder(contact);
+        NamedPipe_IPC_Connection.sendMsg23DBuilder(contact);
 
         // Thread.Sleep(1000); //Delay 1秒
 
@@ -1243,7 +1244,7 @@ public partial class IPC : CsSessionManager
 
         //string contact = "6 hide Left Popliteal Vein";
 
-        sendMsg23DBuilder(contact);
+        NamedPipe_IPC_Connection.sendMsg23DBuilder(contact);
 
         // Thread.Sleep(1000); //Delay 1秒
 
@@ -1309,7 +1310,7 @@ public partial class IPC : CsSessionManager
             //Bent 2017 test
             string contact = "5 " + input + " " + QuestionNo + " " + answer.ToString();
             //string contact = "5 " + input + " "  + answer.Value.ToString();
-            sendMsg23DBuilder(contact);
+            NamedPipe_IPC_Connection.sendMsg23DBuilder(contact);
 
         }
 
@@ -1429,7 +1430,7 @@ public partial class IPC : CsSessionManager
 
             string contact = "6 " + HideOrShow + " " + correctOrganName.ToString(); //send "6 Hide realOrganName" to 3DBuilder
 
-            sendMsg23DBuilder(contact);
+            NamedPipe_IPC_Connection.sendMsg23DBuilder(contact);
 
 
 
@@ -1442,7 +1443,7 @@ public partial class IPC : CsSessionManager
 
 
 
-            sendMsg23DBuilder(contact);
+            NamedPipe_IPC_Connection.sendMsg23DBuilder(contact);
 
         }
 
