@@ -216,8 +216,10 @@ public partial class IPC: CsSessionManager
         //save the currently edited content on the AITypeQuestion editor page to xml file 
         FinishBtn_Click(this, null);
         
-        //wait for the 3DBuilder to respond
+        /*
+        //wait for the AIQ content to be stored into the AIQ XML in the file system.
         System.Threading.Thread.Sleep(100);
+         * */
     }
 
     public void btn_cutBodyPartIn3DBuilder_Onclick(object sender, EventArgs e)
@@ -250,60 +252,7 @@ public partial class IPC: CsSessionManager
     //    }
     //}
 
-    //wait for the 3DBuilder to finish initialization
-    private void sleepUntil3DBuilderFinishInit()
-    {
-        string messageFrom3DBuilder;
-        int sleepTimeCounter = 0;
-
-        while (true)
-        {
-            //increase sleep time counter
-            sleepTimeCounter++;
-
-            //read message sent from the 3DBuilder from the CSNamedPipe.exe
-            messageFrom3DBuilder = NamedPipe_IPC_Connection.readMsgFrom3DBuilder();
-
-
-            //use JS alert() in C# to alert "Read message from named pipe failed." when we failed to read message from the 3DBuilder.
-            if (messageFrom3DBuilder == "Read message from named pipe failed.")
-            {
-
-                ScriptManager.RegisterStartupScript(
-                 this,
-                 typeof(Page),
-                 "Alert",
-                 "<script>alert('" + messageFrom3DBuilder + "');</script>",
-                 false);
-
-                break;
-            }
-            else if (messageFrom3DBuilder == "3DBuilder init is finished.")
-            {
-                /*
-                ScriptManager.RegisterStartupScript(
-                 this,
-                 typeof(Page),
-                 "Alert",
-                 "<script>alert('" + messageFrom3DBuilder + "');</script>",
-                 false);
-                */
-                break;
-            }
-
-            //keep sleeping until we successfully /fail to get the message from the 3DBuilder or  
-            Thread.Sleep(1);
-        }
-
-        //alert how long it slept
-        ScriptManager.RegisterStartupScript(
-                 this,
-                 typeof(Page),
-                 "Alert",
-                 "<script>alert('The AIQ slept for " + sleepTimeCounter + " millisecond to wait for the 3DBuilder Init.');</script>",
-                 false);
-
-    }
+    
 
      
 
@@ -315,16 +264,13 @@ public partial class IPC: CsSessionManager
         //initiate 3DBuilder:  Set Mode to Practice Mode in 3DBuilder for initialization
         setModeIn3DBuilderForInit();
 
-        
-        
-        //wait for the 3DBuilder to finish initialization
+
+
         /*
-        //Ben commented to use the message retrieved from the 3DBuilder to indicate how long should the program stop here.
-        System.Threading.Thread.Sleep(10);
-        //read message from the 3DBuilder with named pipe.
-        string messageFrom3DBuilder = readMsgFrom3DBuilder();
-         * */
-        sleepUntil3DBuilderFinishInit();
+        wait for the 3DBuilder to finish initialization before sending the AIQ XML file path to it to load the 3D organs
+        otherwise an error will occur in the 3DBuilder for loading 3D organs without waiting for the initialization to be finished.
+         */       
+        NamedPipe_IPC_Connection.sleepUntil3DBuilderFinishInit();
 
        
 
@@ -660,7 +606,7 @@ public partial class IPC: CsSessionManager
         
         
 
-        // only when the teacher actually click the "Save the Question" button can the system redirect back to the previous page
+        // only when the teacher actually click the "Save the Question" button can the system save the AIQ content to DB, kill the CSNamedPipe.exe, and redirect back to the previous page
         if (e != null)
         {
             //Activate the "File/Save Scene As" callback function in the 3DBuilder to 

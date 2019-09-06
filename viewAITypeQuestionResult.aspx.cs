@@ -901,8 +901,13 @@ public partial class IPC : CsSessionManager
         setModeIn3DBuilderForInit();
 
 
-        //wait for the 3DBuilder to respond
-        System.Threading.Thread.Sleep(10);
+        /*
+        wait for the 3DBuilder to finish initialization before sending the AIQ XML file path to it to load the 3D organs
+        otherwise an error will occur in the 3DBuilder for loading 3D organs without waiting for the initialization to be finished.
+         */
+        NamedPipe_IPC_Connection.sleepUntil3DBuilderFinishInit();
+
+       
 
 
        

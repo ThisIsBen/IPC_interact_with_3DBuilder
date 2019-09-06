@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Web;
 
 /// <summary>
@@ -62,13 +63,6 @@ public class NamedPipe_IPC_Connection : CsSessionManager
         //pass Hints's userID to CSNamedPipe.exe as the name of the namedPipe.
         CSNamedPipeProcess.StartInfo.Arguments = HintsUserID;
         CSNamedPipeProcess.Start();
-
-
-
-       
-
-
-
 
 
     }
@@ -156,6 +150,60 @@ public class NamedPipe_IPC_Connection : CsSessionManager
         }
     }
 
+    //wait for the 3DBuilder to finish initialization
+    public static void sleepUntil3DBuilderFinishInit()
+    {
+        string messageFrom3DBuilder;
+        int sleepTimeCounter = 0;
+
+        while (true)
+        {
+            //increase sleep time counter
+            sleepTimeCounter++;
+
+            //read message sent from the 3DBuilder from the CSNamedPipe.exe
+            messageFrom3DBuilder = NamedPipe_IPC_Connection.readMsgFrom3DBuilder();
+
+
+            //use JS alert() in C# to alert "Read message from named pipe failed." when we failed to read message from the 3DBuilder.
+            if (messageFrom3DBuilder == "Read message from named pipe failed.")
+            {
+                /*
+                ScriptManager.RegisterStartupScript(
+                 this,
+                 typeof(Page),
+                 "Alert",
+                 "<script>alert('" + messageFrom3DBuilder + "');</script>",
+                 false);
+                */
+                break;
+            }
+            else if (messageFrom3DBuilder == "3DBuilder init is finished.")
+            {
+                /*
+                ScriptManager.RegisterStartupScript(
+                 this,
+                 typeof(Page),
+                 "Alert",
+                 "<script>alert('" + messageFrom3DBuilder + "');</script>",
+                 false);
+                */
+                break;
+            }
+
+            //keep sleeping until we successfully /fail to get the message from the 3DBuilder or  
+            Thread.Sleep(1);
+        }
+        /*
+        //alert how long it slept
+        ScriptManager.RegisterStartupScript(
+                 this,
+                 typeof(Page),
+                 "Alert",
+                 "<script>alert('The AIQ slept for " + sleepTimeCounter + " millisecond to wait for the 3DBuilder Init.');</script>",
+                 false);
+        */
+    }
 
 
     //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
@@ -174,4 +222,6 @@ public class NamedPipe_IPC_Connection : CsSessionManager
             }
         }
     }
+
+
 }
