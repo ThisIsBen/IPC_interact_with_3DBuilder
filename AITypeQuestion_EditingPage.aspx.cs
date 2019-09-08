@@ -175,11 +175,11 @@ public partial class IPC: CsSessionManager
     private void decide_QuestionBodyPartOrganXML()
     {
             //2018011030 use the XML file name retrieved from the URL parameter to replace the hard code SceneFile_Q1.xml.
-        //questionXMLPath = hidden_cQID.Value + ".xml"; The hidden field value will be "" at the first page load because we set the value of the hidden field,hidden_cQID, in document.ready in front end, which is run after the page_load function on backend.
+            //questionXMLPath = hidden_cQID.Value + ".xml"; The hidden field value will be "" at the first page load because we set the value of the hidden field,hidden_cQID, in document.ready in front end, which is run after the page_load function on backend.
             questionXMLPath = Request.QueryString["strQID"] + ".xml";
 
 
-            //check which body part is being used in this question
+            //check which body part is being used for this AIQ
             QuestionBodyPart = Request.QueryString["QuestionBodyPart"];
 
             //decide which body part organ xml file should be loaded
@@ -189,13 +189,15 @@ public partial class IPC: CsSessionManager
                
                 if (File.Exists(CsDynamicConstants.absoluteKneeXMLFolder + questionXMLPath))
                 {
-                    //if the xml of this question has already existed,
-                    //use it as the template
+                    //if the xml of this AIQ has already existed,
+                    //use it as the template for the teacher to edit.
                     completeBodyPartOrgansXMLPath = CsDynamicConstants.relativeKneeXMLFolder + questionXMLPath;
                 }
 
                 else
-                {   //use the original knee xml template
+                {   
+                    //if the xml of this AIQ does not exist,
+                    //use the original knee xml template for the teacher to create a corresponding AIQ xml for this AIQ.
                     completeBodyPartOrgansXMLPath = CsDynamicConstants.completeKneeOrgansXMLPath;
                 }
                 
@@ -204,7 +206,31 @@ public partial class IPC: CsSessionManager
 
 
             }
-           
+
+        /*
+         * ####以後支援讓老師出更多身體部位的AIQ時，需加入的程式:
+         * @@@@注意!! 須先到App_Code/CsDynamicConstants 中新增一個region 並加入指向該身體部位專案的檔案路徑
+        You can add more body parts here if we have more body parts available.
+        e.g.,如果要加入讓老師可已出"Neck"的AIQ:
+                
+         if (QuestionBodyPart == "Neck")
+         {
+
+              if (File.Exists(CsDynamicConstants.absoluteNeckXMLFolder + questionXMLPath))
+                {
+                    //if the xml of this AIQ has already existed,
+                    //use it as the template for the teacher to edit.
+                    completeBodyPartOrgansXMLPath = CsDynamicConstants.relativeNeckXMLFolder + questionXMLPath;
+                }
+
+                else
+                {   //if the xml of this AIQ does not exist,
+                    //use the original knee xml template for the teacher to create a corresponding AIQ xml for this AIQ.
+                    completeBodyPartOrgansXMLPath = CsDynamicConstants.completeNeckOrgansXMLPath;
+                }
+         }         
+        */
+
 
 
     }
