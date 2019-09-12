@@ -1344,28 +1344,31 @@ public partial class IPC : CsSessionManager
                           
 
 
-                var num = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
+                var organNumber = selectedRow.FindControl("TB_OrganIndicator") as Label; //Index of the selected 3D object
 
                 //get the corresponding correct organ name 
-                correctOrganName = CorrectOrganNameSession[Convert.ToInt32(num.Text) - 1];//The correct name of selected 3D object 
+                correctOrganName = CorrectOrganNameSession[Convert.ToInt32(organNumber.Text) - 1];//The correct name of selected 3D object 
 
-            }
+             }
+
+　　　　　　　　　
             //Step 5-1 When the student clicks the “Show/Hide” icon of a question organ, we will hide the corresponding organ according to the number entered by the student.
             //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
             else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
             {
-                TextBox tb = (TextBox)gvScore.Rows[index].FindControl("TB_AnsweringField");
-                string TB_AnsweringField_Content = tb.Text.Trim();
-
+                var organName = selectedRow.FindControl("TB_OrganIndicator") as Label;
+                correctOrganName = organName.Text.Trim();
+            }
+            /*
                 //do sanity check of student's input.
                 //If the student hasn’t answered the organ number, we will prompt the student to answer it before clicking the “Show/Hide” icon of the question organ.
                 if (TB_AnsweringField_Content == "")
                 {
                     //If we use Response.Write to insert JS code, 
                     //JS Bundles/MsAjax error: PRM_ParserErrorDetails will occur on the frontend.
-                    /*
-                    Response.Write("<script>alert('Please enter the answer before clicking the 'Show/Hide' icon.');</script>");
-                    */
+                    
+                    //Response.Write("<script>alert('Please enter the answer before clicking the 'Show/Hide' icon.');</script>");
+                    
 
                     //We use ScriptManager to inset JS code can 
                     //avoid the JS Bundles/MsAjax error: PRM_ParserErrorDetails 
@@ -1417,6 +1420,8 @@ public partial class IPC : CsSessionManager
                  }
 
             }
+            */
+    
 
 
             //switch visibility icon of the selected row .

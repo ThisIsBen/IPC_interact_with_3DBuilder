@@ -853,7 +853,7 @@
 
                     <Columns>
                         <%--cells[0]--%>
-                        <asp:TemplateField ItemStyle-Width="40px" HeaderText="Question Number">
+                        <asp:TemplateField ItemStyle-Width="40px" HeaderText="Question Indicator">
                             <ItemTemplate>
                                 <asp:Label ID="TB_OrganIndicator" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             </ItemTemplate>
