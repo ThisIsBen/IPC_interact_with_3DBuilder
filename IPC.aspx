@@ -586,7 +586,7 @@
                          <%--cells[0]--%>
                         <asp:TemplateField ItemStyle-Width="40px"  HeaderText="Organ Indicator">
                             <ItemTemplate>
-                                <asp:Label ID="TB_OrganIndicator" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server"  />
+                                <asp:Label ID="TB_OrganIndicator" CliendIDMode="static" CssClass="questionNoFontStyle" Font-Names ="TextBox3" Visible="true" runat="server" Text='<%# Eval("Number") %>' />
                             
 
                                 

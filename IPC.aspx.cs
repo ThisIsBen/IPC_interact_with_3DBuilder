@@ -136,7 +136,7 @@ public partial class IPC : CsSessionManager
             System.Threading.Thread.Sleep(100);
              
             //Show 3D Labels in 3DBuilder
-            ShowOrHide3DLabels_Click();
+            ShowOrHide3DLabels();
             */
 
         }
@@ -978,47 +978,25 @@ public partial class IPC : CsSessionManager
 
         NamedPipe_IPC_Connection.sendMsg23DBuilder(contact);
 
-        // Thread.Sleep(1000); //Delay 1秒
-
+       
 
 
 
     }
 
 
-    //protected void ShowOrHideAll_Click(object sender, EventArgs e)
-    protected void ShowOrHide3DLabels_Click()
+    //Show 3D Labels in 3DBuilder
+    protected void ShowOrHide3DLabels()
     {
 
 
 
-        //switch visibility icon All rows .
-        //String hideOrShow3DLabels = switchVisible_Invisible(null, "hf_OrganVisibility", gvScore);
-        string contact = "8 " + "Show_3D_Labels"; //send "6 Hide realOrganName" to 3DBuilder  
-
-        //Hide_3D_Labels
-
-        /*
-         string a = "abcdd";
-        
-         //use JS alert() in C#
-         ScriptManager.RegisterStartupScript(
-          this,
-          typeof(Page),
-          "Alert",
-          "<script>alert('" + a + "');</script>",
-          false);
-         /////
-        */
-
-        //send hide 3D organ msg to 3DBuilder
-        //string contact = "7 " + HideOrShow;//send "7 Hide realOrganName" to 3DBuilder
-        //string contact = "6 " + HideOrShow ;
+      
+        string contact = "8 " + "Show_3D_Labels"; 
 
 
 
-        //string contact = "6 hide Left Popliteal Vein";
-
+   
         NamedPipe_IPC_Connection.sendMsg23DBuilder(contact);
 
         // Thread.Sleep(1000); //Delay 1秒

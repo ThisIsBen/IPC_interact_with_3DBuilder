@@ -127,42 +127,19 @@ public partial class IPC: CsSessionManager
     }
 
 
-    //protected void ShowOrHideAll_Click(object sender, EventArgs e)
-    protected void ShowOrHide3DLabels_Click()
+    //Show 3D Labels in 3DBuilder
+    protected void ShowOrHide3DLabels()
     {
 
 
 
-        //switch visibility icon All rows .
-        //String hideOrShow3DLabels = switchVisible_Invisible(null, "InOrVisible", gvScore);
+       
         string contact = "8 " + "Show_3D_Labels"; //send "6 Hide realOrganName" to 3DBuilder  
 
-        //Hide_3D_Labels
-
-        /*
-         string a = "abcdd";
-        
-         //use JS alert() in C#
-         ScriptManager.RegisterStartupScript(
-          this,
-          typeof(Page),
-          "Alert",
-          "<script>alert('" + a + "');</script>",
-          false);
-         /////
-        */
-
-        //send hide 3D organ msg to 3DBuilder
-        //string contact = "7 " + HideOrShow;//send "7 Hide realOrganName" to 3DBuilder
-        //string contact = "6 " + HideOrShow ;
-
-
-
-        //string contact = "6 hide Left Popliteal Vein";
+       
 
         NamedPipe_IPC_Connection.sendMsg23DBuilder(contact);
 
-        // Thread.Sleep(1000); //Delay 1秒
 
 
 
@@ -327,7 +304,7 @@ public partial class IPC: CsSessionManager
         //2019/4/23 Ben commented because it will cause lag
         /*
         //Show 3D Labels in 3DBuilder
-        ShowOrHide3DLabels_Click();
+        ShowOrHide3DLabels();
         */
         
 
