@@ -588,9 +588,11 @@
         }
 
         //store the Picked Organ Questions in a hidden field so that we can access it on backend
-        function sendThePickedOrganQuestions2Backend() {
+        function goBackToPreviousPage() {
 
-            document.getElementById("<%= hidden_pickedQuestions.ClientID %>").value = questionArray.join(',');  // convert the array into a string using , (comma) as a separator
+            
+            //clear sessionStorage
+            sessionStorage.clear();
 
             //go back to the previous page
             window.history.back();
@@ -792,7 +794,7 @@
                         <div class="container" style="position: fixed;">
                             <div class="row text-left">
                                 <div class="col-sm-4 ">
-                                    <asp:Button ID="btnBack" CssClass='btn-danger btn-lg ' OnClick="btnBack_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="<< Back" runat="server" />
+                                    <asp:Button ID="btnBack" CssClass='btn-danger btn-lg ' OnClick="btnBack_Click" OnClientClick="goBackToPreviousPage();" Text="<< Back" runat="server" />
                                     &nbsp&nbsp&nbsp&nbsp
                                     <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR" value="Hide/Show Non Answer Rows" onclick="hideNonQuestionTR()" />
 

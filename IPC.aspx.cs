@@ -576,11 +576,12 @@ public partial class IPC : CsSessionManager
         //do what should be done when the user clicks submit button
         FinishBtn_ClickEventHandler();
 
-        //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
-        NamedPipe_IPC_Connection.killCorrespondingCSNamedPipe();
-           
+          
 
     }
+
+  
+   
 
     //private void killCorrespondingCSNamedPipe()
     //{
@@ -824,23 +825,31 @@ public partial class IPC : CsSessionManager
         //C# GridView gvScore
         //gvScore.Rows
 
-        /*removes all the objects stored in a Session. 
-         If you do not call the Abandon method explicitly, the server removes these objects and destroys the session when the session times out.
-         It also raises events like Session_End.*/
-        Session.Abandon();
 
 
-        //redirect back to the exam paper
-        redirectBack2ExamPaper();
+
+        //Call all the required functions to clear resources before the user leaves the page, and redirect to the Exam paper page.
+        leaveThePage();
        
     }
 
-    private void redirectBack2ExamPaper()
+    //Call all the required functions to clear resources before the user leaves the page, and redirect to the desired page.
+    public void leaveThePage(object sender = null, EventArgs e = null)
     {
-        //redirect back to the exam paper
-        ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "history.go(-3);", true);
 
+        //It can call the function to shut down the currently used Named pipe
+        NamedPipe_IPC_Connection.killCorrespondingCSNamedPipe();
 
+        /*removes all the objects stored in a Session. 
+        If you do not call the Abandon method explicitly, the server removes these objects and destroys the session when the session times out.
+        It also raises events like Session_End.*/
+        Session.Abandon();
+
+       
+
+        //clear sessionStorage and redirect back to the exam paper             
+        ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "JSRedirectBack2ExamPaper(); ", true);
+        
 
     }
 

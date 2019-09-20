@@ -1047,17 +1047,24 @@ public partial class IPC : CsSessionManager
 
     public void btnBack_Click(object sender, EventArgs e)
     {
-       
+        //Call all the required functions to clear resources before the user leaves the page
+        leaveThePage();
+
+    }
+
+    //Call all the required functions to clear resources before the user leaves the page
+    public void leaveThePage()
+    {
         //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
-       NamedPipe_IPC_Connection. killCorrespondingCSNamedPipe();
+        NamedPipe_IPC_Connection.killCorrespondingCSNamedPipe();
 
 
         /*removes all the objects stored in a Session. 
         If you do not call the Abandon method explicitly, the server removes these objects and destroys the session when the session times out.
         It also raises events like Session_End.*/
         Session.Abandon();
-
     }
+
 
     //private void killCorrespondingCSNamedPipe()
     //{

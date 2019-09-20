@@ -622,9 +622,7 @@ public partial class IPC: CsSessionManager
             //store the AITypeQuestion to DB
             storeAITypeQuestion2DB(CA, QBP, CAO); 
 
-            //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
-            NamedPipe_IPC_Connection.killCorrespondingCSNamedPipe();
-
+           
 
 
             //20190917
@@ -639,19 +637,29 @@ public partial class IPC: CsSessionManager
             saveAITypeQuestion2XMLFile();
             //20190917
 
-            /*removes all the objects stored in a Session. 
-             If you do not call the Abandon method explicitly, the server removes these objects and destroys the session when the session times out.
-             It also raises events like Session_End.*/
-            Session.Abandon();
+            //Call all the required functions to clear resources before the user leaves the page, and redirect to the desired page.
+            leaveThePage();
 
-            //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
-            redirectBack2HintsPaper_MainPage("Save the Question");
+           
         }
           
         
 
         
 
+
+    }
+
+    //Call all the required functions to clear resources before the user leaves the page
+    public void leaveThePage()
+    {
+
+        //It can call the function to shut down the currently used Named pipe
+        NamedPipe_IPC_Connection.killCorrespondingCSNamedPipe();
+
+       
+        //redirect back to the Paper_MainPage.aspx (the exam paper editing page) in Hints.
+        redirectBack2HintsPaper_MainPage("Save the Question");
 
     }
 
@@ -810,7 +818,7 @@ public partial class IPC: CsSessionManager
             ScriptManager.RegisterStartupScript(this.Page, Page.GetType(), "text", "location.href='" + Previous_Page_URL_Session + "'", true);
         }
     
-       //After creating a new AITypeQuestion, go back to the Paper_Main.aspx (the exam paper editing page)
+        //After creating a new AITypeQuestion, go back to the Paper_Main.aspx (the exam paper editing page)
         else 
         {
             //if the teacher clicks 'Save the Question' btn
@@ -841,6 +849,12 @@ public partial class IPC: CsSessionManager
 
 
          }
+
+        /*removes all the objects stored in a Session. 
+        If you do not call the Abandon method explicitly, the server removes these objects and destroys the session when the session times out.
+        It also raises events like Session_End.*/
+        Session.Abandon();
+
        
     }
 

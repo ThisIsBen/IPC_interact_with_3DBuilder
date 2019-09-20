@@ -473,6 +473,11 @@
                 cache: false
             });
         }
+
+
+        function JSRedirectBack2ExamPaper() {
+            sessionStorage.clear(); history.go(-3);
+        }
     </script>
 
 
@@ -541,9 +546,10 @@
             <div  class="container" style="position: fixed;"  >
                 <div class="row"  >
                     <div class="col-sm-5 ">
-                        <asp:Button ID="FinishBtn" CssClass='btn-info btn-lg ' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
-                        &nbsp&nbsp&nbsp&nbsp
-                        <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR"  value="Hide/Show Non Answer Rows" onclick="hideNonQuestionTR()"/>
+                        <asp:Button ID="FinishBtn" CssClass='btn-success btn-lg ' OnClick="FinishBtn_Click" OnClientClick="sendThePickedOrganQuestions2Backend();" Text="Submit" runat="server" />
+                        
+                        <input id="btnBack" type="button" class='btn-danger btn-lg ' value="<< Discard & Back" runat="server"  onclick="if (!confirm('Your answer will not be saved. Are you sure you want to leave?')) return false;" onserverclick="leaveThePage"/>
+                        <input type="button" class='btn-info btn-lg ' id="HideNonQuestionTR"  value=" Hide/Show Non Answer Rows " onclick="hideNonQuestionTR()"/>
                                
                     
                     
