@@ -269,12 +269,7 @@ public partial class IPC: CsSessionManager
 
 
 
-        /*
-        wait for the 3DBuilder to finish initialization before sending the AIQ XML file path to it to load the 3D organs
-        otherwise an error will occur in the 3DBuilder for loading 3D organs without waiting for the initialization to be finished.
-         */       
-        NamedPipe_IPC_Connection.sleepUntil3DBuilderFinishInit();
-
+       
        
 
         //originating from Item.aspx
@@ -317,6 +312,12 @@ public partial class IPC: CsSessionManager
     {
         //originating from ALHomePage.aspx
         NamedPipe_IPC_Connection.sendMsg23DBuilder("1 2");
+        /*
+       wait for the 3DBuilder to finish initialization before sending the AIQ XML file path to it to load the 3D organs
+       otherwise an error will occur in the 3DBuilder for loading 3D organs without waiting for the initialization to be finished.
+        */
+        NamedPipe_IPC_Connection.sleepUntil3DBuilderFinishInit();
+
 
     }
 
@@ -562,7 +563,7 @@ public partial class IPC: CsSessionManager
 
 
 
-        //handle the mode of the AITypeQuestion e.g.,Suergery Mode 
+        //set the skin to be visible or invisible according to the mode of the AIQ e.g.,Suergery Mode 
         handleAITypeQuestionMode(xmlHandler);
 
 
@@ -597,21 +598,23 @@ public partial class IPC: CsSessionManager
         XMLHandler xmlHandler = saveAITypeQuestion2XMLFile();
 
         
-        //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
-        //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
-        //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering        
-        string xmlpath = XMLFolder + questionXMLPath;
-        string CA = xmlpath + xmlHandler.correctAnswer + ":";//compose the required format of the correct answer
-        string CAO = xmlpath + xmlHandler.correctAnswerOrder + ":";//compose the required format of the correct answer order
-        string QBP = QuestionBodyPart;//get the  body part that is used for the  question
-
-        
+       
         
         
 
         // only when the teacher actually click the "Save the Question" button can the system save the AIQ content to DB, kill the CSNamedPipe.exe, and redirect back to the previous page
         if (e != null)
         {
+            //11/9 store question XML file name ('questionXMLPath')  to DB IPCExamHWCorrectAnswer table/ correctAnswer and correctAnswerOrdering
+            //11/9 store correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswer
+            //11/9 store order of correct answer list to DB IPCExamHWCorrectAnswer table/ correctAnswerOrdering        
+            string xmlpath = XMLFolder + questionXMLPath;
+            string CA = xmlpath + xmlHandler.correctAnswer + ":";//compose the required format of the correct answer
+            string CAO = xmlpath + xmlHandler.correctAnswerOrder + ":";//compose the required format of the correct answer order
+            string QBP = QuestionBodyPart;//get the  body part that is used for the  question
+
+        
+
             //Activate the "File/Save Scene As" callback function in the 3DBuilder to 
             //save the incisions cut by the teacher or the content that the teacher directly edited  in the 3DBuilder
             ActivateSaveSceneAsIn3DBuilder();
@@ -622,6 +625,19 @@ public partial class IPC: CsSessionManager
             //kill the corresponding running CsNamedPipe.exe process which is created when the teacher clicks "connect to 3DBuilder" to edit the AITypeQuestion in 3DBuilder.
             NamedPipe_IPC_Connection.killCorrespondingCSNamedPipe();
 
+
+
+            //20190917
+            //save the AITypeQuestion content to the XML file "again"
+            //to make sure the modification made on the AIQ editing page 
+            //after the teacher launches the 3D organs in the 3DBuilder can be saved. 
+            //The reason is that the modification (except for setting 3D organ visibility)
+            //made by the teacher after launching the 3D organs in the 3DBuilder
+            //will not be sent to the 3DBuilder. 
+            //As a result, when the 3DBuilder saves the incision cut by the teacher in the Surgery Mode,
+            //the 3DBuilder can not save the rest of the modification except for the 3D organ visibility.
+            saveAITypeQuestion2XMLFile();
+            //20190917
 
             /*removes all the objects stored in a Session. 
              If you do not call the Abandon method explicitly, the server removes these objects and destroys the session when the session times out.
@@ -715,7 +731,7 @@ public partial class IPC: CsSessionManager
 
 
     }
-
+    //set the skin to be visible or invisible according to the mode of the AIQ e.g.,Suergery Mode 
     private void handleAITypeQuestionMode(XMLHandler xmlHandler)
     {
         if (Request.Form["radioBtn_AITypeQuestionMode"].ToString() == "Surgery Mode")

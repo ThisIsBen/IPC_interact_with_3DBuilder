@@ -313,7 +313,7 @@
 
             for (i = 1; i < studentEachQuestionOrganScoreString.length; i++) {
 
-
+               
 
                 gvDrv.rows[i].cells[2].getElementsByTagName("span")[0].innerHTML = studentEachQuestionOrganScoreString[i] + "/" + scoreOfEachQuestionOrgan;
 
@@ -327,11 +327,12 @@
                     //Step 2-3 Display the correct answer of the question organ if the student didn’t answer it correctly.
                     displayCorrectQuestionOrganAnswer(i, gvDrv);
 
+                    gvDrv.rows[i].cells[2].getElementsByTagName("span")[0].innerHTML = studentEachQuestionOrganScoreString[i] + "/" + scoreOfEachQuestionOrgan;
 
 
 
                 }
-
+               
 
             }
 
@@ -342,7 +343,7 @@
         function displayCorrectQuestionOrganAnswer(rowIndex, gvDrv) {
 
             var correctAnswerOfTheAITypeQuestionJSArray = [];
-               <% 
+            <% 
         
                             
         //var correctAnswerOfTheAITypeQuestion = RandomQuestionNoSession;
@@ -350,20 +351,25 @@
         //if RandomQuestionNoSession is not null
         if (NameOrNumberAnsweringMode_Session == "Name Answering Mode")
         {
+            
+             %>
+                //display the title of the correct answer for Number Answer Mode
+                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+                gvDrv.rows[0].getElementsByTagName("th")[3].innerHTML = "Correct<br/>Organ Name";
+
+             <% 
 
                 for (int i = 0; i < correctAnswerHT[0].Count; i++)
                 {
                                 
                          
-                %>
+             %>
 
                          correctAnswerOfTheAITypeQuestionJSArray.push('<%= correctAnswerHT[0][ScoreAnalysisList[0].questionOrderingString[i+1]] %>');
 
-                         //display the title of the correct answer for Number Answer Mode
-                         var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
-                         gvDrv.rows[0].getElementsByTagName("th")[3].innerHTML = "Correct<br/>Organ Name";
+                        
 
-               <% 
+             <% 
                 }
                 
                 
@@ -373,7 +379,12 @@
         else if (NameOrNumberAnsweringMode_Session == "Number Answering Mode")
         {
             
-            %>
+             %>
+                //display the title of the correct answer for Number Answer Mode
+                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
+                gvDrv.rows[0].getElementsByTagName("th")[3].innerHTML = "Correct<br/>Corresponding 3D Organ<br/>Label Number Here:";
+
+
                 for (i = 0; i < questionArray.length; i++)
                 {
                   
@@ -381,15 +392,12 @@
             
                 }
 
-               
-                //display the title of the correct answer for Number Answer Mode
-                var gvDrv = document.getElementById("<%= gvScore.ClientID %>");
-                gvDrv.rows[0].getElementsByTagName("th")[3].innerHTML = "Correct<br/>Corresponding 3D Organ<br/>Label Number Here:";
+                
                 
             <%
                  
         }
-        %>
+            %>
 
 
 
